@@ -1,3 +1,4 @@
+import 'package:diagram_flow_ai/widgets/diagram_canvas.dart';
 import 'package:flutter/material.dart';
 
 class AppShell extends StatefulWidget {
@@ -54,12 +55,7 @@ class _AppShellState extends State<AppShell> {
   Widget _buildBody() {
     switch (_selectedIndex) {
       case 0:
-        return const Center(
-          child: Text(
-            'Dashboard View',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-        );
+        return const DiagramCanvas();
       case 1:
         return const Center(
           child: Text(
