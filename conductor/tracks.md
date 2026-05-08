@@ -19,7 +19,7 @@ This file tracks all major tracks for the project. Each track has its own detail
 - [x] **Track: Interactive Workspace & Model Control**
   *Link: [./tracks/interactive_workspace_20260508/](./tracks/interactive_workspace_20260508/)*
 
-- [ ] **Track: Advanced Connection Anchors and Edge Routing**
+- [~] **Track: Advanced Connection Anchors and Edge Routing**
   *Link: [./tracks/connection_anchors_20260508/](./tracks/connection_anchors_20260508/)*
 
 - [ ] **Track: Implement Authentication Flow and Login Screen**

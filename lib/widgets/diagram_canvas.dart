@@ -44,7 +44,7 @@ class ConnectionPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
       ..color = color
-      ..strokeWidth = 2.0
+      ..strokeWidth = 1.5
       ..style = PaintingStyle.stroke;
 
     final arrowPaint = Paint()
@@ -52,22 +52,27 @@ class ConnectionPainter extends CustomPainter {
       ..style = PaintingStyle.fill;
 
     for (final connection in connections) {
-      final fromNode = nodes.firstWhere((n) => n.id == connection.fromId);
-      final toNode = nodes.firstWhere((n) => n.id == connection.toId);
+      DiagramNode? fromNode;
+      DiagramNode? toNode;
+      
+      try {
+        fromNode = nodes.firstWhere((n) => n.id == connection.fromId);
+        toNode = nodes.firstWhere((n) => n.id == connection.toId);
+      } catch (_) {
+        continue;
+      }
 
-      // Simple center-to-center line
-      // Offset by ~50, 20 to be near center of node
-      final start = fromNode.position + const Offset(60, 20);
-      final end = toNode.position + const Offset(60, 20);
+      final start = fromNode.getAnchorPosition(connection.fromAnchor);
+      final end = toNode.getAnchorPosition(connection.toAnchor);
 
       final path = Path();
       path.moveTo(start.dx, start.dy);
       path.lineTo(end.dx, end.dy);
       canvas.drawPath(path, paint);
 
-      // Draw arrow head
+      // Draw arrow head at the end point
       final angle = math.atan2(end.dy - start.dy, end.dx - start.dx);
-      const arrowSize = 10.0;
+      const arrowSize = 8.0;
       final arrowPath = Path();
       arrowPath.moveTo(end.dx, end.dy);
       arrowPath.lineTo(
@@ -154,7 +159,7 @@ class _DiagramCanvasState extends State<DiagramCanvas> {
                     foregroundPainter: ConnectionPainter(
                       nodes: state.nodes,
                       connections: state.connections,
-                      color: Theme.of(context).primaryColor,
+                      color: const Color(0xFF202124), // Professional dark gray for arrows
                     ),
                     child: Stack(
                       clipBehavior: Clip.none,
@@ -164,10 +169,7 @@ class _DiagramCanvasState extends State<DiagramCanvas> {
                           label: node.label,
                           position: node.position,
                           onDragUpdate: (delta) {
-                            state.updateNodePosition(
-                              node.id, 
-                              node.position + delta,
-                            );
+                            state.updateNodePosition(node.id, node.position + delta);
                           },
                         );
                       }).toList(),

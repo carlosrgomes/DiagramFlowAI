@@ -21,6 +21,24 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/aws_icons/
     - assets/aws_assets_list.txt
-
+    - assets/aws_icons/Res_IoT/
+    - assets/aws_icons/Res_Quantum-Technologies/
+    - assets/aws_icons/Res_Analytics/
+    - assets/aws_icons/Res_End-User-Computing/
+    - assets/aws_icons/Res_Security-Identity-Compliance/
+    - assets/aws_icons/Res_Blockchain/
+    - assets/aws_icons/Res_Application-Integration/
+    - assets/aws_icons/Res_Management-Governance/
+    - assets/aws_icons/Res_Networking-Content-Delivery/
+    - assets/aws_icons/Res_Storage/
+    - assets/aws_icons/Res_Artificial-Intelligence/
+    - assets/aws_icons/Res_Containers/
+    - assets/aws_icons/Res_General-Icons/
+    - assets/aws_icons/Res_Compute/
+    - assets/aws_icons/Res_Database/
+    - assets/aws_icons/Res_Migration-Modernization/
+    - assets/aws_icons/Res_Media-Services/
+    - assets/aws_icons/Res_Front-End-Web-Mobile/
+    - assets/aws_icons/Res_Developer-Tools/
+    - assets/aws_icons/Res_Business-Applications/

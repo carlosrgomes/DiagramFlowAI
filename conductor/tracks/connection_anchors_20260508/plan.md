@@ -1,10 +1,8 @@
 # Implementation Plan: Advanced Connection Anchors and Edge Routing
 
 ## Phase 1: Anchor Data Model & Painter Update
-- [ ] Task: Create `NodeAnchor` enum and update `DiagramConnection` to store `fromAnchor` and `toAnchor` properties.
-    - [ ] Write Tests
-    - [ ] Implement Feature
-- [ ] Task: Refactor `ConnectionPainter` to calculate line coordinates based on anchor positions at the borders of the `DiagramNodeWidget`, ensuring arrows do not overlap the node graphic.
+- [x] Task: Create `NodeAnchor` enum and update `DiagramConnection` to store `fromAnchor` and `toAnchor` properties. [ac13c26]
+- [~] Task: Refactor `ConnectionPainter` to calculate line coordinates based on anchor positions at the borders of the `DiagramNodeWidget`, ensuring arrows do not overlap the node graphic.
     - [ ] Write Tests
     - [ ] Implement Feature
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Anchor Data Model & Painter Update' (Protocol in workflow.md)

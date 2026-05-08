@@ -14,73 +14,73 @@ class TopNavBar extends StatelessWidget {
           bottom: BorderSide(color: AppColors.outlineVariant, width: 1),
         ),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 12), // Reduced padding
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Left: Brand & Nav
+          // Left: Brand
+          Text(
+            'CloudFlow AI',
+            style: AppTypography.h2.copyWith(
+              color: AppColors.primary,
+              fontWeight: FontWeight.bold,
+              letterSpacing: -0.5,
+              fontSize: 16, // Smaller font for safety
+            ),
+          ),
+          const SizedBox(width: 12),
+          
+          // Center-Left: Nav Links (Collapsed for safety)
           Flexible(
-            flex: 2,
+            flex: 3,
             child: Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  'CloudFlow AI',
-                  style: AppTypography.h2.copyWith(
-                    color: AppColors.primary,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: -0.5,
-                  ),
-                ),
-                const SizedBox(width: 24),
                 _buildNavLink('Canvas', active: true),
                 _buildNavLink('Resources'),
-                _buildNavLink('Deployment'),
               ],
             ),
           ),
           
+          const Spacer(),
+
           // Center: Tool Palette
           Flexible(
-            flex: 1,
+            flex: 4,
             child: Container(
-              padding: const EdgeInsets.all(4),
+              padding: const EdgeInsets.all(2),
               decoration: BoxDecoration(
                 color: AppColors.surfaceContainer,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: AppColors.outlineVariant),
+                borderRadius: BorderRadius.circular(6),
+                border: Border.all(color: AppColors.outlineVariant.withAlpha(50)),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   _buildToolIcon(Icons.zoom_in),
                   _buildToolIcon(Icons.zoom_out),
-                  const VerticalDivider(width: 16, thickness: 1, indent: 4, endIndent: 4),
                   _buildToolIcon(Icons.near_me_outlined, active: true),
-                  _buildToolIcon(Icons.account_tree_outlined),
                   _buildToolIcon(Icons.pan_tool_outlined),
                 ],
               ),
             ),
           ),
           
+          const Spacer(),
+
           // Right: Actions
           Flexible(
-            flex: 2,
+            flex: 3,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                const Icon(Icons.notifications_outlined, color: AppColors.onSurfaceVariant, size: 20),
-                const SizedBox(width: 12),
-                const Icon(Icons.settings_outlined, color: AppColors.onSurfaceVariant, size: 20),
-                const SizedBox(width: 12),
-                _buildActionButton('Share', isPrimary: false),
+                const Icon(Icons.notifications_outlined, color: AppColors.onSurfaceVariant, size: 18),
                 const SizedBox(width: 8),
                 _buildActionButton('Export', isPrimary: true),
-                const SizedBox(width: 12),
+                const SizedBox(width: 8),
                 const CircleAvatar(
-                  radius: 14,
+                  radius: 12,
                   backgroundColor: AppColors.primary,
-                  child: Icon(Icons.person, size: 18, color: AppColors.onPrimary),
+                  child: Icon(Icons.person, size: 14, color: AppColors.onPrimary),
                 ),
               ],
             ),
@@ -92,13 +92,13 @@ class TopNavBar extends StatelessWidget {
 
   Widget _buildNavLink(String label, {bool active = false}) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 6.0),
       child: Text(
         label,
         style: AppTypography.bodyMd.copyWith(
           color: active ? AppColors.primary : AppColors.onSurfaceVariant,
           fontWeight: active ? FontWeight.bold : FontWeight.normal,
-          fontSize: 13,
+          fontSize: 12,
         ),
       ),
     );
@@ -113,7 +113,7 @@ class TopNavBar extends StatelessWidget {
       ),
       child: Icon(
         icon,
-        size: 16,
+        size: 14,
         color: active ? AppColors.primary : AppColors.onSurfaceVariant,
       ),
     );
@@ -121,7 +121,7 @@ class TopNavBar extends StatelessWidget {
 
   Widget _buildActionButton(String label, {required bool isPrimary}) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: isPrimary ? AppColors.primary : Colors.transparent,
         borderRadius: BorderRadius.circular(4),
@@ -132,7 +132,7 @@ class TopNavBar extends StatelessWidget {
         style: AppTypography.bodyMd.copyWith(
           color: isPrimary ? AppColors.onPrimary : AppColors.onSurface,
           fontWeight: FontWeight.w600,
-          fontSize: 12,
+          fontSize: 10,
         ),
       ),
     );

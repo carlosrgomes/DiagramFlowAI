@@ -14,14 +14,6 @@ class ResourceTemplate {
 }
 
 class AssetManager {
-  static const String _awsRoot = 'assets/aws_icons';
-
-  static String get ec2 => '$_awsRoot/ec2.png';
-  static String get s3 => '$_awsRoot/s3.png';
-  static String get rds => '$_awsRoot/rds.png';
-  static String get vpc => '$_awsRoot/vpc.png';
-  static String get lambda => '$_awsRoot/lambda.png';
-
   static Map<String, List<ResourceTemplate>> _catalog = {};
 
   static Map<String, List<ResourceTemplate>> get catalog => _catalog;
@@ -36,7 +28,6 @@ class AssetManager {
       for (var line in lines) {
         if (line.trim().isEmpty) continue;
 
-        // Path example: assets/aws/Resource-Icons_07312025/Res_Compute/Res_Amazon-EC2_Instance_48.png
         final parts = line.split('/');
         if (parts.length < 4) continue;
 
@@ -60,18 +51,43 @@ class AssetManager {
       }
 
       _catalog = newCatalog;
+      dev.log('Asset catalog loaded with ${_catalog.length} categories.');
     } catch (e) {
       dev.log('Error loading asset catalog: $e');
     }
   }
 
   static String getIconForLabel(String label) {
-    final l = label.toUpperCase();
-    if (l.contains('EC2')) return ec2;
-    if (l.contains('RDS')) return rds;
-    if (l.contains('S3')) return s3;
-    if (l.contains('VPC')) return vpc;
-    if (l.contains('LAMBDA')) return lambda;
-    return ec2;
+    final l = label.toUpperCase().replaceAll(' ', '');
+    
+    // Try to find in dynamic catalog first
+    for (var category in _catalog.values) {
+      for (var resource in category) {
+        final resourceLabel = resource.label.toUpperCase().replaceAll(' ', '');
+        if (resourceLabel.contains(l) || l.contains(resourceLabel)) {
+          return resource.path;
+        }
+      }
+    }
+
+    // Common abbreviations
+    if (l.contains('EC2')) return _findInCatalog('EC2');
+    if (l.contains('RDS')) return _findInCatalog('RDS');
+    if (l.contains('S3')) return _findInCatalog('S3');
+    if (l.contains('VPC')) return _findInCatalog('VPC');
+    if (l.contains('LAMBDA')) return _findInCatalog('Lambda');
+    
+    return _catalog.values.first.first.path; // Absolute fallback to any valid asset
+  }
+
+  static String _findInCatalog(String keyword) {
+    for (var category in _catalog.values) {
+      for (var resource in category) {
+        if (resource.label.toUpperCase().contains(keyword.toUpperCase())) {
+          return resource.path;
+        }
+      }
+    }
+    return '';
   }
 }
