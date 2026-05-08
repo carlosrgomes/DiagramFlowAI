@@ -31,5 +31,20 @@ void main() {
       state.updateNodePosition('node-1', const Offset(200, 200));
       expect(state.nodes.first.position, const Offset(200, 200));
     });
+
+    test('updateNodePosition notifies listeners', () {
+      final state = DiagramState();
+      state.addNode(
+        id: 'node-1',
+        label: 'Compute Instance',
+        position: const Offset(100, 100),
+      );
+      
+      bool notified = false;
+      state.addListener(() => notified = true);
+      
+      state.updateNodePosition('node-1', const Offset(150, 150));
+      expect(notified, isTrue);
+    });
   });
 }

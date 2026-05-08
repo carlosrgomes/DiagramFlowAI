@@ -16,28 +16,32 @@ class TopNavBar extends StatelessWidget {
       ),
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Left: Brand
-          Text(
-            'CloudFlow AI',
-            style: AppTypography.h2.copyWith(
-              color: AppColors.primary,
-              fontWeight: FontWeight.bold,
-              letterSpacing: -0.5,
+          // Left: Brand & Nav
+          Flexible(
+            flex: 2,
+            child: Row(
+              children: [
+                Text(
+                  'CloudFlow AI',
+                  style: AppTypography.h2.copyWith(
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: -0.5,
+                  ),
+                ),
+                const SizedBox(width: 24),
+                _buildNavLink('Canvas', active: true),
+                _buildNavLink('Resources'),
+                _buildNavLink('Deployment'),
+              ],
             ),
           ),
-          const SizedBox(width: 24),
           
-          // Center-Left: Nav Links
-          _buildNavLink('Canvas', active: true),
-          _buildNavLink('Resources'),
-          _buildNavLink('Deployment'),
-          _buildNavLink('History'),
-          
-          const Spacer(),
-
           // Center: Tool Palette
           Flexible(
+            flex: 1,
             child: Container(
               padding: const EdgeInsets.all(4),
               decoration: BoxDecoration(
@@ -59,23 +63,27 @@ class TopNavBar extends StatelessWidget {
             ),
           ),
           
-          const Spacer(),
-
           // Right: Actions
-          const Icon(Icons.notifications_outlined, color: AppColors.onSurfaceVariant, size: 20),
-          const SizedBox(width: 12),
-          const Icon(Icons.settings_outlined, color: AppColors.onSurfaceVariant, size: 20),
-          const SizedBox(width: 12),
-          
-          _buildActionButton('Share', isPrimary: false),
-          const SizedBox(width: 8),
-          _buildActionButton('Export', isPrimary: true),
-          
-          const SizedBox(width: 12),
-          const CircleAvatar(
-            radius: 14,
-            backgroundColor: AppColors.primary,
-            child: Icon(Icons.person, size: 18, color: AppColors.onPrimary),
+          Flexible(
+            flex: 2,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                const Icon(Icons.notifications_outlined, color: AppColors.onSurfaceVariant, size: 20),
+                const SizedBox(width: 12),
+                const Icon(Icons.settings_outlined, color: AppColors.onSurfaceVariant, size: 20),
+                const SizedBox(width: 12),
+                _buildActionButton('Share', isPrimary: false),
+                const SizedBox(width: 8),
+                _buildActionButton('Export', isPrimary: true),
+                const SizedBox(width: 12),
+                const CircleAvatar(
+                  radius: 14,
+                  backgroundColor: AppColors.primary,
+                  child: Icon(Icons.person, size: 18, color: AppColors.onPrimary),
+                ),
+              ],
+            ),
           ),
         ],
       ),

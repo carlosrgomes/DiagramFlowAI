@@ -3,6 +3,7 @@ import 'package:diagram_flow_ai/models/resource_template.dart';
 import 'package:diagram_flow_ai/widgets/diagram_node.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'dart:math' as math;
 
 class GridBackgroundPainter extends CustomPainter {
   final Color gridColor;
@@ -32,6 +33,60 @@ class GridBackgroundPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
+class ConnectionPainter extends CustomPainter {
+  final List<DiagramNode> nodes;
+  final List<DiagramConnection> connections;
+  final Color color;
+
+  ConnectionPainter({required this.nodes, required this.connections, required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 2.0
+      ..style = PaintingStyle.stroke;
+
+    final arrowPaint = Paint()
+      ..color = color
+      ..style = PaintingStyle.fill;
+
+    for (final connection in connections) {
+      final fromNode = nodes.firstWhere((n) => n.id == connection.fromId);
+      final toNode = nodes.firstWhere((n) => n.id == connection.toId);
+
+      // Simple center-to-center line
+      // Offset by ~50, 20 to be near center of node
+      final start = fromNode.position + const Offset(60, 20);
+      final end = toNode.position + const Offset(60, 20);
+
+      final path = Path();
+      path.moveTo(start.dx, start.dy);
+      path.lineTo(end.dx, end.dy);
+      canvas.drawPath(path, paint);
+
+      // Draw arrow head
+      final angle = math.atan2(end.dy - start.dy, end.dx - start.dx);
+      const arrowSize = 10.0;
+      final arrowPath = Path();
+      arrowPath.moveTo(end.dx, end.dy);
+      arrowPath.lineTo(
+        end.dx - arrowSize * math.cos(angle - math.pi / 6),
+        end.dy - arrowSize * math.sin(angle - math.pi / 6),
+      );
+      arrowPath.lineTo(
+        end.dx - arrowSize * math.cos(angle + math.pi / 6),
+        end.dy - arrowSize * math.sin(angle + math.pi / 6),
+      );
+      arrowPath.close();
+      canvas.drawPath(arrowPath, arrowPaint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant ConnectionPainter oldDelegate) => true;
+}
+
 class DiagramCanvas extends StatefulWidget {
   const DiagramCanvas({super.key});
 
@@ -50,7 +105,6 @@ class _DiagramCanvasState extends State<DiagramCanvas> {
 
   @override
   Widget build(BuildContext context) {
-    // Use the overlay context for SnackBar to ensure it's visible
     final scaffoldMessenger = ScaffoldMessenger.of(context);
 
     return DragTarget<ResourceTemplate>(
@@ -61,8 +115,6 @@ class _DiagramCanvasState extends State<DiagramCanvas> {
         final RenderBox renderBox = context.findRenderObject() as RenderBox;
         final Offset localOffset = renderBox.globalToLocal(details.offset);
         final Offset adjustedOffset = _transformationController.toScene(localOffset);
-
-        debugPrint('DROP ACCEPTED: ${details.data.label} at $adjustedOffset');
 
         state.addNode(
           id: 'node_${DateTime.now().millisecondsSinceEpoch}',
@@ -85,7 +137,7 @@ class _DiagramCanvasState extends State<DiagramCanvas> {
           color: const Color(0xFFF3F4F6),
           child: InteractiveViewer(
             transformationController: _transformationController,
-            boundaryMargin: const EdgeInsets.all(2500), // Finite but large boundary
+            boundaryMargin: const EdgeInsets.all(2500),
             minScale: 0.1,
             maxScale: 2.0,
             constrained: false,
@@ -94,10 +146,15 @@ class _DiagramCanvasState extends State<DiagramCanvas> {
                 return Container(
                   width: 5000,
                   height: 5000,
-                  color: Colors.white, // Solid background
+                  color: Colors.white,
                   child: CustomPaint(
                     painter: GridBackgroundPainter(
                       gridColor: Colors.black.withAlpha(15),
+                    ),
+                    foregroundPainter: ConnectionPainter(
+                      nodes: state.nodes,
+                      connections: state.connections,
+                      color: Theme.of(context).primaryColor,
                     ),
                     child: Stack(
                       clipBehavior: Clip.none,
@@ -106,6 +163,12 @@ class _DiagramCanvasState extends State<DiagramCanvas> {
                           key: ValueKey(node.id),
                           label: node.label,
                           position: node.position,
+                          onDragUpdate: (delta) {
+                            state.updateNodePosition(
+                              node.id, 
+                              node.position + delta,
+                            );
+                          },
                         );
                       }).toList(),
                     ),

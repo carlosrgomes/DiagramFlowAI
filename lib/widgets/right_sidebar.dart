@@ -22,28 +22,36 @@ class _RightSidebarState extends State<RightSidebar> {
     super.dispose();
   }
 
-  void _handleSendMessage() {
+  Future<void> _handleSendMessage() async {
     final text = _chatController.text.trim();
     if (text.isEmpty) return;
 
     final aiState = context.read<AIModelState>();
     final diagramState = context.read<DiagramState>();
 
-    aiState.addMessage(text, false);
+    aiState.addMessage(text, MessageType.user);
     _chatController.clear();
 
-    // Process with AI Engine
-    final command = _aiEngine.parsePrompt(text);
-    if (command != null) {
-      aiState.addMessage('Understood. Adding ${command.label} to the canvas...', true);
-      
-      diagramState.addNode(
-        id: 'ai_node_${DateTime.now().millisecondsSinceEpoch}',
-        label: command.label,
-        position: command.position,
-      );
-    } else {
-      aiState.addMessage('I\'m sorry, I didn\'t recognize an architectural command in your message. Try asking to "add an EC2 instance" or "create a VPC".', true);
+    await for (final event in _aiEngine.processPrompt(text)) {
+      if (event.startsWith('THOUGHT:')) {
+        aiState.addMessage(event.replaceFirst('THOUGHT:', '').trim(), MessageType.thought);
+      } else if (event.startsWith('NODE:')) {
+        final nodeData = event.replaceFirst('NODE:', '').split('@');
+        final label = nodeData[0];
+        final coords = nodeData[1].split(',');
+        final id = nodeData[2];
+        
+        diagramState.addNode(
+          id: id,
+          label: label,
+          position: Offset(double.parse(coords[0]), double.parse(coords[1])),
+        );
+      } else if (event.startsWith('CONN:')) {
+        final connData = event.replaceFirst('CONN:', '').split('->');
+        diagramState.addConnection(connData[0], connData[1]);
+      } else if (event.startsWith('ACTION:')) {
+        aiState.addMessage(event.replaceFirst('ACTION:', '').trim(), MessageType.ai);
+      }
     }
   }
 
@@ -71,45 +79,53 @@ class _RightSidebarState extends State<RightSidebar> {
   }
 
   Widget _buildCodeSection(BuildContext context) {
-    const mockCode = '''graph TD
-  A[App ALB] -->|Traffic| B(Web API-1)
-  A -->|Traffic| C(Web API-2)
-  B --> D{Primary DB}
-  C --> D''';
+    return Consumer<DiagramState>(
+      builder: (context, state, child) {
+        String mermaidCode = 'graph TD\n';
+        for (final node in state.nodes) {
+          mermaidCode += '  ${node.id.substring(node.id.length - 4)}[${node.label}]\n';
+        }
+        for (final conn in state.connections) {
+          mermaidCode += '  ${conn.fromId.substring(conn.fromId.length - 4)} --> ${conn.toId.substring(conn.toId.length - 4)}\n';
+        }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Mermaid Architecture',
-                style: AppTypography.labelCaps,
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Mermaid Architecture',
+                    style: AppTypography.labelCaps,
+                  ),
+                  const Icon(Icons.copy_all_outlined, size: 16, color: AppColors.onSurfaceVariant),
+                ],
               ),
-              const Icon(Icons.copy_all_outlined, size: 16, color: AppColors.onSurfaceVariant),
-            ],
-          ),
-        ),
-        Expanded(
-          child: Container(
-            width: double.infinity,
-            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: const Color(0xFF060A14), // Darker code background
-              borderRadius: BorderRadius.circular(4),
-              border: Border.all(color: AppColors.outlineVariant.withAlpha(50)),
             ),
-            child: Text(
-              mockCode,
-              style: AppTypography.code.copyWith(color: AppColors.secondary),
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF060A14),
+                  borderRadius: BorderRadius.circular(4),
+                  border: Border.all(color: AppColors.outlineVariant.withAlpha(50)),
+                ),
+                child: SingleChildScrollView(
+                  child: Text(
+                    mermaidCode,
+                    style: AppTypography.code.copyWith(color: AppColors.secondary, fontSize: 11),
+                  ),
+                ),
+              ),
             ),
-          ),
-        ),
-      ],
+          ],
+        );
+      },
     );
   }
 
@@ -177,7 +193,7 @@ class _RightSidebarState extends State<RightSidebar> {
               final message = aiState.messages[index];
               return Padding(
                 padding: const EdgeInsets.only(bottom: 12.0),
-                child: _buildChatMessage(message.text, isAI: message.isAI),
+                child: _buildChatMessage(message),
               );
             },
           ),
@@ -213,7 +229,32 @@ class _RightSidebarState extends State<RightSidebar> {
     );
   }
 
-  Widget _buildChatMessage(String text, {required bool isAI}) {
+  Widget _buildChatMessage(ChatMessage message) {
+    if (message.type == MessageType.thought) {
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(width: 8),
+          const Padding(
+            padding: EdgeInsets.only(top: 2.0),
+            child: Icon(Icons.auto_awesome, size: 12, color: AppColors.secondary),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              message.text,
+              style: AppTypography.bodyMd.copyWith(
+                color: AppColors.onSurfaceVariant.withAlpha(180),
+                fontStyle: FontStyle.italic,
+                fontSize: 12,
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+
+    final isAI = message.type == MessageType.ai;
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -222,7 +263,7 @@ class _RightSidebarState extends State<RightSidebar> {
         border: isAI ? Border.all(color: AppColors.primary.withAlpha(50)) : null,
       ),
       child: Text(
-        text,
+        message.text,
         style: AppTypography.bodyMd.copyWith(
           color: isAI ? AppColors.onSurface : AppColors.onSurfaceVariant,
         ),

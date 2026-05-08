@@ -8,13 +8,6 @@ class ResourceSidebar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dragResources = [
-      ResourceTemplate(label: 'EC2', icon: Icons.memory_outlined, color: AppColors.secondary),
-      ResourceTemplate(label: 'RDS', icon: Icons.dns_outlined, color: AppColors.secondary),
-      ResourceTemplate(label: 'S3', icon: Icons.folder_open_outlined, color: AppColors.secondary),
-      ResourceTemplate(label: 'VPC', icon: Icons.router_outlined, color: AppColors.secondary),
-    ];
-
     return Container(
       width: 280,
       color: AppColors.surface,
@@ -46,7 +39,7 @@ class ResourceSidebar extends StatelessWidget {
           _buildProviderItem(Icons.hub_outlined, 'GCP'),
           _buildProviderItem(Icons.grid_view_outlined, 'Kubernetes'),
           
-          const SizedBox(height: 32),
+          const SizedBox(height: 24),
           
           // Drag Resources Section
           Padding(
@@ -56,22 +49,48 @@ class ResourceSidebar extends StatelessWidget {
               style: AppTypography.labelCaps.copyWith(letterSpacing: 1.2),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: GridView.count(
-              shrinkWrap: true,
-              crossAxisCount: 2,
-              mainAxisSpacing: 8,
-              crossAxisSpacing: 8,
-              childAspectRatio: 1.5,
-              physics: const NeverScrollableScrollPhysics(),
-              children: dragResources.map((template) => _buildDraggableResourceCard(template)).toList(),
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              children: AssetManager.awsLibrary.entries.map((category) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8),
+                      child: Text(
+                        category.key.toUpperCase(),
+                        style: AppTypography.labelCaps.copyWith(
+                          fontSize: 10,
+                          color: AppColors.onSurfaceVariant.withAlpha(150),
+                        ),
+                      ),
+                    ),
+                    GridView.count(
+                      shrinkWrap: true,
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 8,
+                      crossAxisSpacing: 8,
+                      childAspectRatio: 1.4,
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: category.value.entries.map((resource) {
+                        return _buildDraggableResourceCard(
+                          ResourceTemplate(
+                            label: resource.key,
+                            icon: Icons.help_outline, // Not used anymore as we use AssetManager
+                            color: AppColors.secondary,
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(height: 16),
+                  ],
+                );
+              }).toList(),
             ),
           ),
-          
-          const Spacer(),
           
           // Bottom CTA
           Padding(
@@ -105,10 +124,10 @@ class ResourceSidebar extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       child: ListTile(
-        visualDensity: const VisualDensity(vertical: -2),
+        visualDensity: const VisualDensity(vertical: -4),
         leading: Icon(
           icon,
-          size: 20,
+          size: 18,
           color: active ? AppColors.primary : AppColors.onSurfaceVariant,
         ),
         title: Text(
@@ -116,6 +135,7 @@ class ResourceSidebar extends StatelessWidget {
           style: AppTypography.bodyMd.copyWith(
             color: active ? AppColors.primary : AppColors.onSurfaceVariant,
             fontWeight: active ? FontWeight.bold : FontWeight.normal,
+            fontSize: 13,
           ),
         ),
       ),
@@ -129,32 +149,28 @@ class ResourceSidebar extends StatelessWidget {
       feedback: Material(
         color: Colors.transparent,
         child: Container(
-          width: 120,
-          height: 80,
+          width: 100,
+          height: 70,
           decoration: BoxDecoration(
-            color: AppColors.surfaceContainerHighest.withAlpha(200),
+            color: AppColors.surfaceContainerHighest.withAlpha(220),
             borderRadius: BorderRadius.circular(8),
             border: Border.all(color: AppColors.primary, width: 2),
             boxShadow: const [
-              BoxShadow(color: Colors.black54, blurRadius: 20, offset: Offset(0, 10)),
+              BoxShadow(color: Colors.black54, blurRadius: 15, offset: Offset(0, 5)),
             ],
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(AssetManager.getIconForLabel(template.label), width: 32, height: 32),
+              Image.asset(AssetManager.getIconForLabel(template.label), width: 28, height: 28),
               const SizedBox(height: 4),
               Text(
                 template.label, 
-                style: AppTypography.labelCaps.copyWith(color: Colors.white),
+                style: AppTypography.labelCaps.copyWith(color: Colors.white, fontSize: 9),
               ),
             ],
           ),
         ),
-      ),
-      childWhenDragging: Opacity(
-        opacity: 0.3,
-        child: _buildResourceCard(template.label),
       ),
       child: _buildResourceCard(template.label),
     );
@@ -172,7 +188,7 @@ class ResourceSidebar extends StatelessWidget {
         children: [
           Image.asset(AssetManager.getIconForLabel(label), width: 24, height: 24),
           const SizedBox(height: 4),
-          Text(label, style: AppTypography.labelCaps),
+          Text(label, style: AppTypography.labelCaps.copyWith(fontSize: 10)),
         ],
       ),
     );

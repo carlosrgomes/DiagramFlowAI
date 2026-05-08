@@ -6,11 +6,20 @@ enum AIModelStatus {
   ready,
 }
 
+enum MessageType {
+  user,
+  ai,
+  thought,
+}
+
 class ChatMessage {
   final String text;
-  final bool isAI;
+  final MessageType type;
 
-  ChatMessage({required this.text, required this.isAI});
+  ChatMessage({required this.text, required this.type});
+  
+  bool get isAI => type == MessageType.ai;
+  bool get isThought => type == MessageType.thought;
 }
 
 class AIModelState extends ChangeNotifier {
@@ -19,7 +28,7 @@ class AIModelState extends ChangeNotifier {
   final List<ChatMessage> _messages = [
     ChatMessage(
       text: 'I\'ve generated the base VPC and added two EC2 instances behind an ALB. Would you like me to add a Redis cache cluster next to the RDS?',
-      isAI: true,
+      type: MessageType.ai,
     ),
   ];
 
@@ -41,12 +50,20 @@ class AIModelState extends ChangeNotifier {
     }
 
     _status = AIModelStatus.ready;
-    _messages.add(ChatMessage(text: 'Gemma4 model is ready! How can I help you with your architecture today?', isAI: true));
+    _messages.add(ChatMessage(
+      text: 'Gemma4 model is ready! How can I help you with your architecture today?', 
+      type: MessageType.ai,
+    ));
     notifyListeners();
   }
 
-  void addMessage(String text, bool isAI) {
-    _messages.add(ChatMessage(text: text, isAI: isAI));
+  void addMessage(String text, MessageType type) {
+    _messages.add(ChatMessage(text: text, type: type));
+    notifyListeners();
+  }
+
+  void clearThoughts() {
+    _messages.removeWhere((m) => m.type == MessageType.thought);
     notifyListeners();
   }
 }

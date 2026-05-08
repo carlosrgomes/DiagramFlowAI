@@ -1,10 +1,8 @@
 # Implementation Plan: Interactive Workspace & Model Control
 
 ## Phase 1: Interactive Canvas Nodes
-- [ ] Task: Update `DiagramNodeWidget` to detect drag gestures (`onPanUpdate`).
-    - [ ] Write Tests
-    - [ ] Implement Feature
-- [ ] Task: Update `DiagramState` to handle node position updates during drag and ensure `ConnectionPainter` redraws.
+- [x] Task: Update `DiagramNodeWidget` to detect drag gestures (`onPanUpdate`).
+- [~] Task: Update `DiagramState` to handle node position updates during drag and ensure `ConnectionPainter` redraws.
     - [ ] Write Tests
     - [ ] Implement Feature
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Interactive Canvas Nodes' (Protocol in workflow.md)
