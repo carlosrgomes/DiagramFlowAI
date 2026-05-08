@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 
+import 'package:diagram_flow_ai/models/diagram_state.dart';
 import 'package:diagram_flow_ai/theme/design_tokens.dart';
-
 import 'package:diagram_flow_ai/widgets/app_shell.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const DiagramFlowApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => DiagramState(),
+      child: const DiagramFlowApp(),
+    ),
+  );
 }
 
 class DiagramFlowApp extends StatelessWidget {

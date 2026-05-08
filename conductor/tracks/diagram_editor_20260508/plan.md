@@ -19,7 +19,7 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Resource Library & Draggables' (Protocol in workflow.md)
 
 ## Phase 3: Drop Mechanics & Rendering
-- [ ] Task: Wrap `DiagramCanvas` in a `DragTarget` and handle `onAcceptWithDetails` to calculate drop coordinates.
+- [~] Task: Wrap `DiagramCanvas` in a `DragTarget` and handle `onAcceptWithDetails` to calculate drop coordinates.
     - [ ] Write Tests
     - [ ] Implement Feature
 - [ ] Task: Create `DiagramNode` widget to render placed items using a `Stack` and `Positioned`.

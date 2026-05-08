@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:diagram_flow_ai/models/diagram_state.dart';
+import 'package:diagram_flow_ai/widgets/resource_sidebar.dart';
 
 class GridBackgroundPainter extends CustomPainter {
   final Color gridColor;
@@ -28,22 +31,56 @@ class GridBackgroundPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
-class DiagramCanvas extends StatelessWidget {
+class DiagramCanvas extends StatefulWidget {
   const DiagramCanvas({super.key});
 
   @override
+  State<DiagramCanvas> createState() => _DiagramCanvasState();
+}
+
+class _DiagramCanvasState extends State<DiagramCanvas> {
+  final TransformationController _transformationController = TransformationController();
+
+  @override
+  void dispose() {
+    _transformationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return InteractiveViewer(
-      boundaryMargin: const EdgeInsets.all(double.infinity),
-      minScale: 0.1,
-      maxScale: 2.0,
-      constrained: false,
-      child: CustomPaint(
-        size: const Size(5000, 5000), // Large canvas area
-        painter: GridBackgroundPainter(
-          gridColor: Theme.of(context).colorScheme.outlineVariant.withAlpha(51), // 0.2 opacity
-        ),
-      ),
+    return DragTarget<ResourceTemplate>(
+      onAcceptWithDetails: (details) {
+        final state = context.read<DiagramState>();
+        
+        // Find the RenderBox of the CustomPaint (the actual canvas area)
+        final RenderBox renderBox = context.findRenderObject() as RenderBox;
+        final Offset localOffset = renderBox.globalToLocal(details.offset);
+        
+        // Adjust for current transformation (zoom/pan)
+        final Offset adjustedOffset = _transformationController.toScene(localOffset);
+
+        state.addNode(
+          id: DateTime.now().toIso8601String(),
+          label: details.data.label,
+          position: adjustedOffset,
+        );
+      },
+      builder: (context, candidateData, rejectedData) {
+        return InteractiveViewer(
+          transformationController: _transformationController,
+          boundaryMargin: const EdgeInsets.all(double.infinity),
+          minScale: 0.1,
+          maxScale: 2.0,
+          constrained: false,
+          child: CustomPaint(
+            size: const Size(5000, 5000), // Large canvas area
+            painter: GridBackgroundPainter(
+              gridColor: Theme.of(context).colorScheme.outlineVariant.withAlpha(51),
+            ),
+          ),
+        );
+      },
     );
   }
 }
