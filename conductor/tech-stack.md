@@ -4,6 +4,10 @@
 - **Dart:** Primary programming language.
 - **Flutter:** Cross-platform framework targeting Windows, macOS, and Linux desktop environments.
 
+## UI Architecture
+- **Navigation Shell:** Uses a stateful `AppShell` with a `NavigationRail` for desktop-optimized sidebar navigation.
+- **Design Tokens:** Centralized theme management in `lib/theme/design_tokens.dart`.
+
 ## Development Tools
 - **IDE:** VS Code or Android Studio with Flutter extensions.
 - **Design Integration:** Stitch extension for syncing designs.
