@@ -10,7 +10,7 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1: State & Canvas Foundation' (Protocol in workflow.md)
 
 ## Phase 2: Resource Library & Draggables
-- [ ] Task: Create `ResourceSidebar` widget containing categorised dummy resources.
+- [~] Task: Create `ResourceSidebar` widget containing categorised dummy resources.
     - [ ] Write Tests
     - [ ] Implement Feature
 - [ ] Task: Wrap sidebar items in `LongPressDraggable` to initiate drag events.

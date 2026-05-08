@@ -1,4 +1,5 @@
 import 'package:diagram_flow_ai/widgets/diagram_canvas.dart';
+import 'package:diagram_flow_ai/widgets/resource_sidebar.dart';
 import 'package:flutter/material.dart';
 
 class AppShell extends StatefulWidget {
@@ -55,7 +56,13 @@ class _AppShellState extends State<AppShell> {
   Widget _buildBody() {
     switch (_selectedIndex) {
       case 0:
-        return const DiagramCanvas();
+        return const Row(
+          children: [
+            ResourceSidebar(),
+            VerticalDivider(thickness: 1, width: 1),
+            Expanded(child: DiagramCanvas()),
+          ],
+        );
       case 1:
         return const Center(
           child: Text(
