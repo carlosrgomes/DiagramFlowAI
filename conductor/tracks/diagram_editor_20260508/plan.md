@@ -22,7 +22,7 @@
 - [x] Task: Wrap `DiagramCanvas` in a `DragTarget` and handle `onAcceptWithDetails` to calculate drop coordinates. [bf33e4b]
     - [x] Write Tests
     - [x] Implement Feature
-- [~] Task: Create `DiagramNode` widget to render placed items using a `Stack` and `Positioned`.
-    - [ ] Write Tests
-    - [ ] Implement Feature
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Drop Mechanics & Rendering' (Protocol in workflow.md)
+- [x] Task: Create `DiagramNode` widget to render placed items using a `Stack` and `Positioned`. [78ca0b8]
+    - [x] Write Tests
+    - [x] Implement Feature
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Drop Mechanics & Rendering' (Protocol in workflow.md)
