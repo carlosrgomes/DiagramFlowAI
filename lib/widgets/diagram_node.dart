@@ -6,13 +6,17 @@ import 'package:diagram_flow_ai/theme/design_tokens.dart';
 class DiagramNodeWidget extends StatefulWidget {
   final String label;
   final Offset position;
+  final Size size;
   final Function(Offset delta)? onDragUpdate;
+  final Function(Size newSize)? onResizeUpdate;
 
   const DiagramNodeWidget({
     super.key,
     required this.label,
     required this.position,
+    required this.size,
     this.onDragUpdate,
+    this.onResizeUpdate,
   });
 
   @override
@@ -49,6 +53,8 @@ class _DiagramNodeWidgetState extends State<DiagramNodeWidget> {
               child: Material(
                 color: Colors.transparent,
                 child: Container(
+                  width: widget.size.width,
+                  height: widget.size.height,
                   padding: const EdgeInsets.all(1.5),
                   decoration: BoxDecoration(
                     color: AppColors.primary,
@@ -62,24 +68,29 @@ class _DiagramNodeWidgetState extends State<DiagramNodeWidget> {
                     ],
                   ),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                     decoration: BoxDecoration(
                       color: AppColors.surfaceContainerHighest,
                       borderRadius: BorderRadius.circular(3),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         if (iconPath.isNotEmpty)
                            Image.asset(iconPath, width: 22, height: 22)
                         else
                            const Icon(Icons.help_outline, size: 22, color: AppColors.primary),
-                        const SizedBox(width: 10),
-                        Text(
-                          widget.label,
-                          style: AppTypography.bodyMd.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                        const SizedBox(width: 8),
+                        Flexible(
+                          child: Text(
+                            widget.label,
+                            style: AppTypography.bodyMd.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontSize: 12,
+                            ),
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ],
@@ -88,6 +99,34 @@ class _DiagramNodeWidgetState extends State<DiagramNodeWidget> {
                 ),
               ),
             ),
+            // Resize Handle (Bottom Right)
+            if (_isHovered)
+              Positioned(
+                right: -4,
+                bottom: -4,
+                child: GestureDetector(
+                  onPanUpdate: (details) {
+                    if (widget.onResizeUpdate != null) {
+                      final newSize = Size(
+                        (widget.size.width + details.delta.dx).clamp(80.0, 400.0),
+                        (widget.size.height + details.delta.dy).clamp(40.0, 200.0),
+                      );
+                      widget.onResizeUpdate!(newSize);
+                    }
+                  },
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.resizeDownRight,
+                    child: Container(
+                      width: 12,
+                      height: 12,
+                      decoration: const BoxDecoration(
+                        color: AppColors.primary,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             // Anchor Points (Visible on Hover)
             if (_isHovered) ...[
               _buildAnchor(NodeAnchor.top, alignment: Alignment.topCenter),
@@ -108,8 +147,8 @@ class _DiagramNodeWidgetState extends State<DiagramNodeWidget> {
         child: MouseRegion(
           cursor: SystemMouseCursors.click,
           child: Container(
-            width: 12,
-            height: 12,
+            width: 10,
+            height: 10,
             decoration: BoxDecoration(
               color: AppColors.primary,
               shape: BoxShape.circle,

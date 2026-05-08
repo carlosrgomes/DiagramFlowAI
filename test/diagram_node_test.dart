@@ -12,6 +12,7 @@ void main() {
               DiagramNodeWidget(
                 label: 'Test Node',
                 position: Offset(10, 10),
+                size: Size(120, 50),
               ),
             ],
           ),

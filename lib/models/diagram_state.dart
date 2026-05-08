@@ -103,6 +103,14 @@ class DiagramState extends ChangeNotifier {
     }
   }
 
+  void updateNodeSize(String id, Size newSize) {
+    final index = _nodes.indexWhere((node) => node.id == id);
+    if (index != -1) {
+      _nodes[index] = _nodes[index].copyWith(size: newSize);
+      notifyListeners();
+    }
+  }
+
   void clearDiagram() {
     _nodes.clear();
     _connections.clear();

@@ -9,7 +9,10 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Anchor Data Model & Painter Update' (Protocol in workflow.md)
 
 ## Phase 2: Interactive Anchor Handles
-- [~] Task: Update `DiagramNodeWidget` to render interactive, draggable anchor handles (Top, Bottom, Left, Right).
+- [x] Task: Update `DiagramNodeWidget` to render interactive, draggable anchor handles (Top, Bottom, Left, Right). [77514d5]
+    - [x] Write Tests
+    - [x] Implement Feature
+- [~] Task: Implement node resizing logic (resize handle in `DiagramNodeWidget` and `updateNodeSize` in state) and sync UI node size with model node size.
     - [ ] Write Tests
     - [ ] Implement Feature
 - [ ] Task: Implement logic in `DiagramCanvas` to handle dragging from an anchor handle to create or modify a connection in `DiagramState`.

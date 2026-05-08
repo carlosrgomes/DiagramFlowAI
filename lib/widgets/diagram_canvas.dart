@@ -70,7 +70,6 @@ class ConnectionPainter extends CustomPainter {
       path.lineTo(end.dx, end.dy);
       canvas.drawPath(path, paint);
 
-      // Draw arrow head at the end point
       final angle = math.atan2(end.dy - start.dy, end.dx - start.dx);
       const arrowSize = 8.0;
       final arrowPath = Path();
@@ -159,7 +158,7 @@ class _DiagramCanvasState extends State<DiagramCanvas> {
                     foregroundPainter: ConnectionPainter(
                       nodes: state.nodes,
                       connections: state.connections,
-                      color: const Color(0xFF202124), // Professional dark gray for arrows
+                      color: const Color(0xFF202124),
                     ),
                     child: Stack(
                       clipBehavior: Clip.none,
@@ -168,8 +167,12 @@ class _DiagramCanvasState extends State<DiagramCanvas> {
                           key: ValueKey(node.id),
                           label: node.label,
                           position: node.position,
+                          size: node.size,
                           onDragUpdate: (delta) {
                             state.updateNodePosition(node.id, node.position + delta);
+                          },
+                          onResizeUpdate: (newSize) {
+                            state.updateNodeSize(node.id, newSize);
                           },
                         );
                       }).toList(),
