@@ -12,14 +12,14 @@
     - [x] Implement Feature
 - [x] Task: Conductor - User Manual Verification 'Phase 1: AWS Asset Management' (Protocol in workflow.md)
 
-## Phase 2: AI Model Download Manager
-- [~] Task: Implement a download button and progress indicator in the `RightSidebar` chat section for the Gemma 4 model.
-    - [ ] Write Tests
-    - [ ] Implement Feature
-- [ ] Task: Implement mock download logic and state management for model readiness.
-    - [ ] Write Tests
-    - [ ] Implement Feature
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: AI Model Download Manager' (Protocol in workflow.md)
+## Phase 2: AI Model Download Manager [checkpoint: e9fc511]
+- [x] Task: Implement a download button and progress indicator in the `RightSidebar` chat section for the Gemma 4 model. [e9fc511]
+    - [x] Write Tests
+    - [x] Implement Feature
+- [x] Task: Implement mock download logic and state management for model readiness. [e9fc511]
+    - [x] Write Tests
+    - [x] Implement Feature
+- [x] Task: Conductor - User Manual Verification 'Phase 2: AI Model Download Manager' (Protocol in workflow.md)
 
 ## Phase 3: Generative Diagramming
 - [ ] Task: Create an `AIEngineService` that parses natural language chat input into architectural commands (e.g., mapping text to Node creations).
