@@ -1,6 +1,7 @@
 import 'package:diagram_flow_ai/theme/design_tokens.dart';
 import 'package:diagram_flow_ai/widgets/diagram_canvas.dart';
 import 'package:diagram_flow_ai/widgets/resource_sidebar.dart';
+import 'package:diagram_flow_ai/widgets/right_sidebar.dart';
 import 'package:diagram_flow_ai/widgets/top_nav_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -29,28 +30,12 @@ class _AppShellState extends State<AppShell> {
                 // Center Canvas
                 const Expanded(child: DiagramCanvas()),
                 const VerticalDivider(thickness: 1, width: 1, color: AppColors.outlineVariant),
-                // Right Sidebar Placeholder
-                Container(
-                  width: 320,
-                  color: AppColors.surfaceContainer,
-                  child: Column(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: _buildRightSection('Mermaid Architecture'),
-                      ),
-                      const Divider(height: 1, color: AppColors.outlineVariant),
-                      Expanded(
-                        flex: 1,
-                        child: _buildRightSection('Gemma4 AI Assistant'),
-                      ),
-                    ],
-                  ),
-                ),
+                // Right Sidebar
+                const RightSidebar(),
               ],
             ),
           ),
-          // Footer Placeholder
+          // Footer
           Container(
             height: 32,
             decoration: const BoxDecoration(
@@ -77,26 +62,6 @@ class _AppShellState extends State<AppShell> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildRightSection(String title) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Text(
-            title,
-            style: AppTypography.labelCaps,
-          ),
-        ),
-        const Expanded(
-          child: Center(
-            child: Text('Content Placeholder'),
-          ),
-        ),
-      ],
     );
   }
 }
