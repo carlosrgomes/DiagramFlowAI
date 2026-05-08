@@ -9,7 +9,7 @@
     - [x] Implement Feature
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Environment & Project Scaffolding' (Protocol in workflow.md)
 
-## Phase 2: Design Tokens & Base UI
+## Phase 2: Design Tokens & Base UI [checkpoint: 649504a]
 - [x] Task: Add foundational design tokens (colors, typography) referencing Stitch. [b1f8f86]
     - [x] Write Tests
     - [x] Implement Feature
@@ -19,4 +19,4 @@
 - [x] Task: Implement basic navigation skeleton. [2ed5ce2]
     - [x] Write Tests
     - [x] Implement Feature
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Design Tokens & Base UI' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Design Tokens & Base UI' (Protocol in workflow.md)
