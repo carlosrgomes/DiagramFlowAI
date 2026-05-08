@@ -22,4 +22,5 @@ flutter:
   uses-material-design: true
   assets:
     - assets/aws_icons/
+    - assets/aws_assets_list.txt
 

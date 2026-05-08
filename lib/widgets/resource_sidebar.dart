@@ -1,5 +1,4 @@
 import 'package:diagram_flow_ai/models/asset_manager.dart';
-import 'package:diagram_flow_ai/models/resource_template.dart';
 import 'package:diagram_flow_ai/theme/design_tokens.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +13,7 @@ class ResourceSidebar extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Cloud Library Header
+          // Header
           Padding(
             padding: const EdgeInsets.all(24.0),
             child: Column(
@@ -26,48 +25,31 @@ class ResourceSidebar extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'VPC-Primary-Alpha',
+                  'Full AWS Catalog',
                   style: AppTypography.bodyMd.copyWith(color: AppColors.onSurfaceVariant),
                 ),
               ],
             ),
           ),
           
-          // Provider Tabs
-          _buildProviderItem(Icons.cloud_outlined, 'AWS', active: true),
-          _buildProviderItem(Icons.layers_outlined, 'Azure'),
-          _buildProviderItem(Icons.hub_outlined, 'GCP'),
-          _buildProviderItem(Icons.grid_view_outlined, 'Kubernetes'),
+          const Divider(height: 1, color: AppColors.outlineVariant),
           
-          const SizedBox(height: 24),
-          
-          // Drag Resources Section
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: Text(
-              'DRAG RESOURCES',
-              style: AppTypography.labelCaps.copyWith(letterSpacing: 1.2),
-            ),
-          ),
-          const SizedBox(height: 12),
-          
+          // Dynamic Scrollable List of Categories
           Expanded(
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              children: AssetManager.awsLibrary.entries.map((category) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8),
-                      child: Text(
-                        category.key.toUpperCase(),
-                        style: AppTypography.labelCaps.copyWith(
-                          fontSize: 10,
-                          color: AppColors.onSurfaceVariant.withAlpha(150),
-                        ),
-                      ),
+              children: AssetManager.catalog.entries.map((category) {
+                return ExpansionTile(
+                  title: Text(
+                    category.key.toUpperCase(),
+                    style: AppTypography.labelCaps.copyWith(
+                      fontSize: 10,
+                      color: AppColors.primary,
+                      letterSpacing: 1.0,
                     ),
+                  ),
+                  initiallyExpanded: category.key.contains('Compute'),
+                  children: [
                     GridView.count(
                       shrinkWrap: true,
                       crossAxisCount: 2,
@@ -75,14 +57,8 @@ class ResourceSidebar extends StatelessWidget {
                       crossAxisSpacing: 8,
                       childAspectRatio: 1.4,
                       physics: const NeverScrollableScrollPhysics(),
-                      children: category.value.entries.map((resource) {
-                        return _buildDraggableResourceCard(
-                          ResourceTemplate(
-                            label: resource.key,
-                            icon: Icons.help_outline, // Not used anymore as we use AssetManager
-                            color: AppColors.secondary,
-                          ),
-                        );
+                      children: category.value.map((template) {
+                        return _buildDraggableResourceCard(template);
                       }).toList(),
                     ),
                     const SizedBox(height: 16),
@@ -92,7 +68,7 @@ class ResourceSidebar extends StatelessWidget {
             ),
           ),
           
-          // Bottom CTA
+          // Bottom Footer Action
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Container(
@@ -105,39 +81,13 @@ class ResourceSidebar extends StatelessWidget {
               ),
               child: Center(
                 child: Text(
-                  '+ Add Resource',
+                  'Sync Assets',
                   style: AppTypography.bodyMd.copyWith(fontWeight: FontWeight.w500),
                 ),
               ),
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildProviderItem(IconData icon, String label, {bool active = false}) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-      decoration: BoxDecoration(
-        color: active ? AppColors.primary.withAlpha(51) : Colors.transparent,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: ListTile(
-        visualDensity: const VisualDensity(vertical: -4),
-        leading: Icon(
-          icon,
-          size: 18,
-          color: active ? AppColors.primary : AppColors.onSurfaceVariant,
-        ),
-        title: Text(
-          label,
-          style: AppTypography.bodyMd.copyWith(
-            color: active ? AppColors.primary : AppColors.onSurfaceVariant,
-            fontWeight: active ? FontWeight.bold : FontWeight.normal,
-            fontSize: 13,
-          ),
-        ),
       ),
     );
   }
@@ -162,34 +112,41 @@ class ResourceSidebar extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(AssetManager.getIconForLabel(template.label), width: 28, height: 28),
+              Image.asset(template.path, width: 28, height: 28),
               const SizedBox(height: 4),
               Text(
                 template.label, 
-                style: AppTypography.labelCaps.copyWith(color: Colors.white, fontSize: 9),
+                style: AppTypography.labelCaps.copyWith(color: Colors.white, fontSize: 8),
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),
         ),
       ),
-      child: _buildResourceCard(template.label),
-    );
-  }
-
-  Widget _buildResourceCard(String label) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.surfaceContainer,
-        borderRadius: BorderRadius.circular(4),
-        border: Border.all(color: AppColors.outlineVariant),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(AssetManager.getIconForLabel(label), width: 24, height: 24),
-          const SizedBox(height: 4),
-          Text(label, style: AppTypography.labelCaps.copyWith(fontSize: 10)),
-        ],
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.surfaceContainer,
+          borderRadius: BorderRadius.circular(4),
+          border: Border.all(color: AppColors.outlineVariant),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(template.path, width: 24, height: 24),
+            const SizedBox(height: 4),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4.0),
+              child: Text(
+                template.label, 
+                style: AppTypography.labelCaps.copyWith(fontSize: 8),
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

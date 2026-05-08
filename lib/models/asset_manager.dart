@@ -1,3 +1,18 @@
+import 'dart:developer' as dev;
+import 'package:flutter/services.dart';
+
+class ResourceTemplate {
+  final String label;
+  final String path;
+  final String category;
+
+  ResourceTemplate({
+    required this.label,
+    required this.path,
+    required this.category,
+  });
+}
+
 class AssetManager {
   static const String _awsRoot = 'assets/aws_icons';
 
@@ -6,36 +21,49 @@ class AssetManager {
   static String get rds => '$_awsRoot/rds.png';
   static String get vpc => '$_awsRoot/vpc.png';
   static String get lambda => '$_awsRoot/lambda.png';
-  static String get eks => '$_awsRoot/eks.png';
-  static String get route53 => '$_awsRoot/route53.png';
-  static String get dynamodb => '$_awsRoot/dynamodb.png';
-  static String get autoscaling => '$_awsRoot/autoscaling.png';
-  static String get ebs => '$_awsRoot/ebs.png';
-  static String get cloudfront => '$_awsRoot/cloudfront.png';
 
-  static Map<String, Map<String, String>> get awsLibrary => {
-    'Compute': {
-      'EC2': ec2,
-      'Lambda': lambda,
-      'Autoscaling': autoscaling,
-    },
-    'Containers': {
-      'EKS': eks,
-    },
-    'Storage': {
-      'S3': s3,
-      'EBS': ebs,
-    },
-    'Database': {
-      'RDS': rds,
-      'DynamoDB': dynamodb,
-    },
-    'Network': {
-      'VPC': vpc,
-      'Route53': route53,
-      'CloudFront': cloudfront,
-    },
-  };
+  static Map<String, List<ResourceTemplate>> _catalog = {};
+
+  static Map<String, List<ResourceTemplate>> get catalog => _catalog;
+
+  static Future<void> loadCatalog() async {
+    try {
+      final manifest = await rootBundle.loadString('assets/aws_assets_list.txt');
+      final lines = manifest.split('\n');
+      
+      Map<String, List<ResourceTemplate>> newCatalog = {};
+
+      for (var line in lines) {
+        if (line.trim().isEmpty) continue;
+
+        // Path example: assets/aws/Resource-Icons_07312025/Res_Compute/Res_Amazon-EC2_Instance_48.png
+        final parts = line.split('/');
+        if (parts.length < 4) continue;
+
+        final categoryPart = parts[parts.length - 2].replaceFirst('Res_', '');
+        final fileName = parts.last;
+        final label = fileName
+            .replaceFirst('Res_', '')
+            .replaceFirst('_48.png', '')
+            .replaceAll('-', ' ')
+            .replaceAll('_', ' ');
+
+        if (!newCatalog.containsKey(categoryPart)) {
+          newCatalog[categoryPart] = [];
+        }
+
+        newCatalog[categoryPart]!.add(ResourceTemplate(
+          label: label,
+          path: line,
+          category: categoryPart,
+        ));
+      }
+
+      _catalog = newCatalog;
+    } catch (e) {
+      dev.log('Error loading asset catalog: $e');
+    }
+  }
 
   static String getIconForLabel(String label) {
     final l = label.toUpperCase();
@@ -44,12 +72,6 @@ class AssetManager {
     if (l.contains('S3')) return s3;
     if (l.contains('VPC')) return vpc;
     if (l.contains('LAMBDA')) return lambda;
-    if (l.contains('EKS')) return eks;
-    if (l.contains('ROUTE53')) return route53;
-    if (l.contains('DYNAMODB')) return dynamodb;
-    if (l.contains('AUTOSCALING')) return autoscaling;
-    if (l.contains('EBS')) return ebs;
-    if (l.contains('CLOUDFRONT')) return cloudfront;
     return ec2;
   }
 }

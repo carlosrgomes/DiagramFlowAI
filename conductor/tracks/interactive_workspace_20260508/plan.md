@@ -10,10 +10,8 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Interactive Canvas Nodes' (Protocol in workflow.md)
 
 ## Phase 2: Comprehensive Asset Discovery
-- [ ] Task: Implement `AssetScanner` utility to recursively find all `48.png` icons in `assets/aws/` and group them by category.
-    - [ ] Write Tests
-    - [ ] Implement Feature
-- [ ] Task: Refactor `ResourceSidebar` to build its UI dynamically based on the scanned `AssetScanner` catalog.
+- [x] Task: Implement `AssetScanner` utility to recursively find all `48.png` icons in `assets/aws/` and group them by category. [213d3a0]
+- [~] Task: Refactor `ResourceSidebar` to build its UI dynamically based on the scanned `AssetScanner` catalog.
     - [ ] Write Tests
     - [ ] Implement Feature
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Comprehensive Asset Discovery' (Protocol in workflow.md)

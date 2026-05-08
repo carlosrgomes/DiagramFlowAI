@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 
+import 'package:diagram_flow_ai/models/asset_manager.dart';
 import 'package:diagram_flow_ai/models/diagram_state.dart';
 import 'package:diagram_flow_ai/models/ai_model_state.dart';
 import 'package:diagram_flow_ai/theme/design_tokens.dart';
 import 'package:diagram_flow_ai/widgets/app_shell.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await AssetManager.loadCatalog();
+  
   runApp(const DiagramFlowApp());
 }
 
