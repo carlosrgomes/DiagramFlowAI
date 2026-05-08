@@ -4,6 +4,7 @@ import 'package:diagram_flow_ai/models/diagram_state.dart';
 import 'package:diagram_flow_ai/theme/design_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gemma/flutter_gemma.dart' hide MessageType;
 
 class RightSidebar extends StatefulWidget {
   const RightSidebar({super.key});
@@ -30,31 +31,58 @@ class _RightSidebarState extends State<RightSidebar> {
     final aiState = context.read<AIModelState>();
     final diagramState = context.read<DiagramState>();
 
-    aiState.addMessage(text, MessageType.user, rawLog: 'USER_PROMPT: $text\nMODEL: ${aiState.selectedModel}');
+    if (aiState.chatSession == null) {
+       aiState.addMessage('Gemma engine not ready. Please initialize the model.', MessageType.ai);
+       return;
+    }
+
+    aiState.addMessage(text, MessageType.user, rawLog: 'USER_PROMPT: $text');
     _chatController.clear();
 
-    await for (final event in _aiEngine.processPrompt(text)) {
-      if (event.startsWith('THOUGHT:')) {
-        final thought = event.replaceFirst('THOUGHT:', '').trim();
-        aiState.addMessage(thought, MessageType.thought, rawLog: 'AI_REASONING_STEP: $thought');
-      } else if (event.startsWith('NODE:')) {
-        final nodeData = event.replaceFirst('NODE:', '').split('@');
-        final label = nodeData[0];
-        final coords = nodeData[1].split(',');
-        final id = nodeData[2];
-        
-        diagramState.addNode(
-          id: id,
-          label: label,
-          position: Offset(double.parse(coords[0]), double.parse(coords[1])),
-        );
-      } else if (event.startsWith('CONN:')) {
-        final connData = event.replaceFirst('CONN:', '').split('->');
-        diagramState.addConnection(connData[0], connData[1]);
-      } else if (event.startsWith('ACTION:')) {
-        final action = event.replaceFirst('ACTION:', '').trim();
-        aiState.addMessage(action, MessageType.ai, rawLog: 'AI_FINAL_ACTION: $action\nSTATE: UPDATED');
+    String fullResponseBuffer = "";
+
+    try {
+      final stream = _aiEngine.processPrompt(text, aiState.chatSession!);
+      
+      await for (final response in stream) {
+        if (response is ThinkingResponse) {
+          aiState.addMessage(response.content, MessageType.thought, rawLog: 'THOUGHT: ${response.content}');
+        } else if (response is TextResponse) {
+          fullResponseBuffer += response.token;
+          aiState.addMessage(response.token, MessageType.ai, rawLog: 'TOKEN: ${response.token}');
+        }
       }
+
+      // Parse commands from the complete response
+      _parseCommands(fullResponseBuffer, diagramState);
+
+    } catch (e) {
+      aiState.addMessage('Error communicating with Gemma: $e', MessageType.ai, rawLog: 'ERROR: $e');
+    }
+  }
+
+  void _parseCommands(String text, DiagramState diagramState) {
+    // NODE:LABEL@X,Y@ID
+    final nodeRegex = RegExp(r'NODE:([\w\s]+)@([\d.]+),([\d.]+)@([\w\d_]+)');
+    final nodeMatches = nodeRegex.allMatches(text);
+    
+    for (final match in nodeMatches) {
+      final label = match.group(1)!.trim();
+      final x = double.tryParse(match.group(2)!) ?? 200.0;
+      final y = double.tryParse(match.group(3)!) ?? 200.0;
+      final id = match.group(4)!;
+      
+      diagramState.addNode(id: id, label: label, position: Offset(x, y));
+    }
+
+    // CONN:FROM_ID->TO_ID
+    final connRegex = RegExp(r'CONN:([\w\d_]+)->([\w\d_]+)');
+    final connMatches = connRegex.allMatches(text);
+    
+    for (final match in connMatches) {
+      final fromId = match.group(1)!;
+      final toId = match.group(2)!;
+      diagramState.addConnection(fromId, toId);
     }
   }
 
@@ -132,10 +160,13 @@ class _RightSidebarState extends State<RightSidebar> {
       builder: (context, state, child) {
         String mermaidCode = 'graph TD\n';
         for (final node in state.nodes) {
-          mermaidCode += '  ${node.id.substring(node.id.length - 4)}[${node.label}]\n';
+          final id = node.id.length > 4 ? node.id.substring(node.id.length - 4) : node.id;
+          mermaidCode += '  $id[${node.label}]\n';
         }
         for (final conn in state.connections) {
-          mermaidCode += '  ${conn.fromId.substring(conn.fromId.length - 4)} --> ${conn.toId.substring(conn.toId.length - 4)}\n';
+          final fromId = conn.fromId.length > 4 ? conn.fromId.substring(conn.fromId.length - 4) : conn.fromId;
+          final toId = conn.toId.length > 4 ? conn.toId.substring(conn.toId.length - 4) : conn.toId;
+          mermaidCode += '  $fromId --> $toId\n';
         }
 
         return Column(
@@ -224,6 +255,8 @@ class _RightSidebarState extends State<RightSidebar> {
                 )
               else if (aiState.status == AIModelStatus.ready)
                 const Icon(Icons.check_circle, size: 16, color: Colors.green)
+              else if (aiState.status == AIModelStatus.error)
+                const Icon(Icons.error_outline, size: 16, color: Colors.red)
             ],
           ),
         ),

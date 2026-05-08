@@ -9,17 +9,17 @@
     - [x] Implement Feature
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Native Setup & Dependencies' (Protocol in workflow.md)
 
-## Phase 2: Engine Initialization
-- [ ] Task: Update `AIModelState` to initialize `FlutterGemma` and manage the engine lifecycle.
-    - [ ] Write Tests
-    - [ ] Implement Feature
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Engine Initialization' (Protocol in workflow.md)
+## Phase 2: Engine Initialization [checkpoint: 548ae12]
+- [x] Task: Update `AIModelState` to initialize `FlutterGemma` and manage the engine lifecycle. [548ae12]
+    - [x] Write Tests
+    - [x] Implement Feature
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Engine Initialization' (Protocol in workflow.md)
 
-## Phase 3: Real Inference Stream
-- [ ] Task: Refactor `AIEngineService` to use `FlutterGemma.instance.getResponseStream()` with system instructions.
-    - [ ] Write Tests
-    - [ ] Implement Feature
-- [ ] Task: Update `RightSidebar` to handle real-time streaming updates for both thoughts and final actions.
-    - [ ] Write Tests
-    - [ ] Implement Feature
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Real Inference Stream' (Protocol in workflow.md)
+## Phase 3: Real Inference Stream [checkpoint: 548ae12]
+- [x] Task: Refactor `AIEngineService` to use `FlutterGemma.instance.getResponseStream()` with system instructions. [548ae12]
+    - [x] Write Tests
+    - [x] Implement Feature
+- [x] Task: Update `RightSidebar` to handle real-time streaming updates for both thoughts and final actions. [548ae12]
+    - [x] Write Tests
+    - [x] Implement Feature
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Real Inference Stream' (Protocol in workflow.md)

@@ -6,9 +6,14 @@ import 'package:diagram_flow_ai/models/ai_model_state.dart';
 import 'package:diagram_flow_ai/theme/design_tokens.dart';
 import 'package:diagram_flow_ai/widgets/app_shell.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gemma/flutter_gemma.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Initialize the local LLM engine
+  await FlutterGemma.initialize();
+  
   await AssetManager.loadCatalog();
   
   runApp(const DiagramFlowApp());
