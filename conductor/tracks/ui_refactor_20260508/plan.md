@@ -10,7 +10,7 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Layout Skeleton & Header' (Protocol in workflow.md)
 
 ## Phase 2: Left Sidebar Refactor [checkpoint: 6063892]
-- [ ] Task: Refactor `ResourceSidebar` to match the "Cloud Library" and "DRAG RESOURCES" sections precisely.
+- [~] Task: Refactor `ResourceSidebar` to match the "Cloud Library" and "DRAG RESOURCES" sections precisely.
     - [ ] Write Tests
     - [ ] Implement Feature
 - [ ] Task: Update draggable items to use the custom dark-themed buttons shown in the reference.

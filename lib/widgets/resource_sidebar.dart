@@ -1,92 +1,162 @@
+import 'package:diagram_flow_ai/models/resource_template.dart';
+import 'package:diagram_flow_ai/theme/design_tokens.dart';
 import 'package:flutter/material.dart';
-
-class ResourceTemplate {
-  final String label;
-  final IconData icon;
-  final Color color;
-
-  ResourceTemplate({
-    required this.label,
-    required this.icon,
-    required this.color,
-  });
-}
 
 class ResourceSidebar extends StatelessWidget {
   const ResourceSidebar({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final categories = {
-      'Compute': [
-        ResourceTemplate(label: 'EC2 Instance', icon: Icons.memory, color: Colors.orange),
-        ResourceTemplate(label: 'Lambda Function', icon: Icons.bolt, color: Colors.orange),
-      ],
-      'Storage': [
-        ResourceTemplate(label: 'S3 Bucket', icon: Icons.storage, color: Colors.green),
-        ResourceTemplate(label: 'RDS Database', icon: Icons.dns, color: Colors.blue),
-      ],
-      'Network': [
-        ResourceTemplate(label: 'VPC', icon: Icons.cloud_queue, color: Colors.purple),
-        ResourceTemplate(label: 'Load Balancer', icon: Icons.settings_input_component, color: Colors.purple),
-      ],
-    };
+    final dragResources = [
+      ResourceTemplate(label: 'EC2', icon: Icons.memory_outlined, color: AppColors.secondary),
+      ResourceTemplate(label: 'RDS', icon: Icons.dns_outlined, color: AppColors.secondary),
+      ResourceTemplate(label: 'S3', icon: Icons.folder_open_outlined, color: AppColors.secondary),
+      ResourceTemplate(label: 'VPC', icon: Icons.router_outlined, color: AppColors.secondary),
+    ];
 
     return Container(
       width: 280,
-      color: Theme.of(context).colorScheme.surfaceContainer,
+      color: AppColors.surface,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Cloud Library Header
           Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              'Resource Library',
-              style: Theme.of(context).textTheme.headlineSmall,
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Cloud Library',
+                  style: AppTypography.h2.copyWith(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'VPC-Primary-Alpha',
+                  style: AppTypography.bodyMd.copyWith(color: AppColors.onSurfaceVariant),
+                ),
+              ],
             ),
           ),
-          const Divider(height: 1),
-          Expanded(
-            child: ListView(
-              children: categories.entries.map((category) {
-                return ExpansionTile(
-                  title: Text(
-                    category.key,
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ),
-                  initiallyExpanded: true,
-                  children: category.value.map((template) {
-                    return Draggable<ResourceTemplate>(
-                      data: template,
-                      feedback: Material(
-                        color: Colors.transparent,
-                        child: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: template.color.withAlpha(128),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: Icon(template.icon, color: Colors.white, size: 32),
-                        ),
-                      ),
-                      childWhenDragging: Opacity(
-                        opacity: 0.5,
-                        child: ListTile(
-                          leading: Icon(template.icon, color: template.color),
-                          title: Text(template.label),
-                        ),
-                      ),
-                      child: ListTile(
-                        leading: Icon(template.icon, color: template.color),
-                        title: Text(template.label),
-                        onTap: () {},
-                      ),
-                    );
-                  }).toList(),
-                );
-              }).toList(),
+          
+          // Provider Tabs
+          _buildProviderItem(Icons.cloud_outlined, 'AWS', active: true),
+          _buildProviderItem(Icons.layers_outlined, 'Azure'),
+          _buildProviderItem(Icons.hub_outlined, 'GCP'),
+          _buildProviderItem(Icons.grid_view_outlined, 'Kubernetes'),
+          
+          const SizedBox(height: 32),
+          
+          // Drag Resources Section
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Text(
+              'DRAG RESOURCES',
+              style: AppTypography.labelCaps.copyWith(letterSpacing: 1.2),
+            ),
+          ),
+          const SizedBox(height: 16),
+          
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: GridView.count(
+              shrinkWrap: true,
+              crossAxisCount: 2,
+              mainAxisSpacing: 8,
+              crossAxisSpacing: 8,
+              childAspectRatio: 1.5,
+              physics: const NeverScrollableScrollPhysics(),
+              children: dragResources.map((template) => _buildDraggableResourceCard(template)).toList(),
+            ),
+          ),
+          
+          const Spacer(),
+          
+          // Bottom CTA
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              decoration: BoxDecoration(
+                color: AppColors.surfaceContainer,
+                borderRadius: BorderRadius.circular(4),
+                border: Border.all(color: AppColors.outlineVariant),
+              ),
+              child: Center(
+                child: Text(
+                  '+ Add Resource',
+                  style: AppTypography.bodyMd.copyWith(fontWeight: FontWeight.w500),
+                ),
+              ),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildProviderItem(IconData icon, String label, {bool active = false}) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      decoration: BoxDecoration(
+        color: active ? AppColors.primary.withAlpha(51) : Colors.transparent,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: ListTile(
+        visualDensity: const VisualDensity(vertical: -2),
+        leading: Icon(
+          icon,
+          size: 20,
+          color: active ? AppColors.primary : AppColors.onSurfaceVariant,
+        ),
+        title: Text(
+          label,
+          style: AppTypography.bodyMd.copyWith(
+            color: active ? AppColors.primary : AppColors.onSurfaceVariant,
+            fontWeight: active ? FontWeight.bold : FontWeight.normal,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDraggableResourceCard(ResourceTemplate template) {
+    return Draggable<ResourceTemplate>(
+      data: template,
+      feedback: Material(
+        color: Colors.transparent,
+        child: Container(
+          width: 100,
+          height: 60,
+          decoration: BoxDecoration(
+            color: AppColors.surfaceContainer.withAlpha(150),
+            borderRadius: BorderRadius.circular(4),
+            border: Border.all(color: AppColors.primary),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(template.icon, color: AppColors.secondary, size: 24),
+              Text(template.label, style: AppTypography.labelCaps),
+            ],
+          ),
+        ),
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.surfaceContainer,
+          borderRadius: BorderRadius.circular(4),
+          border: Border.all(color: AppColors.outlineVariant),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(template.icon, color: AppColors.secondary, size: 24),
+            const SizedBox(height: 4),
+            Text(template.label, style: AppTypography.labelCaps),
+          ],
+        ),
       ),
     );
   }

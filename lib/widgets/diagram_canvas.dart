@@ -1,8 +1,8 @@
+import 'package:diagram_flow_ai/models/diagram_state.dart';
+import 'package:diagram_flow_ai/models/resource_template.dart';
+import 'package:diagram_flow_ai/widgets/diagram_node.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:diagram_flow_ai/models/diagram_state.dart';
-import 'package:diagram_flow_ai/widgets/resource_sidebar.dart';
-import 'package:diagram_flow_ai/widgets/diagram_node.dart';
 
 class GridBackgroundPainter extends CustomPainter {
   final Color gridColor;
