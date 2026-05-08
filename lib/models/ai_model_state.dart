@@ -31,6 +31,7 @@ class AIModelState extends ChangeNotifier {
   double _downloadProgress = 0.0;
   String _selectedModel = 'Gemma4-2b';
   String? _errorMessage;
+  String? _huggingFaceToken;
   
   InferenceChat? _chatSession;
 
@@ -47,6 +48,7 @@ class AIModelState extends ChangeNotifier {
   double get downloadProgress => _downloadProgress;
   String get selectedModel => _selectedModel;
   String? get errorMessage => _errorMessage;
+  String? get huggingFaceToken => _huggingFaceToken;
   List<ChatMessage> get messages => List.unmodifiable(_messages);
   InferenceChat? get chatSession => _chatSession;
 
@@ -55,14 +57,23 @@ class AIModelState extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setToken(String token) {
+    _huggingFaceToken = token;
+    notifyListeners();
+  }
+
   Future<void> startDownload() async {
-    if (_status != AIModelStatus.notDownloaded) return;
+    if (_status == AIModelStatus.downloading) return;
 
     _status = AIModelStatus.downloading;
+    _errorMessage = null;
     _downloadProgress = 0.0;
     notifyListeners();
 
     try {
+      dev.log('Initializing FlutterGemma with token...');
+      await FlutterGemma.initialize(huggingFaceToken: _huggingFaceToken);
+
       dev.log('Starting model installation for Gemma 4...');
       
       await FlutterGemma.installModel(
@@ -101,7 +112,7 @@ Show your thinking process before providing the commands.
       _status = AIModelStatus.error;
       _errorMessage = e.toString();
       _messages.add(ChatMessage(
-        text: 'Error initializing Gemma: $e. Please ensure the model file is present.', 
+        text: 'Error: $e. Please ensure your token is valid and you have accepted the model terms at hf.co.', 
         type: MessageType.ai,
       ));
     }

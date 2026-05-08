@@ -15,12 +15,14 @@ class RightSidebar extends StatefulWidget {
 
 class _RightSidebarState extends State<RightSidebar> {
   final TextEditingController _chatController = TextEditingController();
+  final TextEditingController _tokenController = TextEditingController();
   final AIEngineService _aiEngine = AIEngineService();
   int _activeTab = 0; // 0: Assistant, 1: Logs
 
   @override
   void dispose() {
     _chatController.dispose();
+    _tokenController.dispose();
     super.dispose();
   }
 
@@ -62,7 +64,6 @@ class _RightSidebarState extends State<RightSidebar> {
   }
 
   void _parseCommands(String text, DiagramState diagramState) {
-    // NODE:LABEL@X,Y@ID
     final nodeRegex = RegExp(r'NODE:([\w\s]+)@([\d.]+),([\d.]+)@([\w\d_]+)');
     final nodeMatches = nodeRegex.allMatches(text);
     
@@ -75,7 +76,6 @@ class _RightSidebarState extends State<RightSidebar> {
       diagramState.addNode(id: id, label: label, position: Offset(x, y));
     }
 
-    // CONN:FROM_ID->TO_ID
     final connRegex = RegExp(r'CONN:([\w\d_]+)->([\w\d_]+)');
     final connMatches = connRegex.allMatches(text);
     
@@ -218,45 +218,73 @@ class _RightSidebarState extends State<RightSidebar> {
         // Model Selection & Model Download
         Padding(
           padding: const EdgeInsets.all(12.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Column(
             children: [
-              Expanded(
-                child: Container(
-                  height: 28,
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  decoration: BoxDecoration(
-                    color: AppColors.surfaceContainerHighest,
-                    borderRadius: BorderRadius.circular(4),
-                    border: Border.all(color: AppColors.outlineVariant),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Container(
+                      height: 28,
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      decoration: BoxDecoration(
+                        color: AppColors.surfaceContainerHighest,
+                        borderRadius: BorderRadius.circular(4),
+                        border: Border.all(color: AppColors.outlineVariant),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: aiState.selectedModel,
+                          icon: const Icon(Icons.keyboard_arrow_down, size: 14),
+                          style: AppTypography.labelCaps.copyWith(fontSize: 10, color: AppColors.primary),
+                          dropdownColor: AppColors.surfaceContainerHighest,
+                          onChanged: (val) => aiState.setSelectedModel(val!),
+                          items: aiState.availableModels.map((m) {
+                            return DropdownMenuItem(value: m, child: Text(m));
+                          }).toList(),
+                        ),
+                      ),
+                    ),
                   ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value: aiState.selectedModel,
-                      icon: const Icon(Icons.keyboard_arrow_down, size: 14),
-                      style: AppTypography.labelCaps.copyWith(fontSize: 10, color: AppColors.primary),
-                      dropdownColor: AppColors.surfaceContainerHighest,
-                      onChanged: (val) => aiState.setSelectedModel(val!),
-                      items: aiState.availableModels.map((m) {
-                        return DropdownMenuItem(value: m, child: Text(m));
-                      }).toList(),
+                  const SizedBox(width: 8),
+                  if (aiState.status == AIModelStatus.notDownloaded || aiState.status == AIModelStatus.error)
+                    IconButton(
+                      onPressed: () {
+                        aiState.setToken(_tokenController.text.trim());
+                        aiState.startDownload();
+                      },
+                      icon: const Icon(Icons.download, size: 16),
+                      tooltip: 'Download Model',
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                    )
+                  else if (aiState.status == AIModelStatus.ready)
+                    const Icon(Icons.check_circle, size: 16, color: Colors.green)
+                  else if (aiState.status == AIModelStatus.downloading)
+                    const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    ),
+                ],
+              ),
+              if (aiState.status == AIModelStatus.notDownloaded || aiState.status == AIModelStatus.error) ...[
+                const SizedBox(height: 8),
+                TextField(
+                  controller: _tokenController,
+                  obscureText: true,
+                  style: AppTypography.bodyMd.copyWith(fontSize: 10),
+                  decoration: InputDecoration(
+                    hintText: 'Hugging Face Token (hf_...)',
+                    hintStyle: AppTypography.bodyMd.copyWith(color: AppColors.onSurfaceVariant, fontSize: 10),
+                    isDense: true,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(4),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 8),
-              if (aiState.status == AIModelStatus.notDownloaded)
-                IconButton(
-                  onPressed: () => aiState.startDownload(),
-                  icon: const Icon(Icons.download, size: 16),
-                  tooltip: 'Download Model',
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                )
-              else if (aiState.status == AIModelStatus.ready)
-                const Icon(Icons.check_circle, size: 16, color: Colors.green)
-              else if (aiState.status == AIModelStatus.error)
-                const Icon(Icons.error_outline, size: 16, color: Colors.red)
+              ],
             ],
           ),
         ),
