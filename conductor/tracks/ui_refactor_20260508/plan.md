@@ -9,16 +9,16 @@
     - [x] Implement Feature
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Layout Skeleton & Header' (Protocol in workflow.md)
 
-## Phase 2: Left Sidebar Refactor [checkpoint: 6063892]
-- [~] Task: Refactor `ResourceSidebar` to match the "Cloud Library" and "DRAG RESOURCES" sections precisely.
-    - [ ] Write Tests
-    - [ ] Implement Feature
-- [ ] Task: Update draggable items to use the custom dark-themed buttons shown in the reference.
-    - [ ] Write Tests
-    - [ ] Implement Feature
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Left Sidebar Refactor' (Protocol in workflow.md)
+## Phase 2: Left Sidebar Refactor [checkpoint: f92bcba]
+- [x] Task: Refactor `ResourceSidebar` to match the "Cloud Library" and "DRAG RESOURCES" sections precisely. [f92bcba]
+    - [x] Write Tests
+    - [x] Implement Feature
+- [x] Task: Update draggable items to use the custom dark-themed buttons shown in the reference. [f92bcba]
+    - [x] Write Tests
+    - [x] Implement Feature
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Left Sidebar Refactor' (Protocol in workflow.md)
 
-## Phase 3: Canvas & Right Sidebar
+## Phase 3: Canvas & Right Sidebar [checkpoint: f92bcba]
 - [ ] Task: Adjust `DiagramCanvas` visual styling (background color, grid pattern) to match the reference screenshot.
     - [ ] Write Tests
     - [ ] Implement Feature
