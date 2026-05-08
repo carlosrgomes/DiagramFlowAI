@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CloudFlow AI - Model Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600;700;900&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary-fixed-variant": "#2f2ebe",
+                    "tertiary-container": "#d97721",
+                    "tertiary-fixed": "#ffdcc5",
+                    "surface-container-lowest": "#060e20",
+                    "on-error-container": "#ffdad6",
+                    "inverse-primary": "#494bd6",
+                    "secondary": "#7bd0ff",
+                    "on-secondary": "#00354a",
+                    "error-container": "#93000a",
+                    "background": "#0b1326",
+                    "primary-container": "#8083ff",
+                    "inverse-on-surface": "#283044",
+                    "primary": "#c0c1ff",
+                    "on-secondary-fixed": "#001e2c",
+                    "secondary-container": "#00a6e0",
+                    "on-primary-container": "#0d0096",
+                    "on-error": "#690005",
+                    "inverse-surface": "#dae2fd",
+                    "secondary-fixed": "#c4e7ff",
+                    "on-secondary-fixed-variant": "#004c69",
+                    "surface-tint": "#c0c1ff",
+                    "on-secondary-container": "#00374d",
+                    "outline": "#908fa0",
+                    "on-surface": "#dae2fd",
+                    "secondary-fixed-dim": "#7bd0ff",
+                    "on-tertiary-fixed-variant": "#703700",
+                    "on-surface-variant": "#c7c4d7",
+                    "surface-bright": "#31394d",
+                    "surface": "#0b1326",
+                    "on-primary": "#1000a9",
+                    "error": "#ffb4ab",
+                    "primary-fixed": "#e1e0ff",
+                    "surface-container-highest": "#2d3449",
+                    "on-tertiary-fixed": "#301400",
+                    "surface-container-low": "#131b2e",
+                    "on-background": "#dae2fd",
+                    "tertiary-fixed-dim": "#ffb783",
+                    "tertiary": "#ffb783",
+                    "on-tertiary-container": "#452000",
+                    "surface-container": "#171f33",
+                    "surface-dim": "#0b1326",
+                    "primary-fixed-dim": "#c0c1ff",
+                    "surface-variant": "#2d3449",
+                    "on-primary-fixed": "#07006c",
+                    "surface-container-high": "#222a3d",
+                    "outline-variant": "#464554",
+                    "on-tertiary": "#4f2500"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "toolbar_height": "56px",
+                    "md": "16px",
+                    "xs": "4px",
+                    "unit": "4px",
+                    "lg": "24px",
+                    "gutter": "16px",
+                    "sidebar_width": "280px",
+                    "xl": "48px",
+                    "sm": "8px"
+            },
+            "fontFamily": {
+                    "label-caps": ["Geist", "sans-serif"],
+                    "h1": ["Geist", "sans-serif"],
+                    "code": ["JetBrains Mono", "monospace"],
+                    "display": ["Geist", "sans-serif"],
+                    "h2": ["Geist", "sans-serif"],
+                    "body-lg": ["Geist", "sans-serif"],
+                    "body-md": ["Geist", "sans-serif"]
+            },
+            "fontSize": {
+                    "label-caps": ["11px", { "lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                    "h1": ["24px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                    "code": ["13px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                    "display": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                    "h2": ["18px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                    "body-lg": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                    "body-md": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+          font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md min-h-screen">
+<!-- TopNavBar -->
+<nav class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-lg h-toolbar_height border-b border-outline-variant bg-surface-container-low font-body-md text-body-md text-primary dark:text-primary">
+<div class="flex items-center space-x-lg">
+<div class="font-display text-h2 font-black text-primary dark:text-primary tracking-tight">
+                CloudFlow AI
+            </div>
+<div class="flex items-center space-x-sm bg-surface-container-highest border border-outline-variant rounded px-sm py-xs">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">search</span>
+<input class="bg-transparent border-none outline-none focus:ring-0 text-body-md text-on-surface w-48 placeholder-on-surface-variant/50 p-0 h-auto" placeholder="Search resources..." type="text"/>
+</div>
+</div>
+<div class="flex items-center h-full">
+<div class="flex space-x-md h-full items-end">
+<a class="text-on-surface-variant hover:text-on-surface transition-colors pb-1 flex items-center h-full hover:bg-surface-variant/50 transition-all px-sm rounded-t-sm" href="#">Projects</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-1 flex items-center h-full hover:bg-surface-variant/50 transition-all px-sm rounded-t-sm scale-95 duration-100" href="#">Models</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors pb-1 flex items-center h-full hover:bg-surface-variant/50 transition-all px-sm rounded-t-sm" href="#">Canvas</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors pb-1 flex items-center h-full hover:bg-surface-variant/50 transition-all px-sm rounded-t-sm" href="#">Deployments</a>
+</div>
+</div>
+<div class="flex items-center space-x-sm">
+<button class="p-xs rounded hover:bg-surface-variant/50 transition-all text-on-surface-variant hover:text-on-surface">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+</button>
+<button class="p-xs rounded hover:bg-surface-variant/50 transition-all text-on-surface-variant hover:text-on-surface">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+<button class="p-xs rounded hover:bg-surface-variant/50 transition-all text-on-surface-variant hover:text-on-surface">
+<span class="material-symbols-outlined text-[20px]">help</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-primary-container overflow-hidden ml-md border border-outline-variant">
+<img alt="User avatar" class="w-full h-full object-cover" data-alt="A futuristic, high-contrast user avatar portrait with subtle neon cyan lighting hitting the edge of a tech-wear hood, set against a completely black background. The style is hyper-detailed digital art." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqNVuW_ZM970uzAd2MbPkj0v6Dmsy-IcaGmqG1lLbQAIEwXA_DQqLCZJM9dN7qgt_2qFKt_1KuaO-J4B2N3TQ-L2EiKr930G1tTzdkNRznMy58_wGfq5PKZefj0hngSe6dPQfzTSq3waJpS4b_zlmLT3sMhSw-jIiwKlF-P8X2wTksnhxt5V-kNO3CjP2LbuwrKkQYFLoVXoVsaMADUNxLiDN8u_wZRkwvmAvlcSFTkhwW2ru_JDp3RMsF_hdaYgE5cTRok6KJnJg"/>
+</div>
+</div>
+</nav>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-toolbar_height w-sidebar_width h-[calc(100vh-toolbar_height)] border-r border-outline-variant bg-surface-container dark:bg-surface-container flex flex-col py-md px-sm space-y-xs font-body-md text-body-md text-primary dark:text-primary z-40">
+<div class="flex items-center space-x-md p-sm mb-sm border-b border-outline-variant pb-md">
+<div class="w-10 h-10 rounded bg-surface-container-highest border border-outline-variant flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-[20px]">deployed_code</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Resource Library</span>
+<span class="font-h2 text-h2 text-on-surface truncate">VPC-Primary-Alpha</span>
+</div>
+</div>
+<button class="w-full bg-primary-container text-on-primary-container font-body-md py-sm rounded-lg flex items-center justify-center space-x-sm hover:bg-primary-fixed transition-colors mb-md shadow-[0px_2px_4px_rgba(0,0,0,0.2)]">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span>Add Resource</span>
+</button>
+<div class="flex-1 flex flex-col space-y-xs">
+<a class="flex items-center space-x-sm p-sm rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">memory</span>
+<span>Compute</span>
+</a>
+<a class="flex items-center space-x-sm p-sm rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">dns</span>
+<span>Storage</span>
+</a>
+<a class="flex items-center space-x-sm p-sm rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">lan</span>
+<span>Network</span>
+</a>
+<a class="flex items-center space-x-sm p-sm rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">database</span>
+<span>Database</span>
+</a>
+<a class="flex items-center space-x-sm p-sm rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">shield</span>
+<span>Security</span>
+</a>
+</div>
+<div class="mt-auto pt-sm border-t border-outline-variant flex flex-col space-y-xs">
+<a class="flex items-center space-x-sm p-sm rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">terminal</span>
+<span>Terminal</span>
+</a>
+<a class="flex items-center space-x-sm p-sm rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">list_alt</span>
+<span>Logs</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="pl-sidebar_width pt-toolbar_height min-h-screen bg-surface">
+<div class="max-w-[1600px] mx-auto p-lg grid grid-cols-12 gap-lg">
+<!-- Page Header -->
+<div class="col-span-12 flex items-end justify-between mb-sm">
+<div>
+<h1 class="font-h1 text-h1 text-on-surface mb-xs">Model Registry</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Manage local and remote AI models available for architecture generation logic.</p>
+</div>
+</div>
+<!-- Default Model Selector Card -->
+<div class="col-span-12 bg-surface-container border border-outline-variant/30 rounded-xl p-md flex flex-col md:flex-row md:items-center justify-between gap-md relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-r from-primary-container/5 to-transparent pointer-events-none"></div>
+<div class="flex items-center space-x-md z-10">
+<div class="w-12 h-12 rounded-lg bg-surface-container-high border border-outline-variant flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-[24px]">smart_toy</span>
+</div>
+<div>
+<div class="font-label-caps text-label-caps text-primary uppercase mb-1">Active Generation Engine</div>
+<div class="flex items-center space-x-sm">
+<span class="font-h2 text-h2 text-on-surface">OpenAI GPT-4 Turbo</span>
+<span class="inline-flex items-center px-sm py-[2px] rounded-full bg-primary-container/20 text-primary-container font-code text-[11px] border border-primary-container/30">API</span>
+</div>
+</div>
+</div>
+<div class="z-10 flex items-center space-x-sm">
+<select class="bg-surface-container-lowest border border-outline-variant rounded p-sm text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary h-10 w-64 appearance-none custom-select">
+<option>OpenAI GPT-4 Turbo</option>
+<option>Gemma 4 (Local)</option>
+<option>Claude 3 Opus</option>
+</select>
+<button class="bg-transparent border border-outline-variant text-on-surface hover:bg-surface-container-high transition-colors px-md h-10 rounded font-body-md flex items-center space-x-xs">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+<span>Set Default</span>
+</button>
+</div>
+</div>
+<!-- Left Column: Registered Models List -->
+<div class="col-span-12 xl:col-span-8 space-y-md">
+<div class="bg-surface-container border border-outline-variant/50 rounded-xl flex flex-col h-full overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.2)]">
+<div class="p-md border-b border-outline-variant/50 flex justify-between items-center bg-surface-container-low">
+<h2 class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-widest">Registered Models</h2>
+<div class="flex items-center space-x-xs">
+<button class="p-xs rounded hover:bg-surface-container-high text-on-surface-variant transition-colors"><span class="material-symbols-outlined text-[18px]">filter_list</span></button>
+<button class="p-xs rounded hover:bg-surface-container-high text-on-surface-variant transition-colors"><span class="material-symbols-outlined text-[18px]">refresh</span></button>
+</div>
+</div>
+<div class="flex-1 overflow-auto">
+<table class="w-full text-left font-body-md">
+<thead class="bg-surface-container-highest border-b border-outline-variant/50">
+<tr>
+<th class="p-sm px-md font-label-caps text-label-caps text-on-surface-variant font-normal uppercase">Model Alias</th>
+<th class="p-sm font-label-caps text-label-caps text-on-surface-variant font-normal uppercase">Provider / Path</th>
+<th class="p-sm font-label-caps text-label-caps text-on-surface-variant font-normal uppercase">Context Limit</th>
+<th class="p-sm font-label-caps text-label-caps text-on-surface-variant font-normal uppercase">Status</th>
+<th class="p-sm text-right px-md"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-high/50 transition-colors group">
+<td class="p-sm px-md flex items-center space-x-sm">
+<div class="w-8 h-8 rounded bg-surface border border-outline-variant flex items-center justify-center"><span class="material-symbols-outlined text-[16px] text-on-surface-variant">api</span></div>
+<span class="font-body-md text-on-surface font-semibold">GPT-4 Turbo</span>
+</td>
+<td class="p-sm text-on-surface-variant font-code text-code text-[12px]">api.openai.com/v1</td>
+<td class="p-sm text-on-surface-variant font-code text-code text-[12px]">128,000</td>
+<td class="p-sm">
+<span class="inline-flex items-center px-sm py-[2px] rounded-full bg-primary-container/10 text-primary-fixed font-label-caps text-[10px] border border-primary-container/20 uppercase tracking-wider"><span class="w-1.5 h-1.5 rounded-full bg-primary-fixed mr-1.5 shadow-[0_0_8px_rgba(192,193,255,0.8)]"></span>Ready</span>
+</td>
+<td class="p-sm px-md text-right opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-on-surface-variant hover:text-on-surface"><span class="material-symbols-outlined text-[18px]">more_vert</span></button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-high/50 transition-colors group">
+<td class="p-sm px-md flex items-center space-x-sm">
+<div class="w-8 h-8 rounded bg-surface border border-outline-variant flex items-center justify-center"><span class="material-symbols-outlined text-[16px] text-on-surface-variant">memory</span></div>
+<span class="font-body-md text-on-surface font-semibold">Gemma 4</span>
+</td>
+<td class="p-sm text-on-surface-variant font-code text-code text-[12px]">/models/gemma-4b-it.gguf</td>
+<td class="p-sm text-on-surface-variant font-code text-code text-[12px]">8,192</td>
+<td class="p-sm">
+<span class="inline-flex items-center px-sm py-[2px] rounded-full bg-primary-container/10 text-primary-fixed font-label-caps text-[10px] border border-primary-container/20 uppercase tracking-wider"><span class="w-1.5 h-1.5 rounded-full bg-primary-fixed mr-1.5 shadow-[0_0_8px_rgba(192,193,255,0.8)]"></span>Ready</span>
+</td>
+<td class="p-sm px-md text-right opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-on-surface-variant hover:text-on-surface"><span class="material-symbols-outlined text-[18px]">more_vert</span></button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-high/50 transition-colors group">
+<td class="p-sm px-md flex items-center space-x-sm">
+<div class="w-8 h-8 rounded bg-surface border border-outline-variant flex items-center justify-center"><span class="material-symbols-outlined text-[16px] text-on-surface-variant">api</span></div>
+<span class="font-body-md text-on-surface font-semibold">Claude 3 Opus</span>
+</td>
+<td class="p-sm text-on-surface-variant font-code text-code text-[12px]">api.anthropic.com/v1</td>
+<td class="p-sm text-on-surface-variant font-code text-code text-[12px]">200,000</td>
+<td class="p-sm">
+<span class="inline-flex items-center px-sm py-[2px] rounded-full bg-surface-variant text-on-surface-variant font-label-caps text-[10px] border border-outline-variant uppercase tracking-wider"><span class="w-1.5 h-1.5 rounded-full bg-on-surface-variant mr-1.5"></span>Inactive</span>
+</td>
+<td class="p-sm px-md text-right opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-on-surface-variant hover:text-on-surface"><span class="material-symbols-outlined text-[18px]">more_vert</span></button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-high/50 transition-colors group">
+<td class="p-sm px-md flex items-center space-x-sm">
+<div class="w-8 h-8 rounded bg-surface border border-error/30 flex items-center justify-center"><span class="material-symbols-outlined text-[16px] text-error">memory</span></div>
+<span class="font-body-md text-on-surface font-semibold">Llama 3 70B</span>
+</td>
+<td class="p-sm text-error font-code text-code text-[12px]">/mnt/nvme/llama3-70b</td>
+<td class="p-sm text-on-surface-variant font-code text-code text-[12px]">8,192</td>
+<td class="p-sm">
+<span class="inline-flex items-center px-sm py-[2px] rounded-full bg-error-container/20 text-error font-label-caps text-[10px] border border-error/30 uppercase tracking-wider"><span class="w-1.5 h-1.5 rounded-full bg-error mr-1.5"></span>Path Error</span>
+</td>
+<td class="p-sm px-md text-right opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-on-surface-variant hover:text-on-surface"><span class="material-symbols-outlined text-[18px]">more_vert</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Right Column: Registration Form -->
+<div class="col-span-12 xl:col-span-4">
+<div class="bg-surface-container border border-outline-variant/50 rounded-xl shadow-[0_4px_24px_rgba(0,0,0,0.2)]">
+<div class="p-md border-b border-outline-variant/50 bg-surface-container-low rounded-t-xl">
+<h2 class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-widest flex items-center"><span class="material-symbols-outlined text-[16px] mr-xs">add_box</span>Register New Model</h2>
+</div>
+<form class="p-md space-y-md">
+<!-- Type Selection -->
+<div class="grid grid-cols-2 gap-sm">
+<label class="cursor-pointer">
+<input checked="" class="peer sr-only" name="model_type" type="radio"/>
+<div class="p-sm border border-outline-variant rounded-lg text-center peer-checked:border-primary peer-checked:bg-primary-container/10 transition-all">
+<span class="material-symbols-outlined block text-[24px] mb-xs text-on-surface-variant peer-checked:text-primary">api</span>
+<span class="font-label-caps text-label-caps text-on-surface peer-checked:text-primary uppercase">API Provider</span>
+</div>
+</label>
+<label class="cursor-pointer">
+<input class="peer sr-only" name="model_type" type="radio"/>
+<div class="p-sm border border-outline-variant rounded-lg text-center peer-checked:border-primary peer-checked:bg-primary-container/10 transition-all">
+<span class="material-symbols-outlined block text-[24px] mb-xs text-on-surface-variant peer-checked:text-primary">hard_drive</span>
+<span class="font-label-caps text-label-caps text-on-surface peer-checked:text-primary uppercase">Local Binary</span>
+</div>
+</label>
+</div>
+<!-- Name -->
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-xs uppercase">Model Alias</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded p-sm text-body-md text-on-surface focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary placeholder-on-surface-variant/50" placeholder="e.g., Internal Code Gen" type="text"/>
+</div>
+<!-- Provider / Path -->
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-xs uppercase">Endpoint URL / Local Path</label>
+<div class="flex">
+<span class="inline-flex items-center px-sm rounded-l border border-r-0 border-outline-variant bg-surface-container-highest text-on-surface-variant font-code text-[12px]">URL</span>
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded-r p-sm text-code text-on-surface focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary placeholder-on-surface-variant/50" placeholder="https://api.openai.com/v1" type="text"/>
+</div>
+</div>
+<!-- API Key -->
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-xs uppercase">API Key / Token</label>
+<div class="relative">
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded p-sm text-code text-on-surface focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary placeholder-on-surface-variant/50 pr-10" placeholder="sk-..." type="password"/>
+<button class="absolute inset-y-0 right-0 px-sm flex items-center text-on-surface-variant hover:text-on-surface" type="button">
+<span class="material-symbols-outlined text-[18px]">visibility_off</span>
+</button>
+</div>
+</div>
+<!-- Parameters Group -->
+<div class="pt-sm border-t border-outline-variant/50">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant uppercase mb-sm">Execution Parameters</h3>
+<div class="grid grid-cols-2 gap-md">
+<div>
+<div class="flex justify-between mb-xs">
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase">Temperature</label>
+<span class="text-code text-[11px] text-primary">0.7</span>
+</div>
+<input class="w-full accent-primary h-1 bg-surface-container-highest rounded-lg appearance-none cursor-pointer" max="2" min="0" step="0.1" type="range" value="0.7"/>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-xs uppercase">Max Tokens</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded p-sm py-1 text-code text-on-surface focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary" type="number" value="4096"/>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="pt-md mt-md flex space-x-sm">
+<button class="flex-1 bg-transparent border border-outline-variant text-on-surface hover:bg-surface-container-highest transition-colors font-body-md py-sm px-md rounded text-center" type="button">Cancel</button>
+<button class="flex-1 bg-primary text-on-primary hover:bg-primary-fixed transition-colors font-body-md py-sm px-md rounded text-center font-semibold shadow-[0_0_12px_rgba(192,193,255,0.2)]" type="button">Save Configuration</button>
+</div>
+</form>
+</div>
+</div>
+</div>
+</main>
+<style>
+        /* Custom styles for precise technical feel */
+        input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 12px;
+            height: 12px;
+            background: #c0c1ff;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        select.custom-select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23908fa0' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+        }
+    </style>
+</body></html>

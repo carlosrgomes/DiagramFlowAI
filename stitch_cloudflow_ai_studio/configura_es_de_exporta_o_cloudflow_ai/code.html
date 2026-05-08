@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Export &amp; Metadata - CloudFlow AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600;700&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "outline": "#908fa0",
+                      "secondary-fixed-dim": "#7bd0ff",
+                      "primary-container": "#8083ff",
+                      "surface-container-low": "#131b2e",
+                      "on-primary-container": "#0d0096",
+                      "on-primary-fixed-variant": "#2f2ebe",
+                      "surface-container-highest": "#2d3449",
+                      "secondary-fixed": "#c4e7ff",
+                      "surface-tint": "#c0c1ff",
+                      "primary": "#c0c1ff",
+                      "on-tertiary-container": "#452000",
+                      "surface-dim": "#0b1326",
+                      "on-secondary": "#00354a",
+                      "outline-variant": "#464554",
+                      "tertiary-fixed": "#ffdcc5",
+                      "on-surface": "#dae2fd",
+                      "secondary": "#7bd0ff",
+                      "tertiary-fixed-dim": "#ffb783",
+                      "error": "#ffb4ab",
+                      "on-surface-variant": "#c7c4d7",
+                      "primary-fixed-dim": "#c0c1ff",
+                      "error-container": "#93000a",
+                      "inverse-surface": "#dae2fd",
+                      "on-tertiary": "#4f2500",
+                      "surface-container": "#171f33",
+                      "on-background": "#dae2fd",
+                      "surface": "#0b1326",
+                      "secondary-container": "#00a6e0",
+                      "tertiary-container": "#d97721",
+                      "surface-variant": "#2d3449",
+                      "inverse-on-surface": "#283044",
+                      "on-primary-fixed": "#07006c",
+                      "on-secondary-container": "#00374d",
+                      "on-error": "#690005",
+                      "primary-fixed": "#e1e0ff",
+                      "on-tertiary-fixed-variant": "#703700",
+                      "on-secondary-fixed-variant": "#004c69",
+                      "on-primary": "#1000a9",
+                      "tertiary": "#ffb783",
+                      "on-error-container": "#ffdad6",
+                      "on-tertiary-fixed": "#301400",
+                      "on-secondary-fixed": "#001e2c",
+                      "surface-bright": "#31394d",
+                      "background": "#0b1326",
+                      "inverse-primary": "#494bd6",
+                      "surface-container-high": "#222a3d",
+                      "surface-container-lowest": "#060e20"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "md": "16px",
+                      "xs": "4px",
+                      "lg": "24px",
+                      "sm": "8px",
+                      "sidebar_width": "280px",
+                      "gutter": "16px",
+                      "unit": "4px",
+                      "xl": "48px",
+                      "toolbar_height": "56px"
+              },
+              "fontFamily": {
+                      "display": ["Geist"],
+                      "label-caps": ["Geist"],
+                      "h2": ["Geist"],
+                      "body-lg": ["Geist"],
+                      "h1": ["Geist"],
+                      "body-md": ["Geist"],
+                      "code": ["JetBrains Mono"]
+              },
+              "fontSize": {
+                      "display": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                      "label-caps": ["11px", { "lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                      "h2": ["18px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                      "body-lg": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                      "h1": ["24px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                      "body-md": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                      "code": ["13px", { "lineHeight": "1.5", "fontWeight": "400" }]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface h-screen w-screen overflow-hidden flex flex-col font-display selection:bg-primary-container selection:text-on-primary-container">
+<!-- Focused Header (Nav suppressed for focused task) -->
+<header class="h-toolbar_height px-lg flex justify-between items-center border-b border-outline-variant bg-surface shrink-0 z-10 relative">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-outline text-[20px]">ios_share</span>
+<h1 class="font-h2 text-h2 text-on-surface tracking-tight">Export &amp; Metadata</h1>
+</div>
+<button class="h-8 w-8 flex items-center justify-center rounded-full hover:bg-surface-variant transition-colors text-outline hover:text-on-surface">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</header>
+<!-- Main Workspace Split Pane -->
+<main class="flex-1 flex flex-row overflow-hidden relative">
+<!-- Left Panel: Settings Inspector -->
+<aside class="w-[360px] lg:w-[420px] border-r border-outline-variant flex flex-col bg-surface z-10 shrink-0 shadow-[4px_0_12px_rgba(0,0,0,0.1)]">
+<div class="flex-1 overflow-y-auto p-lg flex flex-col gap-xl">
+<!-- Format Selection -->
+<section class="flex flex-col gap-md">
+<h3 class="font-label-caps text-label-caps text-outline uppercase tracking-wider">Export Format</h3>
+<div class="grid grid-cols-1 gap-sm">
+<!-- Format Option: PNG (Active) -->
+<label class="flex items-start gap-md p-md rounded-lg border border-primary bg-primary/5 cursor-pointer relative group transition-colors">
+<input checked="" class="mt-1 w-[18px] h-[18px] accent-primary shrink-0 bg-surface border-outline-variant focus:ring-primary focus:ring-offset-surface focus:ring-offset-2" name="export_format" type="radio"/>
+<div class="flex flex-col">
+<span class="font-h2 text-h2 text-primary">PNG Image</span>
+<span class="font-body-md text-body-md text-on-surface-variant mt-xs">High-resolution raster graphic. Best for immediate sharing and presentations.</span>
+</div>
+</label>
+<!-- Format Option: SVG -->
+<label class="flex items-start gap-md p-md rounded-lg border border-outline-variant bg-surface cursor-pointer hover:bg-surface-container transition-colors group">
+<input class="mt-1 w-[18px] h-[18px] accent-primary shrink-0 bg-surface border-outline-variant focus:ring-primary focus:ring-offset-surface focus:ring-offset-2" name="export_format" type="radio"/>
+<div class="flex flex-col">
+<span class="font-h2 text-h2 text-on-surface group-hover:text-primary transition-colors">SVG Vector</span>
+<span class="font-body-md text-body-md text-on-surface-variant mt-xs">Scalable vector graphic. Ideal for external editors and infinite scaling.</span>
+</div>
+</label>
+<!-- Format Option: JSON -->
+<label class="flex items-start gap-md p-md rounded-lg border border-outline-variant bg-surface cursor-pointer hover:bg-surface-container transition-colors group">
+<input class="mt-1 w-[18px] h-[18px] accent-primary shrink-0 bg-surface border-outline-variant focus:ring-primary focus:ring-offset-surface focus:ring-offset-2" name="export_format" type="radio"/>
+<div class="flex flex-col">
+<span class="font-h2 text-h2 text-on-surface group-hover:text-primary transition-colors">Save as JSON Metadata</span>
+<span class="font-body-md text-body-md text-on-surface-variant mt-xs">Raw architectural definition file preserving all entity relationships.</span>
+</div>
+</label>
+</div>
+</section>
+<div class="h-[1px] w-full bg-outline-variant opacity-50"></div>
+<!-- Export Options -->
+<section class="flex flex-col gap-md">
+<h3 class="font-label-caps text-label-caps text-outline uppercase tracking-wider">Configuration Options</h3>
+<div class="flex flex-col gap-lg bg-surface-container-low p-md rounded-lg border border-outline-variant/50">
+<!-- Toggle: Specs -->
+<div class="flex items-center justify-between gap-md">
+<div class="flex flex-col flex-1">
+<span class="font-body-lg text-body-lg text-on-surface">Include Architecture Specs</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Embeds node properties and metadata into the output file.</span>
+</div>
+<button aria-checked="true" class="w-10 h-6 rounded-full bg-primary relative shrink-0 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface" role="switch" type="button">
+<span class="absolute left-[18px] top-1 w-4 h-4 rounded-full bg-on-primary shadow-sm transition-all"></span>
+</button>
+</div>
+<!-- Toggle: Compress -->
+<div class="flex items-center justify-between gap-md">
+<div class="flex flex-col flex-1">
+<span class="font-body-lg text-body-lg text-on-surface">Compress Image</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Reduces file size for PNG exports. May affect clarity.</span>
+</div>
+<button aria-checked="false" class="w-10 h-6 rounded-full bg-surface-variant border border-outline-variant relative shrink-0 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface" role="switch" type="button">
+<span class="absolute left-1 top-[3px] w-4 h-4 rounded-full bg-outline shadow-sm transition-all"></span>
+</button>
+</div>
+</div>
+</section>
+</div>
+<!-- Footer Actions -->
+<div class="p-lg border-t border-outline-variant bg-surface flex gap-md shrink-0">
+<button class="flex-1 h-10 rounded border border-outline-variant bg-transparent text-on-surface font-body-lg text-body-lg hover:bg-surface-variant transition-colors flex items-center justify-center">
+                    Cancel
+                </button>
+<button class="flex-[2] h-10 rounded bg-primary text-on-primary font-body-lg text-body-lg font-medium hover:opacity-90 transition-opacity flex items-center justify-center gap-sm">
+<span class="material-symbols-outlined text-[18px]">download</span>
+                    Export Configuration
+                </button>
+</div>
+</aside>
+<!-- Right Panel: Code Preview Canvas -->
+<section class="flex-1 bg-[#090e1c] flex flex-col overflow-hidden relative isolate">
+<!-- Subtle background texture/gradient -->
+<div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent z-[-1] pointer-events-none"></div>
+<div class="flex-1 p-lg flex flex-col gap-md max-w-[900px] mx-auto w-full">
+<!-- Preview Header -->
+<div class="flex justify-between items-end shrink-0 mt-md">
+<div class="flex flex-col gap-xs">
+<h2 class="font-h1 text-h1 text-on-surface tracking-tight">Data Structure Preview</h2>
+<div class="flex items-center gap-sm text-outline">
+<span class="material-symbols-outlined text-[16px]">data_object</span>
+<span class="font-code text-code">VPC-Primary-Alpha.json</span>
+</div>
+</div>
+<button class="h-8 px-sm rounded border border-outline-variant bg-surface-container hover:bg-surface-variant text-on-surface font-body-md text-body-md transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">content_copy</span>
+                        Copy Code
+                    </button>
+</div>
+<!-- Editor Window Mockup -->
+<div class="flex-1 rounded-xl bg-[#060a14] border border-outline-variant/60 flex flex-col overflow-hidden shadow-2xl shadow-black/40 ring-1 ring-white/5">
+<!-- Window Controls (Aesthetic) -->
+<div class="h-10 bg-[#0a101d] border-b border-outline-variant/40 flex items-center px-md gap-sm shrink-0">
+<div class="flex gap-[6px]">
+<div class="w-3 h-3 rounded-full bg-outline-variant/40"></div>
+<div class="w-3 h-3 rounded-full bg-outline-variant/40"></div>
+<div class="w-3 h-3 rounded-full bg-outline-variant/40"></div>
+</div>
+<div class="ml-auto font-code text-label-caps text-outline uppercase tracking-wider">Read-Only Preview</div>
+</div>
+<!-- Code Content (Syntax Highlighted visually) -->
+<div class="flex-1 overflow-auto p-md font-code text-code leading-relaxed">
+<pre class="m-0"><code class="text-on-surface-variant"><span class="text-secondary">{</span>
+  <span class="text-secondary-fixed-dim">"diagram_id"</span>: <span class="text-tertiary-fixed-dim">"cf-arch-9821-b"</span>,
+  <span class="text-secondary-fixed-dim">"metadata"</span>: <span class="text-secondary">{</span>
+    <span class="text-secondary-fixed-dim">"name"</span>: <span class="text-tertiary-fixed-dim">"VPC-Primary-Alpha"</span>,
+    <span class="text-secondary-fixed-dim">"author"</span>: <span class="text-tertiary-fixed-dim">"System Architect"</span>,
+    <span class="text-secondary-fixed-dim">"version"</span>: <span class="text-primary-fixed-dim">2.1</span>,
+    <span class="text-secondary-fixed-dim">"timestamp"</span>: <span class="text-tertiary-fixed-dim">"2023-11-04T15:30:00Z"</span>,
+    <span class="text-secondary-fixed-dim">"export_specs_included"</span>: <span class="text-primary-fixed-dim">true</span>
+  <span class="text-secondary">}</span>,
+  <span class="text-secondary-fixed-dim">"resources"</span>: <span class="text-secondary">[</span>
+    <span class="text-secondary">{</span>
+      <span class="text-secondary-fixed-dim">"id"</span>: <span class="text-tertiary-fixed-dim">"res_vpc_01"</span>,
+      <span class="text-secondary-fixed-dim">"type"</span>: <span class="text-tertiary-fixed-dim">"aws_vpc"</span>,
+      <span class="text-secondary-fixed-dim">"canvas_coords"</span>: <span class="text-secondary">{</span> <span class="text-secondary-fixed-dim">"x"</span>: <span class="text-primary-fixed-dim">120</span>, <span class="text-secondary-fixed-dim">"y"</span>: <span class="text-primary-fixed-dim">340</span> <span class="text-secondary">}</span>,
+      <span class="text-secondary-fixed-dim">"properties"</span>: <span class="text-secondary">{</span>
+        <span class="text-secondary-fixed-dim">"cidr_block"</span>: <span class="text-tertiary-fixed-dim">"10.0.0.0/16"</span>,
+        <span class="text-secondary-fixed-dim">"enable_dns_support"</span>: <span class="text-primary-fixed-dim">true</span>,
+        <span class="text-secondary-fixed-dim">"tags"</span>: <span class="text-secondary">{</span>
+          <span class="text-secondary-fixed-dim">"Environment"</span>: <span class="text-tertiary-fixed-dim">"Production"</span>
+        <span class="text-secondary">}</span>
+      <span class="text-secondary">}</span>
+    <span class="text-secondary">}</span>,
+    <span class="text-secondary">{</span>
+      <span class="text-secondary-fixed-dim">"id"</span>: <span class="text-tertiary-fixed-dim">"res_sub_public_a"</span>,
+      <span class="text-secondary-fixed-dim">"type"</span>: <span class="text-tertiary-fixed-dim">"aws_subnet"</span>,
+      <span class="text-secondary-fixed-dim">"parent_id"</span>: <span class="text-tertiary-fixed-dim">"res_vpc_01"</span>,
+      <span class="text-secondary-fixed-dim">"properties"</span>: <span class="text-secondary">{</span>
+        <span class="text-secondary-fixed-dim">"cidr_block"</span>: <span class="text-tertiary-fixed-dim">"10.0.1.0/24"</span>,
+        <span class="text-secondary-fixed-dim">"availability_zone"</span>: <span class="text-tertiary-fixed-dim">"us-east-1a"</span>,
+        <span class="text-secondary-fixed-dim">"map_public_ip_on_launch"</span>: <span class="text-primary-fixed-dim">true</span>
+      <span class="text-secondary">}</span>
+    <span class="text-secondary">}</span>
+  <span class="text-secondary">]</span>,
+  <span class="text-secondary-fixed-dim">"connections"</span>: <span class="text-secondary">[</span>
+    <span class="text-secondary">{</span>
+      <span class="text-secondary-fixed-dim">"source"</span>: <span class="text-tertiary-fixed-dim">"res_sub_public_a"</span>,
+      <span class="text-secondary-fixed-dim">"target"</span>: <span class="text-tertiary-fixed-dim">"res_igw_01"</span>,
+      <span class="text-secondary-fixed-dim">"protocol"</span>: <span class="text-tertiary-fixed-dim">"tcp"</span>,
+      <span class="text-secondary-fixed-dim">"line_style"</span>: <span class="text-tertiary-fixed-dim">"solid"</span>
+    <span class="text-secondary">}</span>
+  <span class="text-secondary">]</span>
+<span class="text-secondary">}</span></code></pre>
+</div>
+</div>
+</div>
+</section>
+</main>
+</body></html>

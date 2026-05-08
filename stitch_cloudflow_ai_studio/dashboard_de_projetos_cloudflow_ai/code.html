@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CloudFlow AI - Project Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600;700&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline": "#908fa0",
+                        "secondary-fixed-dim": "#7bd0ff",
+                        "primary-container": "#8083ff",
+                        "surface-container-low": "#131b2e",
+                        "on-primary-container": "#0d0096",
+                        "on-primary-fixed-variant": "#2f2ebe",
+                        "surface-container-highest": "#2d3449",
+                        "secondary-fixed": "#c4e7ff",
+                        "surface-tint": "#c0c1ff",
+                        "primary": "#c0c1ff",
+                        "on-tertiary-container": "#452000",
+                        "surface-dim": "#0b1326",
+                        "on-secondary": "#00354a",
+                        "outline-variant": "#464554",
+                        "tertiary-fixed": "#ffdcc5",
+                        "on-surface": "#dae2fd",
+                        "secondary": "#7bd0ff",
+                        "tertiary-fixed-dim": "#ffb783",
+                        "error": "#ffb4ab",
+                        "on-surface-variant": "#c7c4d7",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "error-container": "#93000a",
+                        "inverse-surface": "#dae2fd",
+                        "on-tertiary": "#4f2500",
+                        "surface-container": "#171f33",
+                        "on-background": "#dae2fd",
+                        "surface": "#0b1326",
+                        "secondary-container": "#00a6e0",
+                        "tertiary-container": "#d97721",
+                        "surface-variant": "#2d3449",
+                        "inverse-on-surface": "#283044",
+                        "on-primary-fixed": "#07006c",
+                        "on-secondary-container": "#00374d",
+                        "on-error": "#690005",
+                        "primary-fixed": "#e1e0ff",
+                        "on-tertiary-fixed-variant": "#703700",
+                        "on-secondary-fixed-variant": "#004c69",
+                        "on-primary": "#1000a9",
+                        "tertiary": "#ffb783",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary-fixed": "#301400",
+                        "on-secondary-fixed": "#001e2c",
+                        "surface-bright": "#31394d",
+                        "background": "#0b1326",
+                        "inverse-primary": "#494bd6",
+                        "surface-container-high": "#222a3d",
+                        "surface-container-lowest": "#060e20"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "xs": "4px",
+                        "lg": "24px",
+                        "sm": "8px",
+                        "sidebar_width": "280px",
+                        "gutter": "16px",
+                        "unit": "4px",
+                        "xl": "48px",
+                        "toolbar_height": "56px"
+                    },
+                    "fontFamily": {
+                        "display": ["Geist"],
+                        "label-caps": ["Geist"],
+                        "h2": ["Geist"],
+                        "body-lg": ["Geist"],
+                        "h1": ["Geist"],
+                        "body-md": ["Geist"],
+                        "code": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "display": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "label-caps": ["11px", { "lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "h2": ["18px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "h1": ["24px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "code": ["13px", { "lineHeight": "1.5", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom scrollbar for dark tech aesthetic */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b1326; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2d3449; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #464554; 
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md h-screen w-screen overflow-hidden flex flex-col antialiased">
+<!-- TopNavBar -->
+<nav class="bg-surface dark:bg-surface text-primary dark:text-primary font-display text-body-md absolute full-width top-0 border-b border-outline-variant dark:border-outline-variant flex justify-between items-center h-toolbar_height px-lg w-full z-50">
+<!-- Left: Brand & Search -->
+<div class="flex items-center gap-lg">
+<div class="font-display text-h2 font-semibold text-primary dark:text-primary tracking-tight">
+                CloudFlow AI
+            </div>
+<div class="relative hidden md:flex items-center">
+<span class="material-symbols-outlined absolute left-sm text-on-surface-variant text-[18px]">search</span>
+<input class="bg-surface-container border border-outline-variant rounded-full py-xs pl-xl pr-md text-body-md text-on-surface placeholder-on-surface-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none w-[240px] transition-all" placeholder="Search resources..." type="text"/>
+</div>
+</div>
+<!-- Center: Navigation Links -->
+<div class="hidden lg:flex items-center gap-md h-full">
+<a class="h-full flex items-center px-sm text-primary dark:text-primary border-b-2 border-primary transition-opacity opacity-80" href="#">
+                Canvas
+            </a>
+<a class="h-full flex items-center px-sm text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary transition-colors" href="#">
+                Resources
+            </a>
+<a class="h-full flex items-center px-sm text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary transition-colors" href="#">
+                Deployment
+            </a>
+<a class="h-full flex items-center px-sm text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary transition-colors" href="#">
+                History
+            </a>
+</div>
+<!-- Right: Actions & Profile -->
+<div class="flex items-center gap-md">
+<button class="hidden md:flex items-center gap-xs px-md py-xs rounded-lg border border-outline-variant text-on-surface hover:bg-surface-container-highest transition-colors">
+                Export
+            </button>
+<button class="hidden md:flex items-center gap-xs px-md py-xs rounded-lg border border-outline-variant text-on-surface hover:bg-surface-container-highest transition-colors">
+                Share
+            </button>
+<div class="flex items-center gap-sm ml-sm pl-sm border-l border-outline-variant">
+<button class="p-xs text-on-surface-variant hover:text-primary transition-colors rounded-full hover:bg-surface-container">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-xs text-on-surface-variant hover:text-primary transition-colors rounded-full hover:bg-surface-container">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="w-[32px] h-[32px] rounded-full bg-surface-container-highest border border-outline-variant overflow-hidden ml-xs cursor-pointer">
+<img alt="User profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC53PPtzWED6FV_-gh4FV5q0wVWtWpmsQcuEkVFlhB9vjytVK84kmRPEQY3bD7SemLwcrILmJw4k2poflel9m8gX4-QOFXTMZbd6WKCy4D7RSTfBM6goukxso72g1mSyXAS_0oJF174ZmtE9aCMilPc1ymEtPfbqCUHNRq09lXksAjYwjxOuurlf2aEyIDV9F5z3Xq3Xe_WVzfrpAaVn31_lqsRoI1mOud8M-egiTV7i2ZWVSNeFIvo3oHuw15wt6A5qSKs0a87ItU"/>
+</div>
+</div>
+</div>
+</nav>
+<div class="flex flex-1 pt-toolbar_height pb-8 h-full">
+<!-- SideNavBar -->
+<aside class="bg-surface-container dark:bg-surface-container text-primary dark:text-primary font-display text-body-sm w-sidebar_width border-r border-outline-variant dark:border-outline-variant flex flex-col py-md px-sm z-40 overflow-y-auto shrink-0">
+<!-- Header -->
+<div class="flex items-center gap-sm px-sm mb-lg">
+<div class="w-[32px] h-[32px] rounded-lg bg-surface-bright border border-outline-variant flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-[18px]">account_tree</span>
+</div>
+<div>
+<div class="text-body-md font-semibold text-on-surface">Cloud Library</div>
+<div class="font-display text-label-caps font-bold text-on-surface-variant mt-xs">VPC-Primary-Alpha</div>
+</div>
+</div>
+<!-- CTA -->
+<button class="w-full flex items-center justify-center gap-xs bg-primary text-on-primary rounded-lg py-sm px-md mb-lg hover:opacity-90 transition-opacity font-medium">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                Add Resource
+            </button>
+<!-- Tabs -->
+<nav class="flex-1 flex flex-col gap-xs">
+<a class="flex items-center gap-sm bg-primary-container dark:bg-primary-container text-on-primary-container dark:text-on-primary-container rounded-lg p-sm scale-95 transition-transform origin-left" href="#">
+<span class="material-symbols-outlined text-[20px] fill">cloud</span>
+                    AWS
+                </a>
+<a class="flex items-center gap-sm text-on-surface-variant dark:text-on-surface-variant p-sm rounded-lg hover:bg-surface-container-highest dark:hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">layers</span>
+                    Azure
+                </a>
+<a class="flex items-center gap-sm text-on-surface-variant dark:text-on-surface-variant p-sm rounded-lg hover:bg-surface-container-highest dark:hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">hub</span>
+                    GCP
+                </a>
+<a class="flex items-center gap-sm text-on-surface-variant dark:text-on-surface-variant p-sm rounded-lg hover:bg-surface-container-highest dark:hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">grid_view</span>
+                    Kubernetes
+                </a>
+<a class="flex items-center gap-sm text-on-surface-variant dark:text-on-surface-variant p-sm rounded-lg hover:bg-surface-container-highest dark:hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">category</span>
+                    Generic
+                </a>
+</nav>
+<!-- Footer Tabs -->
+<div class="mt-auto flex flex-col gap-xs pt-md border-t border-outline-variant border-opacity-50">
+<a class="flex items-center gap-sm text-on-surface-variant p-sm rounded-lg hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">help</span>
+                    Help
+                </a>
+<a class="flex items-center gap-sm text-on-surface-variant p-sm rounded-lg hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">sensors</span>
+                    Status
+                </a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 overflow-y-auto bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-surface-container-low via-background to-background relative">
+<div class="max-w-[1400px] mx-auto p-lg lg:p-xl">
+<!-- Dashboard Header -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-md mb-xl">
+<div>
+<h1 class="font-display text-display text-on-surface mb-xs">Projects</h1>
+<p class="text-on-surface-variant text-body-md">Manage and deploy your cloud architectures.</p>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex bg-surface-container p-xs rounded-lg border border-outline-variant">
+<button class="px-md py-xs rounded text-primary bg-surface-container-highest shadow-sm font-medium transition-all">My Projects</button>
+<button class="px-md py-xs rounded text-on-surface-variant hover:text-on-surface transition-all">Shared</button>
+<button class="px-md py-xs rounded text-on-surface-variant hover:text-on-surface transition-all">Templates</button>
+</div>
+<button class="flex items-center gap-xs bg-primary text-on-primary rounded-lg py-sm px-md hover:bg-primary-fixed transition-colors font-medium shadow-[0px_4px_12px_rgba(192,193,255,0.15)]">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                            New Project
+                        </button>
+</div>
+</div>
+<!-- Projects Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-lg">
+<!-- Card 1 -->
+<div class="bg-surface-container border border-outline-variant hover:border-primary/50 rounded-xl overflow-hidden group cursor-pointer transition-all duration-300 relative flex flex-col shadow-sm hover:shadow-[0px_8px_24px_rgba(0,0,0,0.4)]">
+<div class="h-[160px] w-full border-b border-outline-variant relative overflow-hidden bg-surface-dim">
+<div class="absolute inset-0 bg-cover bg-center opacity-70 group-hover:opacity-100 transition-opacity" data-alt="A highly stylized, top-down blueprint view of a complex digital network architecture on a deep slate background. Glowing indigo lines connect various node points representing servers and databases, creating a technical, modern light-mode aesthetic despite the dark canvas. The scene is illuminated by sharp, cool-toned digital light, conveying a sense of engineered precision and advanced cloud infrastructure." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCja7jJwG3_fx4t2J3veGw1fyVodhsylOPqCo8v2md3a27KDPIGTGX0klmqJWlMusDaj2qEQoWw7JP1UBfAnWCeiiCdwKx4i5JDH0qSEJkk_RdFnREqHDN3M6BAfu5KEsffBnzgKXqYwrfZwrS7dFqN3mhK4OxLkzBJ8xMGD8Dja3a2s3LckWKG4e6Dlm5Ya7dRzTFLircOSlIMreddDYz9ty67x-lkRi8eK4TEVaysNWS9anknN4bwA90hRFExNbNexpbyH4QsMe8');"></div>
+<div class="absolute top-sm right-sm bg-surface/80 backdrop-blur-md px-sm py-[2px] rounded text-[10px] font-bold text-on-surface uppercase tracking-wider border border-white/10">Active</div>
+</div>
+<div class="p-md flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-sm">
+<h3 class="font-h2 text-h2 text-on-surface group-hover:text-primary transition-colors">E-Commerce Production VPC</h3>
+<button class="text-on-surface-variant hover:text-on-surface"><span class="material-symbols-outlined text-[20px]">more_vert</span></button>
+</div>
+<p class="text-body-md text-on-surface-variant mb-md line-clamp-2">Primary virtual private cloud containing front-end clusters, RDS instances, and Redis cache for the main storefront.</p>
+<div class="mt-auto pt-sm border-t border-outline-variant border-opacity-30 flex items-center justify-between">
+<div class="flex items-center gap-xs">
+<span class="px-xs py-[2px] rounded bg-secondary/10 text-secondary border border-secondary/20 text-label-caps font-label-caps">AWS</span>
+<span class="px-xs py-[2px] rounded bg-primary/10 text-primary border border-primary/20 text-label-caps font-label-caps">PROD</span>
+</div>
+<span class="text-code font-code text-on-surface-variant text-[11px]">Updated 2h ago</span>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container border border-outline-variant hover:border-primary/50 rounded-xl overflow-hidden group cursor-pointer transition-all duration-300 relative flex flex-col shadow-sm hover:shadow-[0px_8px_24px_rgba(0,0,0,0.4)]">
+<div class="h-[160px] w-full border-b border-outline-variant relative overflow-hidden bg-surface-dim">
+<div class="absolute inset-0 bg-cover bg-center opacity-70 group-hover:opacity-100 transition-opacity" data-alt="A minimalist, abstract representation of a Kubernetes cluster visualization. Floating transparent geometric cubes representing pods and nodes are arranged in an isometric grid over a deep slate background. Subtle glowing connections in cyan and indigo pulse between the blocks, highlighting the technical utility and dynamic nature of the container orchestration system. The lighting is soft but precise, typical of a high-end technical dashboard." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBh7NztKToWQ4SwyMjdaJaXuTeM4fSLs64iDMQelLf-LhrD-Mx_Rjz38aSg_yHR0-53yRZsIicJM1Wdh7jWGvseLJ94TJGbhUL2Q4V0HnLn4MUGgpqSawSnh7gHXjEaJhMhPDmoyOSwYEhoBsRKBFsICTTtcroR2MRcWvdn3_mxlMnq0T_kx6YD8KGkmRNsbCXcpio_BKvCapqtGHCdRz7ezwyOgvh0WBqNBBjV3SmYCZ03qEie9YRRLq3rnNS8uF_DFB6F7oIk9Go');"></div>
+<div class="absolute top-sm right-sm bg-surface/80 backdrop-blur-md px-sm py-[2px] rounded text-[10px] font-bold text-on-surface uppercase tracking-wider border border-white/10">Draft</div>
+</div>
+<div class="p-md flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-sm">
+<h3 class="font-h2 text-h2 text-on-surface group-hover:text-primary transition-colors">Microservices K8s Alpha</h3>
+<button class="text-on-surface-variant hover:text-on-surface"><span class="material-symbols-outlined text-[20px]">more_vert</span></button>
+</div>
+<p class="text-body-md text-on-surface-variant mb-md line-clamp-2">Experimental cluster configuration testing new Istio service mesh deployments and auto-scaling rules.</p>
+<div class="mt-auto pt-sm border-t border-outline-variant border-opacity-30 flex items-center justify-between">
+<div class="flex items-center gap-xs">
+<span class="px-xs py-[2px] rounded bg-secondary-container/20 text-secondary-container border border-secondary-container/20 text-label-caps font-label-caps">K8S</span>
+<span class="px-xs py-[2px] rounded bg-surface-bright text-on-surface-variant border border-outline-variant text-label-caps font-label-caps">TEST</span>
+</div>
+<span class="text-code font-code text-on-surface-variant text-[11px]">Updated 1d ago</span>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container border border-outline-variant hover:border-primary/50 rounded-xl overflow-hidden group cursor-pointer transition-all duration-300 relative flex flex-col shadow-sm hover:shadow-[0px_8px_24px_rgba(0,0,0,0.4)]">
+<div class="h-[160px] w-full border-b border-outline-variant relative overflow-hidden bg-surface-dim flex items-center justify-center">
+<div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-surface-bright to-surface-dim"></div>
+<span class="material-symbols-outlined text-[48px] text-outline-variant opacity-50 z-10">architecture</span>
+</div>
+<div class="p-md flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-sm">
+<h3 class="font-h2 text-h2 text-on-surface group-hover:text-primary transition-colors">Data Lake Pipeline</h3>
+<button class="text-on-surface-variant hover:text-on-surface"><span class="material-symbols-outlined text-[20px]">more_vert</span></button>
+</div>
+<p class="text-body-md text-on-surface-variant mb-md line-clamp-2">Ingestion and processing architecture utilizing S3, Glue, and Athena for BI reporting workflows.</p>
+<div class="mt-auto pt-sm border-t border-outline-variant border-opacity-30 flex items-center justify-between">
+<div class="flex items-center gap-xs">
+<span class="px-xs py-[2px] rounded bg-secondary/10 text-secondary border border-secondary/20 text-label-caps font-label-caps">AWS</span>
+<span class="px-xs py-[2px] rounded bg-tertiary/10 text-tertiary border border-tertiary/20 text-label-caps font-label-caps">STAGING</span>
+</div>
+<span class="text-code font-code text-on-surface-variant text-[11px]">Updated 3d ago</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest dark:bg-surface-container-lowest text-secondary dark:text-secondary font-code text-code fixed bottom-0 left-0 w-full z-40 flex justify-between items-center px-lg py-xs h-8 border-t border-outline-variant dark:border-outline-variant">
+<div class="font-code text-secondary">
+            Gemma4 Connected | Engine: CloudFlow-v2.1
+        </div>
+<div class="flex items-center gap-md">
+<a class="text-outline dark:text-outline hover:text-on-surface dark:hover:text-on-surface transition-colors" href="#">Documentation</a>
+<a class="text-outline dark:text-outline hover:text-on-surface dark:hover:text-on-surface transition-colors" href="#">Privacy Policy</a>
+<a class="text-outline dark:text-outline hover:text-on-surface dark:hover:text-on-surface transition-colors" href="#">Terms of Service</a>
+</div>
+</footer>
+</body></html>

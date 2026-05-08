@@ -16,15 +16,25 @@ class DiagramFlowApp extends StatelessWidget {
     return MaterialApp(
       title: 'DiagramFlow AI',
       theme: ThemeData(
+        brightness: Brightness.dark,
         colorScheme: ColorScheme.fromSeed(
+          brightness: Brightness.dark,
           seedColor: AppColors.primary,
           surface: AppColors.surface,
           onSurface: AppColors.onSurface,
+          primary: AppColors.primary,
+          onPrimary: AppColors.onPrimary,
+          secondary: AppColors.secondary,
+          onSecondary: AppColors.onSecondary,
+          error: AppColors.error,
         ),
-        textTheme: const TextTheme(
-          headlineMedium: AppTypography.headline,
-          bodyMedium: AppTypography.body,
-          labelLarge: AppTypography.label,
+        textTheme: TextTheme(
+          displayLarge: AppTypography.display,
+          headlineLarge: AppTypography.h1,
+          headlineMedium: AppTypography.h2,
+          bodyLarge: AppTypography.bodyLg,
+          bodyMedium: AppTypography.bodyMd,
+          labelLarge: AppTypography.labelCaps,
         ),
         useMaterial3: true,
       ),
