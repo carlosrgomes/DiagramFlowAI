@@ -9,12 +9,14 @@
     - [x] Implement Feature
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Interactive Canvas Nodes' (Protocol in workflow.md)
 
-## Phase 2: Comprehensive Asset Discovery
-- [x] Task: Implement `AssetScanner` utility to recursively find all `48.png` icons in `assets/aws/` and group them by category. [213d3a0]
-- [~] Task: Refactor `ResourceSidebar` to build its UI dynamically based on the scanned `AssetScanner` catalog.
-    - [ ] Write Tests
-    - [ ] Implement Feature
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Comprehensive Asset Discovery' (Protocol in workflow.md)
+## Phase 2: Comprehensive Asset Discovery [checkpoint: 96bb203]
+- [x] Task: Implement `AssetScanner` utility to recursively find all `48.png` icons in `assets/aws/` and group them by category. [96bb203]
+    - [x] Write Tests
+    - [x] Implement Feature
+- [x] Task: Refactor `ResourceSidebar` to build its UI dynamically based on the scanned `AssetScanner` catalog. [96bb203]
+    - [x] Write Tests
+    - [x] Implement Feature
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Comprehensive Asset Discovery' (Protocol in workflow.md)
 
 ## Phase 3: AI Model Control & Logs
 - [ ] Task: Add a model selection dropdown to `RightSidebar` and update `AIModelState` to track the selected model.
