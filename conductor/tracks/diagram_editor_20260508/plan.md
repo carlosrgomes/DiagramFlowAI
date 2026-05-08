@@ -4,7 +4,7 @@
 - [x] Task: Create `DiagramState` class to manage a list of nodes and their coordinates. [0ff8d19]
     - [x] Write Tests
     - [x] Implement Feature
-- [ ] Task: Implement `DiagramCanvas` widget using `InteractiveViewer` with a custom grid background.
+- [~] Task: Implement `DiagramCanvas` widget using `InteractiveViewer` with a custom grid background.
     - [ ] Write Tests
     - [ ] Implement Feature
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: State & Canvas Foundation' (Protocol in workflow.md)
