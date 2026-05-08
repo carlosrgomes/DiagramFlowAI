@@ -22,7 +22,7 @@
 - [x] Task: Adjust `DiagramCanvas` visual styling (background color, grid pattern) to match the reference screenshot. [2c7e5ac]
     - [x] Write Tests
     - [x] Implement Feature
-- [~] Task: Create `RightSidebar` widget containing 'Mermaid Architecture' code view and 'Gemma4 AI Assistant' chat view.
-    - [ ] Write Tests
-    - [ ] Implement Feature
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Canvas & Right Sidebar' (Protocol in workflow.md)
+- [x] Task: Create `RightSidebar` widget containing 'Mermaid Architecture' code view and 'Gemma4 AI Assistant' chat view. [af37886]
+    - [x] Write Tests
+    - [x] Implement Feature
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Canvas & Right Sidebar' (Protocol in workflow.md)
