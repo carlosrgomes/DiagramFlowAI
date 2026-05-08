@@ -27,9 +27,14 @@ class _AppShellState extends State<AppShell> {
                 // Left Sidebar
                 const ResourceSidebar(),
                 const VerticalDivider(thickness: 1, width: 1, color: AppColors.outlineVariant),
+                
                 // Center Canvas
-                const Expanded(child: DiagramCanvas()),
+                const Expanded(
+                  child: DiagramCanvas(),
+                ),
+                
                 const VerticalDivider(thickness: 1, width: 1, color: AppColors.outlineVariant),
+                
                 // Right Sidebar
                 const RightSidebar(),
               ],
@@ -50,13 +55,16 @@ class _AppShellState extends State<AppShell> {
                 Expanded(
                   child: Text(
                     'Gemma4 Connected | Engine: CloudFlow-v2.1',
-                    style: AppTypography.code.copyWith(fontSize: 11),
+                    style: AppTypography.code.copyWith(fontSize: 10),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                Text('Documentation', style: AppTypography.code.copyWith(fontSize: 11)),
                 const SizedBox(width: 16),
-                Text('Privacy Policy', style: AppTypography.code.copyWith(fontSize: 11)),
+                Text('Documentation', style: AppTypography.code.copyWith(fontSize: 10, color: AppColors.onSurfaceVariant)),
+                const SizedBox(width: 16),
+                Text('Privacy Policy', style: AppTypography.code.copyWith(fontSize: 10, color: AppColors.onSurfaceVariant)),
+                const SizedBox(width: 16),
+                Text('Terms of Service', style: AppTypography.code.copyWith(fontSize: 10, color: AppColors.onSurfaceVariant)),
               ],
             ),
           ),

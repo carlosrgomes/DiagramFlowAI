@@ -51,7 +51,7 @@ class _DiagramCanvasState extends State<DiagramCanvas> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color(0xFFF3F4F6), // Light gray background for canvas
+      color: const Color(0xFFF3F4F6),
       child: DragTarget<ResourceTemplate>(
         onAcceptWithDetails: (details) {
           final state = context.read<DiagramState>();
@@ -75,18 +75,21 @@ class _DiagramCanvasState extends State<DiagramCanvas> {
             constrained: false,
             child: Consumer<DiagramState>(
               builder: (context, state, child) {
-                return CustomPaint(
-                  size: const Size(5000, 5000),
-                  painter: GridBackgroundPainter(
-                    gridColor: Colors.black.withAlpha(20), // Subtle grid
-                  ),
-                  child: Stack(
-                    children: state.nodes.map((node) {
-                      return DiagramNodeWidget(
-                        label: node.label,
-                        position: node.position,
-                      );
-                    }).toList(),
+                return SizedBox(
+                  width: 5000,
+                  height: 5000,
+                  child: CustomPaint(
+                    painter: GridBackgroundPainter(
+                      gridColor: Colors.black.withAlpha(20),
+                    ),
+                    child: Stack(
+                      children: state.nodes.map((node) {
+                        return DiagramNodeWidget(
+                          label: node.label,
+                          position: node.position,
+                        );
+                      }).toList(),
+                    ),
                   ),
                 );
               },
