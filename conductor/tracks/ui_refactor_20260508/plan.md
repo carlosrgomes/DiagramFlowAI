@@ -1,9 +1,9 @@
 # Implementation Plan: High-Fidelity UI Refactor
 
 ## Phase 1: Layout Skeleton & Header
-- [~] Task: Restructure `AppShell` to include Header, Footer, and a 3-column body (Left Sidebar, Canvas, Right Sidebar).
-    - [ ] Write Tests
-    - [ ] Implement Feature
+- [x] Task: Restructure `AppShell` to include Header, Footer, and a 3-column body (Left Sidebar, Canvas, Right Sidebar). [d8ccffc]
+    - [x] Write Tests
+    - [x] Implement Feature
 - [ ] Task: Create `TopNavBar` widget matching the reference design (branding, nav links, central toolbar, user profile).
     - [ ] Write Tests
     - [ ] Implement Feature
