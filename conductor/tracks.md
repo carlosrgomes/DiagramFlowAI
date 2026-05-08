@@ -28,5 +28,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 - [x] **Track: Hugging Face Token Authentication for Gated Models**
   *Link: [./tracks/hf_auth_20260508/](./tracks/hf_auth_20260508/)*
 
+- [ ] **Track: High-Fidelity Hierarchical Grouping & Professional Visuals**
+  *Link: [./tracks/hierarchical_grouping_20260508/](./tracks/hierarchical_grouping_20260508/)*
+
 - [ ] **Track: Implement Authentication Flow and Login Screen**
   *Link: [./tracks/auth_flow_20260508/](./tracks/auth_flow_20260508/)*
