@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:diagram_flow_ai/models/diagram_state.dart';
+import 'package:diagram_flow_ai/models/ai_model_state.dart';
 import 'package:diagram_flow_ai/theme/design_tokens.dart';
 import 'package:diagram_flow_ai/widgets/app_shell.dart';
 import 'package:provider/provider.dart';
@@ -14,8 +15,11 @@ class DiagramFlowApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => DiagramState(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => DiagramState()),
+        ChangeNotifierProvider(create: (_) => AIModelState()),
+      ],
       child: MaterialApp(
         title: 'DiagramFlow AI',
       theme: ThemeData(

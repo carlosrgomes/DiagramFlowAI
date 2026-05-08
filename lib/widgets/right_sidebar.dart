@@ -1,5 +1,7 @@
+import 'package:diagram_flow_ai/models/ai_model_state.dart';
 import 'package:diagram_flow_ai/theme/design_tokens.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class RightSidebar extends StatelessWidget {
   const RightSidebar({super.key});
@@ -71,22 +73,61 @@ class RightSidebar extends StatelessWidget {
   }
 
   Widget _buildChatSection(BuildContext context) {
+    final aiState = context.watch<AIModelState>();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.all(12.0),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Icon(Icons.smart_toy_outlined, size: 18, color: AppColors.primary),
-              const SizedBox(width: 8),
-              Text(
-                'Gemma4 AI Assistant',
-                style: AppTypography.labelCaps,
+              Expanded(
+                child: Row(
+                  children: [
+                    const Icon(Icons.smart_toy_outlined, size: 18, color: AppColors.primary),
+                    const SizedBox(width: 8),
+                    Flexible(
+                      child: Text(
+                        'Gemma4 AI Assistant',
+                        style: AppTypography.labelCaps,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
               ),
+              if (aiState.status == AIModelStatus.notDownloaded)
+                TextButton.icon(
+                  onPressed: () => aiState.startDownload(),
+                  icon: const Icon(Icons.download, size: 12),
+                  label: const Text('Download', style: TextStyle(fontSize: 10)),
+                )
+              else if (aiState.status == AIModelStatus.ready)
+                const Icon(Icons.check_circle, size: 16, color: Colors.green)
             ],
           ),
         ),
+        if (aiState.status == AIModelStatus.downloading)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                LinearProgressIndicator(
+                  value: aiState.downloadProgress,
+                  backgroundColor: AppColors.surfaceContainer,
+                  color: AppColors.primary,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Downloading... ${(aiState.downloadProgress * 100).toInt()}%',
+                  style: AppTypography.labelCaps.copyWith(fontSize: 9),
+                ),
+              ],
+            ),
+          ),
         Expanded(
           child: ListView(
             padding: const EdgeInsets.all(12),
@@ -107,18 +148,21 @@ class RightSidebar extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(12.0),
           child: TextField(
+            enabled: aiState.status == AIModelStatus.ready,
             style: AppTypography.bodyMd,
             decoration: InputDecoration(
-              hintText: 'Ask Gemma4 to modify architecture...',
-              hintStyle: AppTypography.bodyMd.copyWith(color: AppColors.onSurfaceVariant),
+              hintText: aiState.status == AIModelStatus.ready 
+                  ? 'Ask Gemma4...' 
+                  : 'Download model to start...',
+              hintStyle: AppTypography.bodyMd.copyWith(color: AppColors.onSurfaceVariant, fontSize: 12),
               filled: true,
               fillColor: AppColors.surfaceContainer,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
                 borderSide: const BorderSide(color: AppColors.outlineVariant),
               ),
-              suffixIcon: const Icon(Icons.send_outlined, size: 18, color: AppColors.primary),
+              suffixIcon: const Icon(Icons.send_outlined, size: 16, color: AppColors.primary),
             ),
           ),
         ),
