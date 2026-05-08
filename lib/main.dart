@@ -28,14 +28,7 @@ class DiagramFlowApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const AppShell(
-        child: Center(
-          child: Text(
-            'Welcome to DiagramFlow AI',
-            style: AppTypography.headline,
-          ),
-        ),
-      ),
+      home: const AppShell(),
     );
   }
 }

@@ -7,6 +7,6 @@ void main() {
     await tester.pumpWidget(const DiagramFlowApp());
 
     // Verify that our welcome text is present.
-    expect(find.text('Welcome to DiagramFlow AI'), findsOneWidget);
+    expect(find.text('Dashboard View'), findsOneWidget);
   });
 }

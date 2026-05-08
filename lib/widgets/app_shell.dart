@@ -1,55 +1,74 @@
 import 'package:flutter/material.dart';
 
-class AppShell extends StatelessWidget {
-  final Widget child;
+class AppShell extends StatefulWidget {
+  const AppShell({super.key});
 
-  const AppShell({
-    super.key,
-    required this.child,
-  });
+  @override
+  State<AppShell> createState() => _AppShellState();
+}
+
+class _AppShellState extends State<AppShell> {
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Row(
         children: [
-          // Navigation Sidebar Placeholder
-          Container(
-            width: 250,
-            color: Theme.of(context).colorScheme.surfaceContainerHighest,
-            child: const Column(
-              children: [
-                DrawerHeader(
-                  child: Center(
-                    child: Text(
-                      'DiagramFlow AI',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-                ListTile(
-                  leading: Icon(Icons.dashboard),
-                  title: Text('Dashboard'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.settings),
-                  title: Text('Settings'),
-                ),
-              ],
-            ),
+          // Sidebar
+          NavigationRail(
+            extended: true,
+            minExtendedWidth: 200,
+            destinations: const [
+              NavigationRailDestination(
+                icon: Icon(Icons.dashboard_outlined),
+                selectedIcon: Icon(Icons.dashboard),
+                label: Text('Dashboard'),
+              ),
+              NavigationRailDestination(
+                icon: Icon(Icons.settings_outlined),
+                selectedIcon: Icon(Icons.settings),
+                label: Text('Settings'),
+              ),
+            ],
+            selectedIndex: _selectedIndex,
+            onDestinationSelected: (index) {
+              setState(() {
+                _selectedIndex = index;
+              });
+            },
           ),
+          const VerticalDivider(thickness: 1, width: 1),
           // Main Content Area
           Expanded(
             child: Container(
               color: Theme.of(context).colorScheme.surface,
-              child: child,
+              child: _buildBody(),
             ),
           ),
         ],
       ),
     );
+  }
+
+  Widget _buildBody() {
+    switch (_selectedIndex) {
+      case 0:
+        return const Center(
+          child: Text(
+            'Dashboard View',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+        );
+      case 1:
+        return const Center(
+          child: Text(
+            'Settings View',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+        );
+      default:
+        return const Center(child: Text('Not Found'));
+    }
   }
 }
