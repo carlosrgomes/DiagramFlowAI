@@ -9,10 +9,10 @@ To provide a seamless, high-performance desktop application for cloud architects
 ## Key Features
 - **Cross-Platform Compatibility:** [Implemented] Single codebase providing native-like desktop apps on Windows, macOS, and Linux using Flutter.
 - **AI-Driven Architecture Generation:** [Implemented] Integration with a local Gemma 4 model (downloadable via chat) to automatically draw diagrams from natural language prompts.
-- **Diagram Editor:** [Implemented] Infinite high-fidelity canvas with drag-and-drop support, Mermaid code view, and AI chat interface utilizing official AWS icons.
-- **Model Registry:** Management of local and remote AI models for architectural logic.
+- **Diagram Editor:** [Implemented] Infinite high-fidelity canvas with drag-and-drop support, interactive node dragging, Mermaid code view, and AI chat interface utilizing official AWS icons.
+- **Model Registry:** [Implemented] Management of local and remote AI models (selection via UI) with technical interaction logging.
 - **Export & Metadata:** Support for PNG, SVG, and JSON metadata exports of architectural definitions.
-- **Official Cloud Assets:** [Implemented] Integration of official AWS Architecture Icons for professional-grade diagramming.
+- **Official Cloud Assets:** [Implemented] Comprehensive integration of official AWS Architecture Icons (categorized library).
 - **Responsive UI:** [Implemented] High-fidelity professional dark-mode interface matching the CloudFlow AI Studio design.
 
 ## Non-Functional Requirements
