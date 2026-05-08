@@ -1,7 +1,7 @@
 # Implementation Plan: Generative AI & AWS Assets
 
 ## Phase 1: AWS Asset Management
-- [ ] Task: Download and extract the official AWS Architecture Icons ZIP to the local `assets/` folder.
+- [~] Task: Download and extract the official AWS Architecture Icons ZIP to the local `assets/` folder.
     - [ ] Write Tests
     - [ ] Implement Feature
 - [ ] Task: Update `pubspec.yaml` to include the new image assets and create an `AssetManager` utility to load them.

@@ -50,41 +50,60 @@ class _DiagramCanvasState extends State<DiagramCanvas> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: const Color(0xFFF3F4F6),
-      child: DragTarget<ResourceTemplate>(
-        onAcceptWithDetails: (details) {
-          final state = context.read<DiagramState>();
-          
-          final RenderBox renderBox = context.findRenderObject() as RenderBox;
-          final Offset localOffset = renderBox.globalToLocal(details.offset);
-          final Offset adjustedOffset = _transformationController.toScene(localOffset);
+    // Use the overlay context for SnackBar to ensure it's visible
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
 
-          state.addNode(
-            id: DateTime.now().toIso8601String(),
-            label: details.data.label,
-            position: adjustedOffset,
-          );
-        },
-        builder: (context, candidateData, rejectedData) {
-          return InteractiveViewer(
+    return DragTarget<ResourceTemplate>(
+      onWillAcceptWithDetails: (details) => true,
+      onAcceptWithDetails: (details) {
+        final state = context.read<DiagramState>();
+        
+        final RenderBox renderBox = context.findRenderObject() as RenderBox;
+        final Offset localOffset = renderBox.globalToLocal(details.offset);
+        final Offset adjustedOffset = _transformationController.toScene(localOffset);
+
+        debugPrint('DROP ACCEPTED: ${details.data.label} at $adjustedOffset');
+
+        state.addNode(
+          id: 'node_${DateTime.now().millisecondsSinceEpoch}',
+          label: details.data.label,
+          position: adjustedOffset,
+        );
+
+        scaffoldMessenger.clearSnackBars();
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text('Added ${details.data.label}'),
+            behavior: SnackBarBehavior.floating,
+            width: 200,
+            duration: const Duration(milliseconds: 1500),
+          ),
+        );
+      },
+      builder: (context, candidateData, rejectedData) {
+        return Container(
+          color: const Color(0xFFF3F4F6),
+          child: InteractiveViewer(
             transformationController: _transformationController,
-            boundaryMargin: const EdgeInsets.all(double.infinity),
+            boundaryMargin: const EdgeInsets.all(2500), // Finite but large boundary
             minScale: 0.1,
             maxScale: 2.0,
             constrained: false,
             child: Consumer<DiagramState>(
               builder: (context, state, child) {
-                return SizedBox(
+                return Container(
                   width: 5000,
                   height: 5000,
+                  color: Colors.white, // Solid background
                   child: CustomPaint(
                     painter: GridBackgroundPainter(
-                      gridColor: Colors.black.withAlpha(20),
+                      gridColor: Colors.black.withAlpha(15),
                     ),
                     child: Stack(
+                      clipBehavior: Clip.none,
                       children: state.nodes.map((node) {
                         return DiagramNodeWidget(
+                          key: ValueKey(node.id),
                           label: node.label,
                           position: node.position,
                         );
@@ -94,9 +113,9 @@ class _DiagramCanvasState extends State<DiagramCanvas> {
                 );
               },
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

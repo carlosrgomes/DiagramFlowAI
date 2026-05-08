@@ -1,3 +1,4 @@
+import 'package:diagram_flow_ai/models/asset_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:diagram_flow_ai/theme/design_tokens.dart';
 
@@ -16,49 +17,44 @@ class DiagramNodeWidget extends StatelessWidget {
     return Positioned(
       left: position.dx,
       top: position.dy,
-      child: Container(
-        padding: const EdgeInsets.all(2),
-        decoration: BoxDecoration(
-          color: AppColors.primary,
-          borderRadius: BorderRadius.circular(4),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withAlpha(50),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
+      child: Material(
+        color: Colors.transparent,
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: const EdgeInsets.all(1.5),
           decoration: BoxDecoration(
-            color: AppColors.surfaceContainer,
-            borderRadius: BorderRadius.circular(3),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(_getIconForLabel(label), color: AppColors.primary, size: 20),
-              const SizedBox(width: 12),
-              Text(
-                label,
-                style: AppTypography.bodyMd.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.onSurface,
-                ),
+            color: AppColors.primary,
+            borderRadius: BorderRadius.circular(4),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withAlpha(40),
+                blurRadius: 12,
+                offset: const Offset(0, 6),
               ),
             ],
+          ),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            decoration: BoxDecoration(
+              color: AppColors.surfaceContainerHighest,
+              borderRadius: BorderRadius.circular(3),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image.asset(AssetManager.getIconForLabel(label), width: 22, height: 22),
+                const SizedBox(width: 10),
+                Text(
+                  label,
+                  style: AppTypography.bodyMd.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
-  }
-
-  IconData _getIconForLabel(String label) {
-    if (label.contains('EC2')) return Icons.memory_outlined;
-    if (label.contains('RDS')) return Icons.dns_outlined;
-    if (label.contains('S3')) return Icons.folder_open_outlined;
-    if (label.contains('VPC')) return Icons.router_outlined;
-    return Icons.settings_input_component_outlined;
   }
 }

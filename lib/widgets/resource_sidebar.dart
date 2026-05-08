@@ -1,3 +1,4 @@
+import 'package:diagram_flow_ai/models/asset_manager.dart';
 import 'package:diagram_flow_ai/models/resource_template.dart';
 import 'package:diagram_flow_ai/theme/design_tokens.dart';
 import 'package:flutter/material.dart';
@@ -124,39 +125,55 @@ class ResourceSidebar extends StatelessWidget {
   Widget _buildDraggableResourceCard(ResourceTemplate template) {
     return Draggable<ResourceTemplate>(
       data: template,
+      dragAnchorStrategy: pointerDragAnchorStrategy,
       feedback: Material(
         color: Colors.transparent,
         child: Container(
-          width: 100,
-          height: 60,
+          width: 120,
+          height: 80,
           decoration: BoxDecoration(
-            color: AppColors.surfaceContainer.withAlpha(150),
-            borderRadius: BorderRadius.circular(4),
-            border: Border.all(color: AppColors.primary),
+            color: AppColors.surfaceContainerHighest.withAlpha(200),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: AppColors.primary, width: 2),
+            boxShadow: const [
+              BoxShadow(color: Colors.black54, blurRadius: 20, offset: Offset(0, 10)),
+            ],
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(template.icon, color: AppColors.secondary, size: 24),
-              Text(template.label, style: AppTypography.labelCaps),
+              Image.asset(AssetManager.getIconForLabel(template.label), width: 32, height: 32),
+              const SizedBox(height: 4),
+              Text(
+                template.label, 
+                style: AppTypography.labelCaps.copyWith(color: Colors.white),
+              ),
             ],
           ),
         ),
       ),
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppColors.surfaceContainer,
-          borderRadius: BorderRadius.circular(4),
-          border: Border.all(color: AppColors.outlineVariant),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(template.icon, color: AppColors.secondary, size: 24),
-            const SizedBox(height: 4),
-            Text(template.label, style: AppTypography.labelCaps),
-          ],
-        ),
+      childWhenDragging: Opacity(
+        opacity: 0.3,
+        child: _buildResourceCard(template.label),
+      ),
+      child: _buildResourceCard(template.label),
+    );
+  }
+
+  Widget _buildResourceCard(String label) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.surfaceContainer,
+        borderRadius: BorderRadius.circular(4),
+        border: Border.all(color: AppColors.outlineVariant),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(AssetManager.getIconForLabel(label), width: 24, height: 24),
+          const SizedBox(height: 4),
+          Text(label, style: AppTypography.labelCaps),
+        ],
       ),
     );
   }
