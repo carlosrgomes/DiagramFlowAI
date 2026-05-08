@@ -8,10 +8,11 @@ To provide a seamless, high-performance desktop application for cloud architects
 
 ## Key Features
 - **Cross-Platform Compatibility:** [Implemented] Single codebase providing native-like desktop apps on Windows, macOS, and Linux using Flutter.
-- **AI-Driven Architecture Generation:** Integration with LLMs (Gemma, GPT-4, Claude) to assist in creating and optimizing diagrams.
+- **AI-Driven Architecture Generation:** (In Progress) Integration with LLMs (Gemma, GPT-4, Claude) to assist in creating and optimizing diagrams.
+- **Diagram Editor:** [Implemented] Infinite canvas with drag-and-drop support for cloud resources.
 - **Model Registry:** Management of local and remote AI models for architectural logic.
 - **Export & Metadata:** Support for PNG, SVG, and JSON metadata exports of architectural definitions.
-- **Responsive UI:** A professional dark-mode interface that adheres to the "Technical Architecture System" design language.
+- **Responsive UI:** [Implemented] A professional dark-mode interface that adheres to the "Technical Architecture System" design language.
 
 ## Non-Functional Requirements
 - **Engineering Precision:** High-density layouts using a 4px base grid.
