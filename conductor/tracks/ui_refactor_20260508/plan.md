@@ -4,7 +4,7 @@
 - [x] Task: Restructure `AppShell` to include Header, Footer, and a 3-column body (Left Sidebar, Canvas, Right Sidebar). [d8ccffc]
     - [x] Write Tests
     - [x] Implement Feature
-- [ ] Task: Create `TopNavBar` widget matching the reference design (branding, nav links, central toolbar, user profile).
+- [~] Task: Create `TopNavBar` widget matching the reference design (branding, nav links, central toolbar, user profile).
     - [ ] Write Tests
     - [ ] Implement Feature
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Layout Skeleton & Header' (Protocol in workflow.md)

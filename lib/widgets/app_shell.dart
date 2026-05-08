@@ -1,6 +1,7 @@
 import 'package:diagram_flow_ai/theme/design_tokens.dart';
 import 'package:diagram_flow_ai/widgets/diagram_canvas.dart';
 import 'package:diagram_flow_ai/widgets/resource_sidebar.dart';
+import 'package:diagram_flow_ai/widgets/top_nav_bar.dart';
 import 'package:flutter/material.dart';
 
 class AppShell extends StatefulWidget {
@@ -17,29 +18,7 @@ class _AppShellState extends State<AppShell> {
       backgroundColor: AppColors.background,
       body: Column(
         children: [
-          // Header Placeholder
-          Container(
-            height: 56,
-            decoration: const BoxDecoration(
-              color: AppColors.surface,
-              border: Border(
-                bottom: BorderSide(color: AppColors.outlineVariant, width: 1),
-              ),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Row(
-              children: [
-                Text(
-                  'CloudFlow AI',
-                  style: AppTypography.h2.copyWith(color: AppColors.primary),
-                ),
-                const Spacer(),
-                const Icon(Icons.notifications_outlined, color: AppColors.onSurfaceVariant),
-                const SizedBox(width: 16),
-                const Icon(Icons.settings_outlined, color: AppColors.onSurfaceVariant),
-              ],
-            ),
-          ),
+          const TopNavBar(),
           // Main Body (3 Columns)
           Expanded(
             child: Row(
