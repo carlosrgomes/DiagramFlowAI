@@ -10,7 +10,7 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Environment & Project Scaffolding' (Protocol in workflow.md)
 
 ## Phase 2: Design Tokens & Base UI
-- [ ] Task: Add foundational design tokens (colors, typography) referencing Stitch.
+- [~] Task: Add foundational design tokens (colors, typography) referencing Stitch.
     - [ ] Write Tests
     - [ ] Implement Feature
 - [ ] Task: Create main application shell widget.

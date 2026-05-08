@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:diagram_flow_ai/theme/design_tokens.dart';
+
 void main() {
   runApp(const DiagramFlowApp());
 }
@@ -12,7 +14,16 @@ class DiagramFlowApp extends StatelessWidget {
     return MaterialApp(
       title: 'DiagramFlow AI',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: AppColors.primary,
+          surface: AppColors.surface,
+          onSurface: AppColors.onSurface,
+        ),
+        textTheme: const TextTheme(
+          headlineMedium: AppTypography.headline,
+          bodyMedium: AppTypography.body,
+          labelLarge: AppTypography.label,
+        ),
         useMaterial3: true,
       ),
       home: const MainShell(),
@@ -25,9 +36,12 @@ class MainShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
-        child: Text('DiagramFlow AI Initialized'),
+        child: Text(
+          'DiagramFlow AI Initialized',
+          style: Theme.of(context).textTheme.headlineMedium,
+        ),
       ),
     );
   }
