@@ -55,10 +55,31 @@ class ResourceSidebar extends StatelessWidget {
                   ),
                   initiallyExpanded: true,
                   children: category.value.map((template) {
-                    return ListTile(
-                      leading: Icon(template.icon, color: template.color),
-                      title: Text(template.label),
-                      onTap: () {}, // Will handle drag start later
+                    return Draggable<ResourceTemplate>(
+                      data: template,
+                      feedback: Material(
+                        color: Colors.transparent,
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: template.color.withAlpha(128),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Icon(template.icon, color: Colors.white, size: 32),
+                        ),
+                      ),
+                      childWhenDragging: Opacity(
+                        opacity: 0.5,
+                        child: ListTile(
+                          leading: Icon(template.icon, color: template.color),
+                          title: Text(template.label),
+                        ),
+                      ),
+                      child: ListTile(
+                        leading: Icon(template.icon, color: template.color),
+                        title: Text(template.label),
+                        onTap: () {},
+                      ),
                     );
                   }).toList(),
                 );

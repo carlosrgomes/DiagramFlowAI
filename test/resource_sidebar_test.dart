@@ -18,5 +18,6 @@ void main() {
     expect(find.text('Network'), findsOneWidget);
     expect(find.text('EC2 Instance'), findsOneWidget);
     expect(find.text('S3 Bucket'), findsOneWidget);
+    expect(find.byType(Draggable<ResourceTemplate>), findsWidgets);
   });
 }

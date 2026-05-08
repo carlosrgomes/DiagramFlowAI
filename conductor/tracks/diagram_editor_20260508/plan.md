@@ -13,7 +13,7 @@
 - [x] Task: Create `ResourceSidebar` widget containing categorised dummy resources. [5cf4327]
     - [x] Write Tests
     - [x] Implement Feature
-- [ ] Task: Wrap sidebar items in `LongPressDraggable` to initiate drag events.
+- [~] Task: Wrap sidebar items in `LongPressDraggable` to initiate drag events.
     - [ ] Write Tests
     - [ ] Implement Feature
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Resource Library & Draggables' (Protocol in workflow.md)
