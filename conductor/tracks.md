@@ -4,5 +4,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: Scaffold Flutter desktop application and set up basic UI layout**
+- [x] **Track: Scaffold Flutter desktop application and set up basic UI layout**
   *Link: [./tracks/scaffold_flutter_app_20260508/](./tracks/scaffold_flutter_app_20260508/)*
