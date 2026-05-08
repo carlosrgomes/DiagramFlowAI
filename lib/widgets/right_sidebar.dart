@@ -1,10 +1,51 @@
+import 'package:diagram_flow_ai/models/ai_engine_service.dart';
 import 'package:diagram_flow_ai/models/ai_model_state.dart';
+import 'package:diagram_flow_ai/models/diagram_state.dart';
 import 'package:diagram_flow_ai/theme/design_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class RightSidebar extends StatelessWidget {
+class RightSidebar extends StatefulWidget {
   const RightSidebar({super.key});
+
+  @override
+  State<RightSidebar> createState() => _RightSidebarState();
+}
+
+class _RightSidebarState extends State<RightSidebar> {
+  final TextEditingController _chatController = TextEditingController();
+  final AIEngineService _aiEngine = AIEngineService();
+
+  @override
+  void dispose() {
+    _chatController.dispose();
+    super.dispose();
+  }
+
+  void _handleSendMessage() {
+    final text = _chatController.text.trim();
+    if (text.isEmpty) return;
+
+    final aiState = context.read<AIModelState>();
+    final diagramState = context.read<DiagramState>();
+
+    aiState.addMessage(text, false);
+    _chatController.clear();
+
+    // Process with AI Engine
+    final command = _aiEngine.parsePrompt(text);
+    if (command != null) {
+      aiState.addMessage('Understood. Adding ${command.label} to the canvas...', true);
+      
+      diagramState.addNode(
+        id: 'ai_node_${DateTime.now().millisecondsSinceEpoch}',
+        label: command.label,
+        position: command.position,
+      );
+    } else {
+      aiState.addMessage('I\'m sorry, I didn\'t recognize an architectural command in your message. Try asking to "add an EC2 instance" or "create a VPC".', true);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -129,26 +170,25 @@ class RightSidebar extends StatelessWidget {
             ),
           ),
         Expanded(
-          child: ListView(
+          child: ListView.builder(
             padding: const EdgeInsets.all(12),
-            children: [
-              _buildChatMessage(
-                'I\'ve generated the base VPC and added two EC2 instances behind an ALB. Would you like me to add a Redis cache cluster next to the RDS?',
-                isAI: true,
-              ),
-              const SizedBox(height: 16),
-              _buildChatMessage(
-                'Yes, add an ElastiCache Redis node and update the Mermaid code to reflect it.',
-                isAI: false,
-              ),
-            ],
+            itemCount: aiState.messages.length,
+            itemBuilder: (context, index) {
+              final message = aiState.messages[index];
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 12.0),
+                child: _buildChatMessage(message.text, isAI: message.isAI),
+              );
+            },
           ),
         ),
         // Chat Input
         Padding(
           padding: const EdgeInsets.all(12.0),
           child: TextField(
+            controller: _chatController,
             enabled: aiState.status == AIModelStatus.ready,
+            onSubmitted: (_) => _handleSendMessage(),
             style: AppTypography.bodyMd,
             decoration: InputDecoration(
               hintText: aiState.status == AIModelStatus.ready 
@@ -162,7 +202,10 @@ class RightSidebar extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
                 borderSide: const BorderSide(color: AppColors.outlineVariant),
               ),
-              suffixIcon: const Icon(Icons.send_outlined, size: 16, color: AppColors.primary),
+              suffixIcon: IconButton(
+                onPressed: _handleSendMessage,
+                icon: const Icon(Icons.send_outlined, size: 16, color: AppColors.primary),
+              ),
             ),
           ),
         ),
