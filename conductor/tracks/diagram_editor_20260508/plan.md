@@ -1,7 +1,7 @@
 # Implementation Plan: Diagram Editor
 
 ## Phase 1: State & Canvas Foundation
-- [ ] Task: Create `DiagramState` class to manage a list of nodes and their coordinates.
+- [~] Task: Create `DiagramState` class to manage a list of nodes and their coordinates.
     - [ ] Write Tests
     - [ ] Implement Feature
 - [ ] Task: Implement `DiagramCanvas` widget using `InteractiveViewer` with a custom grid background.
