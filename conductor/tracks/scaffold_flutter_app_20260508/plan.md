@@ -16,7 +16,7 @@
 - [x] Task: Create main application shell widget. [6b7ffea]
     - [x] Write Tests
     - [x] Implement Feature
-- [~] Task: Implement basic navigation skeleton.
-    - [ ] Write Tests
-    - [ ] Implement Feature
+- [x] Task: Implement basic navigation skeleton. [2ed5ce2]
+    - [x] Write Tests
+    - [x] Implement Feature
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Design Tokens & Base UI' (Protocol in workflow.md)
