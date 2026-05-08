@@ -1,7 +1,7 @@
 # Implementation Plan
 
 ## Phase 1: Environment & Project Scaffolding
-- [ ] Task: Initialize new Flutter project with desktop platforms enabled.
+- [~] Task: Initialize new Flutter project with desktop platforms enabled.
     - [ ] Write Tests
     - [ ] Implement Feature
 - [ ] Task: Clean up default template files and configure pubspec.yaml.
