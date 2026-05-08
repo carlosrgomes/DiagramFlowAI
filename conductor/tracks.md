@@ -10,5 +10,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 - [x] **Track: Implement Diagram Editor with Drag and Drop Functionality**
   *Link: [./tracks/diagram_editor_20260508/](./tracks/diagram_editor_20260508/)*
 
+- [ ] **Track: High-Fidelity UI Refactor for Editor Canvas**
+  *Link: [./tracks/ui_refactor_20260508/](./tracks/ui_refactor_20260508/)*
+
 - [ ] **Track: Implement Authentication Flow and Login Screen**
   *Link: [./tracks/auth_flow_20260508/](./tracks/auth_flow_20260508/)*
