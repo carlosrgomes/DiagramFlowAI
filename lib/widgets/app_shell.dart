@@ -1,3 +1,4 @@
+import 'package:diagram_flow_ai/theme/design_tokens.dart';
 import 'package:diagram_flow_ai/widgets/diagram_canvas.dart';
 import 'package:diagram_flow_ai/widgets/resource_sidebar.dart';
 import 'package:flutter/material.dart';
@@ -10,42 +11,89 @@ class AppShell extends StatefulWidget {
 }
 
 class _AppShellState extends State<AppShell> {
-  int _selectedIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Row(
+      backgroundColor: AppColors.background,
+      body: Column(
         children: [
-          // Sidebar
-          NavigationRail(
-            extended: true,
-            minExtendedWidth: 200,
-            destinations: const [
-              NavigationRailDestination(
-                icon: Icon(Icons.dashboard_outlined),
-                selectedIcon: Icon(Icons.dashboard),
-                label: Text('Dashboard'),
+          // Header Placeholder
+          Container(
+            height: 56,
+            decoration: const BoxDecoration(
+              color: AppColors.surface,
+              border: Border(
+                bottom: BorderSide(color: AppColors.outlineVariant, width: 1),
               ),
-              NavigationRailDestination(
-                icon: Icon(Icons.settings_outlined),
-                selectedIcon: Icon(Icons.settings),
-                label: Text('Settings'),
-              ),
-            ],
-            selectedIndex: _selectedIndex,
-            onDestinationSelected: (index) {
-              setState(() {
-                _selectedIndex = index;
-              });
-            },
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Row(
+              children: [
+                Text(
+                  'CloudFlow AI',
+                  style: AppTypography.h2.copyWith(color: AppColors.primary),
+                ),
+                const Spacer(),
+                const Icon(Icons.notifications_outlined, color: AppColors.onSurfaceVariant),
+                const SizedBox(width: 16),
+                const Icon(Icons.settings_outlined, color: AppColors.onSurfaceVariant),
+              ],
+            ),
           ),
-          const VerticalDivider(thickness: 1, width: 1),
-          // Main Content Area
+          // Main Body (3 Columns)
           Expanded(
-            child: Container(
-              color: Theme.of(context).colorScheme.surface,
-              child: _buildBody(),
+            child: Row(
+              children: [
+                // Left Sidebar
+                const ResourceSidebar(),
+                const VerticalDivider(thickness: 1, width: 1, color: AppColors.outlineVariant),
+                // Center Canvas
+                const Expanded(child: DiagramCanvas()),
+                const VerticalDivider(thickness: 1, width: 1, color: AppColors.outlineVariant),
+                // Right Sidebar Placeholder
+                Container(
+                  width: 320,
+                  color: AppColors.surfaceContainer,
+                  child: Column(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: _buildRightSection('Mermaid Architecture'),
+                      ),
+                      const Divider(height: 1, color: AppColors.outlineVariant),
+                      Expanded(
+                        flex: 1,
+                        child: _buildRightSection('Gemma4 AI Assistant'),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Footer Placeholder
+          Container(
+            height: 32,
+            decoration: const BoxDecoration(
+              color: AppColors.surface,
+              border: Border(
+                top: BorderSide(color: AppColors.outlineVariant, width: 1),
+              ),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'Gemma4 Connected | Engine: CloudFlow-v2.1',
+                    style: AppTypography.code.copyWith(fontSize: 11),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                Text('Documentation', style: AppTypography.code.copyWith(fontSize: 11)),
+                const SizedBox(width: 16),
+                Text('Privacy Policy', style: AppTypography.code.copyWith(fontSize: 11)),
+              ],
             ),
           ),
         ],
@@ -53,25 +101,23 @@ class _AppShellState extends State<AppShell> {
     );
   }
 
-  Widget _buildBody() {
-    switch (_selectedIndex) {
-      case 0:
-        return const Row(
-          children: [
-            ResourceSidebar(),
-            VerticalDivider(thickness: 1, width: 1),
-            Expanded(child: DiagramCanvas()),
-          ],
-        );
-      case 1:
-        return const Center(
+  Widget _buildRightSection(String title) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(12.0),
           child: Text(
-            'Settings View',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            title,
+            style: AppTypography.labelCaps,
           ),
-        );
-      default:
-        return const Center(child: Text('Not Found'));
-    }
+        ),
+        const Expanded(
+          child: Center(
+            child: Text('Content Placeholder'),
+          ),
+        ),
+      ],
+    );
   }
 }
