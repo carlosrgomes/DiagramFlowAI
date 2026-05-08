@@ -19,7 +19,7 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Left Sidebar Refactor' (Protocol in workflow.md)
 
 ## Phase 3: Canvas & Right Sidebar [checkpoint: f92bcba]
-- [ ] Task: Adjust `DiagramCanvas` visual styling (background color, grid pattern) to match the reference screenshot.
+- [~] Task: Adjust `DiagramCanvas` visual styling (background color, grid pattern) to match the reference screenshot.
     - [ ] Write Tests
     - [ ] Implement Feature
 - [ ] Task: Create `RightSidebar` widget containing 'Mermaid Architecture' code view and 'Gemma4 AI Assistant' chat view.

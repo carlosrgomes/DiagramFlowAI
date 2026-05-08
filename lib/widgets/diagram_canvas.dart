@@ -10,14 +10,14 @@ class GridBackgroundPainter extends CustomPainter {
 
   GridBackgroundPainter({
     required this.gridColor,
-    this.spacing = 32.0,
+    this.spacing = 20.0,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
       ..color = gridColor
-      ..strokeWidth = 1.0;
+      ..strokeWidth = 0.5;
 
     for (double i = 0; i <= size.width; i += spacing) {
       canvas.drawLine(Offset(i, 0), Offset(i, size.height), paint);
@@ -50,47 +50,50 @@ class _DiagramCanvasState extends State<DiagramCanvas> {
 
   @override
   Widget build(BuildContext context) {
-    return DragTarget<ResourceTemplate>(
-      onAcceptWithDetails: (details) {
-        final state = context.read<DiagramState>();
-        
-        final RenderBox renderBox = context.findRenderObject() as RenderBox;
-        final Offset localOffset = renderBox.globalToLocal(details.offset);
-        final Offset adjustedOffset = _transformationController.toScene(localOffset);
+    return Container(
+      color: const Color(0xFFF3F4F6), // Light gray background for canvas
+      child: DragTarget<ResourceTemplate>(
+        onAcceptWithDetails: (details) {
+          final state = context.read<DiagramState>();
+          
+          final RenderBox renderBox = context.findRenderObject() as RenderBox;
+          final Offset localOffset = renderBox.globalToLocal(details.offset);
+          final Offset adjustedOffset = _transformationController.toScene(localOffset);
 
-        state.addNode(
-          id: DateTime.now().toIso8601String(),
-          label: details.data.label,
-          position: adjustedOffset,
-        );
-      },
-      builder: (context, candidateData, rejectedData) {
-        return InteractiveViewer(
-          transformationController: _transformationController,
-          boundaryMargin: const EdgeInsets.all(double.infinity),
-          minScale: 0.1,
-          maxScale: 2.0,
-          constrained: false,
-          child: Consumer<DiagramState>(
-            builder: (context, state, child) {
-              return CustomPaint(
-                size: const Size(5000, 5000), // Large canvas area
-                painter: GridBackgroundPainter(
-                  gridColor: Theme.of(context).colorScheme.outlineVariant.withAlpha(51),
-                ),
-                child: Stack(
-                  children: state.nodes.map((node) {
-                    return DiagramNodeWidget(
-                      label: node.label,
-                      position: node.position,
-                    );
-                  }).toList(),
-                ),
-              );
-            },
-          ),
-        );
-      },
+          state.addNode(
+            id: DateTime.now().toIso8601String(),
+            label: details.data.label,
+            position: adjustedOffset,
+          );
+        },
+        builder: (context, candidateData, rejectedData) {
+          return InteractiveViewer(
+            transformationController: _transformationController,
+            boundaryMargin: const EdgeInsets.all(double.infinity),
+            minScale: 0.1,
+            maxScale: 2.0,
+            constrained: false,
+            child: Consumer<DiagramState>(
+              builder: (context, state, child) {
+                return CustomPaint(
+                  size: const Size(5000, 5000),
+                  painter: GridBackgroundPainter(
+                    gridColor: Colors.black.withAlpha(20), // Subtle grid
+                  ),
+                  child: Stack(
+                    children: state.nodes.map((node) {
+                      return DiagramNodeWidget(
+                        label: node.label,
+                        position: node.position,
+                      );
+                    }).toList(),
+                  ),
+                );
+              },
+            ),
+          );
+        },
+      ),
     );
   }
 }

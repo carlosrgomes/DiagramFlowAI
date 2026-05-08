@@ -17,24 +17,48 @@ class DiagramNodeWidget extends StatelessWidget {
       left: position.dx,
       top: position.dy,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.all(2),
         decoration: BoxDecoration(
-          color: AppColors.surfaceContainer,
+          color: AppColors.primary,
           borderRadius: BorderRadius.circular(4),
-          border: Border.all(color: AppColors.outlineVariant, width: 1),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withAlpha(128),
-              blurRadius: 8,
+              color: Colors.black.withAlpha(50),
+              blurRadius: 10,
               offset: const Offset(0, 4),
             ),
           ],
         ),
-        child: Text(
-          label,
-          style: AppTypography.bodyMd,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          decoration: BoxDecoration(
+            color: AppColors.surfaceContainer,
+            borderRadius: BorderRadius.circular(3),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(_getIconForLabel(label), color: AppColors.primary, size: 20),
+              const SizedBox(width: 12),
+              Text(
+                label,
+                style: AppTypography.bodyMd.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.onSurface,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  IconData _getIconForLabel(String label) {
+    if (label.contains('EC2')) return Icons.memory_outlined;
+    if (label.contains('RDS')) return Icons.dns_outlined;
+    if (label.contains('S3')) return Icons.folder_open_outlined;
+    if (label.contains('VPC')) return Icons.router_outlined;
+    return Icons.settings_input_component_outlined;
   }
 }
