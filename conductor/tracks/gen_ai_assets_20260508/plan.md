@@ -1,16 +1,16 @@
 # Implementation Plan: Generative AI & AWS Assets
 
-## Phase 1: AWS Asset Management
-- [~] Task: Download and extract the official AWS Architecture Icons ZIP to the local `assets/` folder.
-    - [ ] Write Tests
-    - [ ] Implement Feature
-- [ ] Task: Update `pubspec.yaml` to include the new image assets and create an `AssetManager` utility to load them.
-    - [ ] Write Tests
-    - [ ] Implement Feature
-- [ ] Task: Refactor `DiagramNodeWidget` and `ResourceSidebar` to render the official AWS icons instead of Material icons.
-    - [ ] Write Tests
-    - [ ] Implement Feature
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: AWS Asset Management' (Protocol in workflow.md)
+## Phase 1: AWS Asset Management [checkpoint: f50bef1]
+- [x] Task: Download and extract the official AWS Architecture Icons ZIP to the local `assets/` folder. [f50bef1]
+    - [x] Write Tests
+    - [x] Implement Feature
+- [x] Task: Update `pubspec.yaml` to include the new image assets and create an `AssetManager` utility to load them. [f50bef1]
+    - [x] Write Tests
+    - [x] Implement Feature
+- [x] Task: Refactor `DiagramNodeWidget` and `ResourceSidebar` to render the official AWS icons instead of Material icons. [f50bef1]
+    - [x] Write Tests
+    - [x] Implement Feature
+- [x] Task: Conductor - User Manual Verification 'Phase 1: AWS Asset Management' (Protocol in workflow.md)
 
 ## Phase 2: AI Model Download Manager
 - [ ] Task: Implement a download button and progress indicator in the `RightSidebar` chat section for the Gemma 4 model.
