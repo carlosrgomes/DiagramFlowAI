@@ -4,7 +4,7 @@
 - [x] Task: Initialize new Flutter project with desktop platforms enabled. [98cd0e2]
     - [x] Write Tests
     - [x] Implement Feature
-- [ ] Task: Clean up default template files and configure pubspec.yaml.
+- [~] Task: Clean up default template files and configure pubspec.yaml.
     - [ ] Write Tests
     - [ ] Implement Feature
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Environment & Project Scaffolding' (Protocol in workflow.md)
