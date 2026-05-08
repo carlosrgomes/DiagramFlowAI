@@ -1,12 +1,12 @@
 # Implementation Plan: Authentication Flow
 
 ## Phase 1: Theme & Assets
-- [~] Task: Integrate Geist and JetBrains Mono fonts into the project.
-    - [ ] Write Tests
-    - [ ] Implement Feature
-- [ ] Task: Update design tokens with full Technical Architecture System palette.
-    - [ ] Write Tests
-    - [ ] Implement Feature
+- [x] Task: Integrate Geist and JetBrains Mono fonts into the project. [ac13c26]
+    - [x] Write Tests
+    - [x] Implement Feature
+- [x] Task: Update design tokens with full Technical Architecture System palette. [ac13c26]
+    - [x] Write Tests
+    - [x] Implement Feature
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Theme & Assets' (Protocol in workflow.md)
 
 ## Phase 2: Authentication State
