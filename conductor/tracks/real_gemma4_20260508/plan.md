@@ -1,13 +1,13 @@
 # Implementation Plan: Real Local Gemma 4 Integration
 
-## Phase 1: Native Setup & Dependencies
-- [ ] Task: Add `flutter_gemma` dependency to `pubspec.yaml`.
-    - [ ] Write Tests
-    - [ ] Implement Feature
-- [ ] Task: Update `macos/Podfile` to include `OTHER_LDFLAGS` for `flutter_gemma`.
-    - [ ] Write Tests
-    - [ ] Implement Feature
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Native Setup & Dependencies' (Protocol in workflow.md)
+## Phase 1: Native Setup & Dependencies [checkpoint: 6ae2362]
+- [x] Task: Add `flutter_gemma` dependency to `pubspec.yaml`. [6ae2362]
+    - [x] Write Tests
+    - [x] Implement Feature
+- [x] Task: Update `macos/Podfile` to include `OTHER_LDFLAGS` for `flutter_gemma`. [6ae2362]
+    - [x] Write Tests
+    - [x] Implement Feature
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Native Setup & Dependencies' (Protocol in workflow.md)
 
 ## Phase 2: Engine Initialization
 - [ ] Task: Update `AIModelState` to initialize `FlutterGemma` and manage the engine lifecycle.
