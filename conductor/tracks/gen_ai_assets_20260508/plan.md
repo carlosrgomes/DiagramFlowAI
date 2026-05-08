@@ -21,11 +21,11 @@
     - [x] Implement Feature
 - [x] Task: Conductor - User Manual Verification 'Phase 2: AI Model Download Manager' (Protocol in workflow.md)
 
-## Phase 3: Generative Diagramming
-- [~] Task: Create an `AIEngineService` that parses natural language chat input into architectural commands (e.g., mapping text to Node creations).
-    - [ ] Write Tests
-    - [ ] Implement Feature
-- [~] Task: Connect the chat input field to the `AIEngineService` and trigger `DiagramState.addNode` automatically.
-    - [ ] Write Tests
-    - [ ] Implement Feature
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Generative Diagramming' (Protocol in workflow.md)
+## Phase 3: Generative Diagramming [checkpoint: add9da4]
+- [x] Task: Create an `AIEngineService` that parses natural language chat input into architectural commands (e.g., mapping text to Node creations). [add9da4]
+    - [x] Write Tests
+    - [x] Implement Feature
+- [x] Task: Connect the chat input field to the `AIEngineService` and trigger `DiagramState.addNode` automatically. [add9da4]
+    - [x] Write Tests
+    - [x] Implement Feature
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Generative Diagramming' (Protocol in workflow.md)
