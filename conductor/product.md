@@ -1,21 +1,20 @@
-# Initial Concept
-
-App Desktop multi platform, Windows, Macos, Linux witch flutter, use a extensao do stitch para baixar o design que deve seguir https://stitch.withgoogle.com/projects/7341515664028582467?pli=1
-
-# Product Guide
+# Product Guide: CloudFlow AI
 
 ## Vision
-To provide a seamless, high-performance desktop application for Windows, macOS, and Linux users, built entirely with Flutter. The application will adhere to the design specifications defined in the provided Google Stitch project (7341515664028582467).
+To provide a seamless, high-performance desktop application for cloud architects and engineers, built with Flutter. CloudFlow AI serves as a high-density, low-friction environment for designing and managing complex cloud architectures with engineering precision.
 
 ## Target Audience
-- Desktop users seeking a unified, responsive experience across Windows, macOS, and Linux.
+- Cloud Architects, DevOps Engineers, and System Administrators seeking a unified, responsive experience across Windows, macOS, and Linux.
 
 ## Key Features
 - **Cross-Platform Compatibility:** [Implemented] Single codebase providing native-like desktop apps on Windows, macOS, and Linux using Flutter.
-- **Design Fidelity:** Strict adherence to the Google Stitch design guidelines and assets.
-- **Responsive UI:** Adapts gracefully to various desktop window sizes and resolutions.
+- **AI-Driven Architecture Generation:** Integration with LLMs (Gemma, GPT-4, Claude) to assist in creating and optimizing diagrams.
+- **Model Registry:** Management of local and remote AI models for architectural logic.
+- **Export & Metadata:** Support for PNG, SVG, and JSON metadata exports of architectural definitions.
+- **Responsive UI:** A professional dark-mode interface that adheres to the "Technical Architecture System" design language.
 
 ## Non-Functional Requirements
-- **Performance:** Smooth 60fps rendering and fast load times.
-- **Maintainability:** Clean, modular Flutter architecture to facilitate easy updates.
-- **Consistency:** Uniform look and feel across all three desktop operating systems while respecting platform-specific paradigms where appropriate.
+- **Engineering Precision:** High-density layouts using a 4px base grid.
+- **Performance:** Smooth 60fps rendering and fast load times, minimizing ocular fatigue through a dark-first approach.
+- **Maintainability:** Modular Flutter architecture with centralized theme management.
+- **Consistency:** Uniform look and feel using Geist and JetBrains Mono typography.
