@@ -8,6 +8,10 @@ import 'package:provider/provider.dart';
 
 void main() {
   testWidgets('RightSidebar renders Mermaid code and AI chat sections', (WidgetTester tester) async {
+    // Large size for test
+    tester.view.physicalSize = const Size(1600, 1200);
+    tester.view.devicePixelRatio = 1.0;
+
     await tester.pumpWidget(
       MultiProvider(
         providers: [
@@ -29,13 +33,16 @@ void main() {
       ),
     );
 
-    expect(find.text('Mermaid Architecture'), findsOneWidget);
-    expect(find.text('Gemma4 AI Assistant'), findsOneWidget);
+    expect(find.text('ASSISTANT'), findsOneWidget);
+    expect(find.text('SYSTEM LOGS'), findsOneWidget);
     
-    // Check for some mock Mermaid code
+    // Mermaid code is rendered inside a ScrollView/Text
     expect(find.textContaining('graph TD'), findsOneWidget);
     
     // Check for chat input
     expect(find.byType(TextField), findsOneWidget);
+
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
   });
 }

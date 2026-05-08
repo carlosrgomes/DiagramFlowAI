@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:diagram_flow_ai/widgets/resource_sidebar.dart';
-import 'package:diagram_flow_ai/models/asset_manager.dart';
 
 void main() {
   testWidgets('ResourceSidebar renders library sections and handles dynamic assets', (WidgetTester tester) async {

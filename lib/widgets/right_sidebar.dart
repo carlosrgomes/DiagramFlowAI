@@ -15,6 +15,7 @@ class RightSidebar extends StatefulWidget {
 class _RightSidebarState extends State<RightSidebar> {
   final TextEditingController _chatController = TextEditingController();
   final AIEngineService _aiEngine = AIEngineService();
+  int _activeTab = 0; // 0: Assistant, 1: Logs
 
   @override
   void dispose() {
@@ -29,12 +30,13 @@ class _RightSidebarState extends State<RightSidebar> {
     final aiState = context.read<AIModelState>();
     final diagramState = context.read<DiagramState>();
 
-    aiState.addMessage(text, MessageType.user);
+    aiState.addMessage(text, MessageType.user, rawLog: 'USER_PROMPT: $text\nMODEL: ${aiState.selectedModel}');
     _chatController.clear();
 
     await for (final event in _aiEngine.processPrompt(text)) {
       if (event.startsWith('THOUGHT:')) {
-        aiState.addMessage(event.replaceFirst('THOUGHT:', '').trim(), MessageType.thought);
+        final thought = event.replaceFirst('THOUGHT:', '').trim();
+        aiState.addMessage(thought, MessageType.thought, rawLog: 'AI_REASONING_STEP: $thought');
       } else if (event.startsWith('NODE:')) {
         final nodeData = event.replaceFirst('NODE:', '').split('@');
         final label = nodeData[0];
@@ -50,7 +52,8 @@ class _RightSidebarState extends State<RightSidebar> {
         final connData = event.replaceFirst('CONN:', '').split('->');
         diagramState.addConnection(connData[0], connData[1]);
       } else if (event.startsWith('ACTION:')) {
-        aiState.addMessage(event.replaceFirst('ACTION:', '').trim(), MessageType.ai);
+        final action = event.replaceFirst('ACTION:', '').trim();
+        aiState.addMessage(action, MessageType.ai, rawLog: 'AI_FINAL_ACTION: $action\nSTATE: UPDATED');
       }
     }
   }
@@ -68,12 +71,58 @@ class _RightSidebarState extends State<RightSidebar> {
             child: _buildCodeSection(context),
           ),
           const Divider(height: 1, color: AppColors.outlineVariant),
-          // Gemma4 AI Assistant Section
+          
+          // Tab Header
+          _buildTabHeader(),
+          
+          // Gemma4 AI Assistant / Logs Section
           Expanded(
             flex: 3,
-            child: _buildChatSection(context),
+            child: _activeTab == 0 ? _buildChatSection(context) : _buildLogsSection(context),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildTabHeader() {
+    return Container(
+      height: 40,
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      decoration: const BoxDecoration(
+        color: AppColors.surfaceContainer,
+      ),
+      child: Row(
+        children: [
+          _buildTabButton('Assistant', 0),
+          _buildTabButton('System Logs', 1),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTabButton(String title, int index) {
+    final active = _activeTab == index;
+    return InkWell(
+      onTap: () => setState(() => _activeTab = index),
+      child: Container(
+        margin: const EdgeInsets.only(right: 16),
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              color: active ? AppColors.primary : Colors.transparent,
+              width: 2,
+            ),
+          ),
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          title.toUpperCase(),
+          style: AppTypography.labelCaps.copyWith(
+            fontSize: 9,
+            color: active ? AppColors.onSurface : AppColors.onSurfaceVariant,
+          ),
+        ),
       ),
     );
   }
@@ -135,31 +184,43 @@ class _RightSidebarState extends State<RightSidebar> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Model Selection & Model Download
         Padding(
           padding: const EdgeInsets.all(12.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: Row(
-                  children: [
-                    const Icon(Icons.smart_toy_outlined, size: 18, color: AppColors.primary),
-                    const SizedBox(width: 8),
-                    Flexible(
-                      child: Text(
-                        'Gemma4 AI Assistant',
-                        style: AppTypography.labelCaps,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                child: Container(
+                  height: 28,
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  decoration: BoxDecoration(
+                    color: AppColors.surfaceContainerHighest,
+                    borderRadius: BorderRadius.circular(4),
+                    border: Border.all(color: AppColors.outlineVariant),
+                  ),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      value: aiState.selectedModel,
+                      icon: const Icon(Icons.keyboard_arrow_down, size: 14),
+                      style: AppTypography.labelCaps.copyWith(fontSize: 10, color: AppColors.primary),
+                      dropdownColor: AppColors.surfaceContainerHighest,
+                      onChanged: (val) => aiState.setSelectedModel(val!),
+                      items: aiState.availableModels.map((m) {
+                        return DropdownMenuItem(value: m, child: Text(m));
+                      }).toList(),
                     ),
-                  ],
+                  ),
                 ),
               ),
+              const SizedBox(width: 8),
               if (aiState.status == AIModelStatus.notDownloaded)
-                TextButton.icon(
+                IconButton(
                   onPressed: () => aiState.startDownload(),
-                  icon: const Icon(Icons.download, size: 12),
-                  label: const Text('Download', style: TextStyle(fontSize: 10)),
+                  icon: const Icon(Icons.download, size: 16),
+                  tooltip: 'Download Model',
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
                 )
               else if (aiState.status == AIModelStatus.ready)
                 const Icon(Icons.check_circle, size: 16, color: Colors.green)
@@ -176,11 +237,12 @@ class _RightSidebarState extends State<RightSidebar> {
                   value: aiState.downloadProgress,
                   backgroundColor: AppColors.surfaceContainer,
                   color: AppColors.primary,
+                  minHeight: 2,
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Downloading... ${(aiState.downloadProgress * 100).toInt()}%',
-                  style: AppTypography.labelCaps.copyWith(fontSize: 9),
+                  'Downloading model... ${(aiState.downloadProgress * 100).toInt()}%',
+                  style: AppTypography.labelCaps.copyWith(fontSize: 8),
                 ),
               ],
             ),
@@ -226,6 +288,34 @@ class _RightSidebarState extends State<RightSidebar> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildLogsSection(BuildContext context) {
+    final aiState = context.watch<AIModelState>();
+    return Container(
+      color: const Color(0xFF040612),
+      child: ListView.builder(
+        padding: const EdgeInsets.all(12),
+        itemCount: aiState.messages.length,
+        itemBuilder: (context, index) {
+          final message = aiState.messages[index];
+          if (message.rawLog == null) return const SizedBox.shrink();
+          return Container(
+            margin: const EdgeInsets.only(bottom: 8),
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: AppColors.surfaceContainer.withAlpha(100),
+              borderRadius: BorderRadius.circular(4),
+              border: Border.all(color: AppColors.outlineVariant.withAlpha(30)),
+            ),
+            child: Text(
+              message.rawLog!,
+              style: AppTypography.code.copyWith(fontSize: 10, color: AppColors.onSurfaceVariant),
+            ),
+          );
+        },
+      ),
     );
   }
 

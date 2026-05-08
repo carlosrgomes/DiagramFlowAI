@@ -19,10 +19,8 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Comprehensive Asset Discovery' (Protocol in workflow.md)
 
 ## Phase 3: AI Model Control & Logs
-- [ ] Task: Add a model selection dropdown to `RightSidebar` and update `AIModelState` to track the selected model.
-    - [ ] Write Tests
-    - [ ] Implement Feature
-- [ ] Task: Implement an "AI Logs" view in the `RightSidebar` to display detailed interaction histories.
+- [x] Task: Add a model selection dropdown to `RightSidebar` and update `AIModelState` to track the selected model. [96bb203]
+- [~] Task: Implement an "AI Logs" view in the `RightSidebar` to display detailed interaction histories.
     - [ ] Write Tests
     - [ ] Implement Feature
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: AI Model Control & Logs' (Protocol in workflow.md)

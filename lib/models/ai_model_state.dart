@@ -15,8 +15,9 @@ enum MessageType {
 class ChatMessage {
   final String text;
   final MessageType type;
+  final String? rawLog; // To store detailed JSON or prompt context
 
-  ChatMessage({required this.text, required this.type});
+  ChatMessage({required this.text, required this.type, this.rawLog});
   
   bool get isAI => type == MessageType.ai;
   bool get isThought => type == MessageType.thought;
@@ -25,6 +26,10 @@ class ChatMessage {
 class AIModelState extends ChangeNotifier {
   AIModelStatus _status = AIModelStatus.notDownloaded;
   double _downloadProgress = 0.0;
+  String _selectedModel = 'Gemma4-2b';
+  
+  final List<String> availableModels = ['Gemma4-2b', 'Gemma4-7b', 'Claude-3-Opus', 'GPT-4-Turbo'];
+
   final List<ChatMessage> _messages = [
     ChatMessage(
       text: 'I\'ve generated the base VPC and added two EC2 instances behind an ALB. Would you like me to add a Redis cache cluster next to the RDS?',
@@ -34,7 +39,13 @@ class AIModelState extends ChangeNotifier {
 
   AIModelStatus get status => _status;
   double get downloadProgress => _downloadProgress;
+  String get selectedModel => _selectedModel;
   List<ChatMessage> get messages => List.unmodifiable(_messages);
+
+  void setSelectedModel(String model) {
+    _selectedModel = model;
+    notifyListeners();
+  }
 
   Future<void> startDownload() async {
     if (_status != AIModelStatus.notDownloaded) return;
@@ -44,7 +55,7 @@ class AIModelState extends ChangeNotifier {
     notifyListeners();
 
     for (int i = 1; i <= 100; i++) {
-      await Future.delayed(const Duration(milliseconds: 50));
+      await Future.delayed(const Duration(milliseconds: 30));
       _downloadProgress = i / 100.0;
       notifyListeners();
     }
@@ -57,8 +68,8 @@ class AIModelState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addMessage(String text, MessageType type) {
-    _messages.add(ChatMessage(text: text, type: type));
+  void addMessage(String text, MessageType type, {String? rawLog}) {
+    _messages.add(ChatMessage(text: text, type: type, rawLog: rawLog));
     notifyListeners();
   }
 
