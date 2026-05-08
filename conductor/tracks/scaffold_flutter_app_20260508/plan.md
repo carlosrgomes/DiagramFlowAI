@@ -13,7 +13,7 @@
 - [x] Task: Add foundational design tokens (colors, typography) referencing Stitch. [b1f8f86]
     - [x] Write Tests
     - [x] Implement Feature
-- [ ] Task: Create main application shell widget.
+- [~] Task: Create main application shell widget.
     - [ ] Write Tests
     - [ ] Implement Feature
 - [ ] Task: Implement basic navigation skeleton.
