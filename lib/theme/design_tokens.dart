@@ -13,6 +13,7 @@ class AppColors {
   static const Color onBackground = Color(0xFFDAE2FD);
   static const Color onSurface = Color(0xFFDAE2FD);
   static const Color onSurfaceVariant = Color(0xFFC7C4D7);
+  static const Color outlineVariant = Color(0xFF464554);
   static const Color error = Color(0xFFFFB4AB);
 }
 

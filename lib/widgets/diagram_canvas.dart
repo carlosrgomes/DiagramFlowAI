@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:diagram_flow_ai/models/diagram_state.dart';
 import 'package:diagram_flow_ai/widgets/resource_sidebar.dart';
+import 'package:diagram_flow_ai/widgets/diagram_node.dart';
 
 class GridBackgroundPainter extends CustomPainter {
   final Color gridColor;
@@ -53,11 +54,8 @@ class _DiagramCanvasState extends State<DiagramCanvas> {
       onAcceptWithDetails: (details) {
         final state = context.read<DiagramState>();
         
-        // Find the RenderBox of the CustomPaint (the actual canvas area)
         final RenderBox renderBox = context.findRenderObject() as RenderBox;
         final Offset localOffset = renderBox.globalToLocal(details.offset);
-        
-        // Adjust for current transformation (zoom/pan)
         final Offset adjustedOffset = _transformationController.toScene(localOffset);
 
         state.addNode(
@@ -73,11 +71,23 @@ class _DiagramCanvasState extends State<DiagramCanvas> {
           minScale: 0.1,
           maxScale: 2.0,
           constrained: false,
-          child: CustomPaint(
-            size: const Size(5000, 5000), // Large canvas area
-            painter: GridBackgroundPainter(
-              gridColor: Theme.of(context).colorScheme.outlineVariant.withAlpha(51),
-            ),
+          child: Consumer<DiagramState>(
+            builder: (context, state, child) {
+              return CustomPaint(
+                size: const Size(5000, 5000), // Large canvas area
+                painter: GridBackgroundPainter(
+                  gridColor: Theme.of(context).colorScheme.outlineVariant.withAlpha(51),
+                ),
+                child: Stack(
+                  children: state.nodes.map((node) {
+                    return DiagramNodeWidget(
+                      label: node.label,
+                      position: node.position,
+                    );
+                  }).toList(),
+                ),
+              );
+            },
           ),
         );
       },

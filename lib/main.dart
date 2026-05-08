@@ -6,12 +6,7 @@ import 'package:diagram_flow_ai/widgets/app_shell.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(
-    ChangeNotifierProvider(
-      create: (_) => DiagramState(),
-      child: const DiagramFlowApp(),
-    ),
-  );
+  runApp(const DiagramFlowApp());
 }
 
 class DiagramFlowApp extends StatelessWidget {
@@ -19,8 +14,10 @@ class DiagramFlowApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'DiagramFlow AI',
+    return ChangeNotifierProvider(
+      create: (_) => DiagramState(),
+      child: MaterialApp(
+        title: 'DiagramFlow AI',
       theme: ThemeData(
         brightness: Brightness.dark,
         colorScheme: ColorScheme.fromSeed(
@@ -45,6 +42,7 @@ class DiagramFlowApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const AppShell(),
+      ),
     );
   }
 }
