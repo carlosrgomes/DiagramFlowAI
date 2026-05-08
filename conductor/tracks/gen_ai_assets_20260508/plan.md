@@ -1,4 +1,4 @@
-# Implementation Plan: Generative AI & AWS Assets
+# Implementation Plan: Generative AI, Assets, Connections & Export
 
 ## Phase 1: AWS Asset Management [checkpoint: f50bef1]
 - [x] Task: Download and extract the official AWS Architecture Icons ZIP to the local `assets/` folder. [f50bef1]
@@ -28,4 +28,31 @@
 - [x] Task: Connect the chat input field to the `AIEngineService` and trigger `DiagramState.addNode` automatically. [add9da4]
     - [x] Write Tests
     - [x] Implement Feature
-- [x] Task: Conductor - User Manual Verification 'Phase 3: Generative Diagramming' (Protocol in workflow.md)
+- [~] Task: Refactor `AIEngineService` and UI to support stream-based "thought process" and multi-resource parsing.
+    - [ ] Write Tests
+    - [ ] Implement Feature
+- [ ] Task: Conductor - User Manual Verification 'Phase 3: Generative Diagramming' (Protocol in workflow.md)
+
+## Phase 4: Comprehensive AWS Assets
+- [~] Task: Refactor `AssetManager` and `ResourceSidebar` to dynamically load and categorize all extracted AWS icons.
+    - [ ] Write Tests
+    - [ ] Implement Feature
+- [ ] Task: Conductor - User Manual Verification 'Phase 4: Comprehensive AWS Assets' (Protocol in workflow.md)
+
+## Phase 5: Connection Lines
+- [~] Task: Extend `DiagramState` to support connection edges between nodes.
+    - [ ] Write Tests
+    - [ ] Implement Feature
+- [~] Task: Implement interactive line drawing on `DiagramCanvas` using `CustomPaint`.
+    - [ ] Write Tests
+    - [ ] Implement Feature
+- [ ] Task: Conductor - User Manual Verification 'Phase 5: Connection Lines' (Protocol in workflow.md)
+
+## Phase 6: Metadata Export
+- [ ] Task: Implement JSON serialization for `DiagramState` (nodes and connections).
+    - [ ] Write Tests
+    - [ ] Implement Feature
+- [ ] Task: Connect the "Export" button in `TopNavBar` to save the JSON file to disk.
+    - [ ] Write Tests
+    - [ ] Implement Feature
+- [ ] Task: Conductor - User Manual Verification 'Phase 6: Metadata Export' (Protocol in workflow.md)
