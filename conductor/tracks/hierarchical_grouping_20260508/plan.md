@@ -1,9 +1,9 @@
 # Implementation Plan: Hierarchical Grouping & Professional Visuals
 
 ## Phase 1: Data Model & Parent-Child Logic
-- [ ] Task: Update `DiagramNode` with `NodeType` enum and `parentId` field. Modify `DiagramState` to handle these properties.
-    - [ ] Write Tests
-    - [ ] Implement Feature
+- [x] Task: Update `DiagramNode` with `NodeType` enum and `parentId` field. Modify `DiagramState` to handle these properties. 89e8f77
+    - [x] Write Tests
+    - [x] Implement Feature
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Data Model' (Protocol in workflow.md)
 
 ## Phase 2: Visual Overhaul (Groups & Resources)

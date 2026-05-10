@@ -1,119 +1,135 @@
 import 'package:flutter/material.dart';
+import 'diagram_node.dart';
 
-enum NodeAnchor {
-  top,
-  bottom,
-  left,
-  right,
-  center,
-}
-
-class DiagramNode {
-  final String id;
-  final String label;
-  final Offset position;
-  final Size size; // Added size to handle border calculations
-
-  DiagramNode({
-    required this.id,
-    required this.label,
-    required this.position,
-    this.size = const Size(120, 50), // Default node size
-  });
-
-  DiagramNode copyWith({
-    Offset? position,
-    Size? size,
-  }) {
-    return DiagramNode(
-      id: id,
-      label: label,
-      position: position ?? this.position,
-      size: size ?? this.size,
-    );
-  }
-
-  Offset getAnchorPosition(NodeAnchor anchor) {
-    switch (anchor) {
-      case NodeAnchor.top:
-        return position + Offset(size.width / 2, 0);
-      case NodeAnchor.bottom:
-        return position + Offset(size.width / 2, size.height);
-      case NodeAnchor.left:
-        return position + Offset(0, size.height / 2);
-      case NodeAnchor.right:
-        return position + Offset(size.width, size.height / 2);
-      case NodeAnchor.center:
-        return position + Offset(size.width / 2, size.height / 2);
-    }
-  }
-}
-
-class DiagramConnection {
+class DiagramEdge {
   final String fromId;
   final String toId;
-  final NodeAnchor fromAnchor;
-  final NodeAnchor toAnchor;
+  final String? label;
 
-  DiagramConnection({
-    required this.fromId,
-    required this.toId,
-    this.fromAnchor = NodeAnchor.right,
-    this.toAnchor = NodeAnchor.left,
-  });
+  DiagramEdge({required this.fromId, required this.toId, this.label});
 }
 
 class DiagramState extends ChangeNotifier {
-  final List<DiagramNode> _nodes = [];
-  final List<DiagramConnection> _connections = [];
+  static const _kInitialHeader = 'flowchart TD';
 
-  List<DiagramNode> get nodes => List.unmodifiable(_nodes);
-  List<DiagramConnection> get connections => List.unmodifiable(_connections);
+  final Map<String, DiagramNode> _nodes = {};
+  final List<DiagramEdge> _edges = [];
+  
+  String _code = '$_kInitialHeader\n    A[Start] --> B[End]';
+  String _lastGoodCode = '$_kInitialHeader\n    A[Start] --> B[End]';
+  String? _syntaxError;
 
-  void addNode({
-    required String id,
-    required String label,
-    required Offset position,
-    Size size = const Size(120, 50),
-  }) {
-    _nodes.add(DiagramNode(id: id, label: label, position: position, size: size));
+  String get mermaidCode => _code;
+  String? get syntaxError => _syntaxError;
+  Map<String, DiagramNode> get nodes => Map.unmodifiable(_nodes);
+
+  DiagramState() {
+    // Initialize with default nodes to match initial code if needed, 
+    // but for now we'll just let the first clear/add handle it.
+  }
+
+  void setCode(String code) {
+    if (code == _code) return;
+    _code = code;
+    _syntaxError = null;
     notifyListeners();
   }
 
-  void addConnection(String fromId, String toId, {NodeAnchor? fromAnchor, NodeAnchor? toAnchor}) {
-    final fromExists = _nodes.any((n) => n.id == fromId);
-    final toExists = _nodes.any((n) => n.id == toId);
-    
-    if (fromExists && toExists) {
-      _connections.add(DiagramConnection(
-        fromId: fromId, 
-        toId: toId,
-        fromAnchor: fromAnchor ?? NodeAnchor.right,
-        toAnchor: toAnchor ?? NodeAnchor.left,
-      ));
-      notifyListeners();
-    }
+  void confirmCodeValid() {
+    _lastGoodCode = _code;
+    _syntaxError = null;
   }
 
-  void updateNodePosition(String id, Offset newPosition) {
-    final index = _nodes.indexWhere((node) => node.id == id);
-    if (index != -1) {
-      _nodes[index] = _nodes[index].copyWith(position: newPosition);
-      notifyListeners();
-    }
-  }
-
-  void updateNodeSize(String id, Size newSize) {
-    final index = _nodes.indexWhere((node) => node.id == id);
-    if (index != -1) {
-      _nodes[index] = _nodes[index].copyWith(size: newSize);
-      notifyListeners();
-    }
+  void reportSyntaxError(String error) {
+    _code = _lastGoodCode;
+    _syntaxError = error;
+    notifyListeners();
   }
 
   void clearDiagram() {
     _nodes.clear();
-    _connections.clear();
+    _edges.clear();
+    addNodeWithParent(id: 'A', label: 'Start', type: NodeType.resource);
+  }
+
+  void addNodeWithParent({
+    required String id,
+    required String label,
+    required NodeType type,
+    String? parentId,
+  }) {
+    _nodes[id] = DiagramNode(
+      id: id,
+      label: label,
+      type: type,
+      parentId: parentId,
+    );
+    _rebuildMermaidCode();
+  }
+
+  void addNode(String id, String label, {String shape = 'rect'}) {
+    // Mapping old addNode to new structured model
+    addNodeWithParent(id: id, label: label, type: NodeType.resource);
+  }
+
+  void addEdge(String fromId, String toId, {String? label}) {
+    _edges.add(DiagramEdge(fromId: fromId, toId: toId, label: label));
+    _rebuildMermaidCode();
+  }
+
+  void deleteNode(String nodeId) {
+    _nodes.remove(nodeId);
+    _edges.removeWhere((edge) => edge.fromId == nodeId || edge.toId == nodeId);
+    _rebuildMermaidCode();
+  }
+
+  void _rebuildMermaidCode() {
+    final buffer = StringBuffer();
+    buffer.writeln(_kInitialHeader);
+
+    // Group nodes by parentId
+    final Map<String?, List<DiagramNode>> groupedNodes = {};
+    for (var node in _nodes.values) {
+      groupedNodes.putIfAbsent(node.parentId, () => []).add(node);
+    }
+
+    // First, write nodes without parents
+    if (groupedNodes.containsKey(null)) {
+      for (var node in groupedNodes[null]!) {
+        _writeNode(buffer, node);
+      }
+    }
+
+    // Then, write subgraphs for each parent
+    for (var entry in groupedNodes.entries) {
+      final parentId = entry.key;
+      if (parentId == null) continue;
+
+      final parentNode = _nodes[parentId];
+      final label = parentNode?.label ?? parentId;
+      
+      buffer.writeln('    subgraph $parentId [$label]');
+      for (var node in entry.value) {
+        _writeNode(buffer, node, indent: '        ');
+      }
+      buffer.writeln('    end');
+    }
+
+    // Finally, write edges
+    for (var edge in _edges) {
+      final arrow = edge.label != null && edge.label!.isNotEmpty 
+          ? '-->|${edge.label}|' 
+          : '-->';
+      buffer.writeln('    ${edge.fromId} $arrow ${edge.toId}');
+    }
+
+    _code = buffer.toString().trimRight();
     notifyListeners();
+  }
+
+  void _writeNode(StringBuffer buffer, DiagramNode node, {String indent = '    '}) {
+    // For now, we use default rect shape for all. 
+    // Future tracks will handle custom visual representations.
+    buffer.writeln('$indent${node.id}[${node.label}]');
   }
 }
