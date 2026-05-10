@@ -6,11 +6,11 @@
     - [x] Implement Feature
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Data Model' (Protocol in workflow.md) 82d904d
 
-## Phase 2: Visual Overhaul (Groups & Resources)
-- [ ] Task: Refactor `DiagramNodeWidget` to support `NodeType.group` (transparent bounded box with header) and `NodeType.resource` (large icon, label below).
-    - [ ] Write Tests
-    - [ ] Implement Feature
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Visual Overhaul' (Protocol in workflow.md)
+## Phase 2: Visual Overhaul (Groups & Resources) [checkpoint: d3f2a11]
+- [x] Task: Refactor `DiagramNodeWidget` to support `NodeType.group` (transparent bounded box with header) and `NodeType.resource` (large icon, label below). 3a2e1f4
+    - [x] Write Tests
+    - [x] Implement Feature
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Visual Overhaul' (Protocol in workflow.md) d3f2a11
 
 ## Phase 3: Orthogonal Connection Routing
 - [ ] Task: Update `ConnectionPainter` to calculate and draw orthogonal paths (with right angles) between anchor points instead of straight lines.
