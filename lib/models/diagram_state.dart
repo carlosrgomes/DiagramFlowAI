@@ -131,7 +131,7 @@ class DiagramState extends ChangeNotifier {
       childrenByParent.putIfAbsent(node.parentId, () => []).add(node);
     }
 
-    // Recursively write nodes and groups
+    // Recursively write nodes and groups starting from the top level (parentId: null)
     _writeChildren(buffer, null, childrenByParent, '');
 
     // Finally, write edges
