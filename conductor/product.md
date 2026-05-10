@@ -10,7 +10,7 @@ To provide a seamless, high-performance desktop application for cloud architects
 - **Cross-Platform Compatibility:** [Implemented] Single codebase providing native-like desktop apps on Windows, macOS, and Linux using Flutter.
 - **AI-Driven Architecture Generation:** [Implemented] Integration with a local Gemma 4 model (downloadable via chat) to automatically draw diagrams from natural language prompts.
 - **Gemma 4 Engine:** [Implemented] Full local integration using LiteRT-LM runtime for high-performance, private architectural generation with transparent reasoning.
-- **Diagram Editor:** [Implemented] Infinite high-fidelity canvas with drag-and-drop support, interactive node dragging, precision connection anchors, Mermaid code view, and AI chat interface utilizing official AWS icons.
+- **Diagram Editor:** [Implemented] Infinite high-fidelity canvas with drag-and-drop support, hierarchical grouping (VPCs, Subnets), orthogonal connection routing, Mermaid code view, and AI chat interface utilizing large-format official AWS icons.
 - **Model Registry:** [Implemented] Management of local and remote AI models (selection via UI) with technical interaction logging.
 - **Export & Metadata:** Support for PNG, SVG, and JSON metadata exports of architectural definitions.
 - **Official Cloud Assets:** [Implemented] Comprehensive integration of official AWS Architecture Icons (categorized library).
