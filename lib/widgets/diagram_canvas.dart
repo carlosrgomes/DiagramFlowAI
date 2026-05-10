@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:diagram_flow_ai/models/asset_manager.dart';
+import 'package:diagram_flow_ai/models/diagram_node.dart';
 import 'package:diagram_flow_ai/models/diagram_state.dart';
 import 'package:diagram_flow_ai/theme/design_tokens.dart';
 import 'package:flutter/material.dart';
