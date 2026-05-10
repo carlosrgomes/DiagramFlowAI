@@ -1,0 +1,8 @@
+{
+  "track_id": "mermaid_engine_20260510",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-05-10T12:00:00Z",
+  "updated_at": "2026-05-10T12:00:00Z",
+  "description": "entenda tudo que foi feito @.claude/ estamos agora usando mermaid como motor, quero que o sistema fique robusto, é bom definir um agente em backgroud no gemma para que ele seja especialista em diagramas mermaid, tb inclua exportar imagem em png, com fundo, sem fundo. Modernize o que achar necessario"
+}

@@ -33,3 +33,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [ ] **Track: Implement Authentication Flow and Login Screen**
   *Link: [./tracks/auth_flow_20260508/](./tracks/auth_flow_20260508/)*
+
+---
+
+- [ ] **Track: Mermaid Engine Robustness & AI Specialist**
+*Link: [./tracks/mermaid_engine_20260510/](./tracks/mermaid_engine_20260510/)*
