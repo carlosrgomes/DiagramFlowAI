@@ -264,19 +264,19 @@ class AIModelState extends ChangeNotifier {
     final lines = text.split('\n');
     bool foundCommands = false;
 
+    // Regex to find commands even if surrounded by AI noise
+    final cmdRegex = RegExp(r'(NODE|GROUP|EDGE):([^@\n]+@[^@\n]+(?:@[^@\n]*)*)');
+
     for (var line in lines) {
-      final l = line.trim();
-      if (l.startsWith('NODE:') || l.startsWith('GROUP:') || l.startsWith('EDGE:')) {
+      final match = cmdRegex.firstMatch(line);
+      if (match != null) {
         if (!foundCommands) {
           diagramState.clearDiagramNoRebuild();
           foundCommands = true;
         }
         
-        final parts = l.split(':');
-        if (parts.length < 2) continue;
-        
-        final cmd = parts[0];
-        final args = parts[1].split('@');
+        final cmd = match.group(1);
+        final args = match.group(2)!.split('@');
         
         if (cmd == 'NODE' && args.length >= 4) {
           final label = args[0];
@@ -314,7 +314,6 @@ class AIModelState extends ChangeNotifier {
   }
 
   String? extractMermaidCode(String text) {
-    // Keep for compatibility but use parseAndApplyCommands when possible
     final fenceRe = RegExp(r'```(?:mermaid)?\s*\n([\s\S]*?)```', multiLine: true);
     for (final m in fenceRe.allMatches(text)) {
       final content = m.group(1)!.trim();

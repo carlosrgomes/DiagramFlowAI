@@ -18,8 +18,8 @@ class DiagramState extends ChangeNotifier {
   final List<DiagramEdge> _edges = [];
   final Map<String, String> _iconBase64Cache = {};
   
-  String _code = '$_kInitialHeader\n    A[Start] --> B[End]';
-  String _lastGoodCode = '$_kInitialHeader\n    A[Start] --> B[End]';
+  String _code = '$_kInitialHeader\n    A["Start"] --> B["End"]';
+  String _lastGoodCode = '$_kInitialHeader\n    A["Start"] --> B["End"]';
   String? _syntaxError;
 
   String get mermaidCode => _code;
@@ -28,7 +28,7 @@ class DiagramState extends ChangeNotifier {
   List<DiagramEdge> get edges => List.unmodifiable(_edges);
 
   DiagramState() {
-    // Initialize with default
+    // Initialize
   }
 
   void setCode(String code) {
@@ -126,34 +126,13 @@ class DiagramState extends ChangeNotifier {
     buffer.writeln(_kInitialHeader);
 
     // Group nodes by parentId
-    final Map<String?, List<DiagramNode>> groupedNodes = {};
+    final Map<String?, List<DiagramNode>> childrenByParent = {};
     for (var node in _nodes.values) {
-      groupedNodes.putIfAbsent(node.parentId, () => []).add(node);
+      childrenByParent.putIfAbsent(node.parentId, () => []).add(node);
     }
 
-    // First, write nodes without parents (that are not groups themselves, or groups with no parent)
-    if (groupedNodes.containsKey(null)) {
-      for (var node in groupedNodes[null]!) {
-        if (node.type == NodeType.resource) {
-          _writeNode(buffer, node);
-        }
-      }
-    }
-
-    // Then, write subgraphs for each parent
-    for (var entry in groupedNodes.entries) {
-      final parentId = entry.key;
-      if (parentId == null) continue;
-
-      final parentNode = _nodes[parentId];
-      final label = parentNode?.label ?? parentId;
-      
-      buffer.writeln('    subgraph $parentId ["$label"]');
-      for (var node in entry.value) {
-        _writeNode(buffer, node, indent: '        ');
-      }
-      buffer.writeln('    end');
-    }
+    // Recursively write nodes and groups
+    _writeChildren(buffer, null, childrenByParent, '');
 
     // Finally, write edges
     for (var edge in _edges) {
@@ -167,10 +146,24 @@ class DiagramState extends ChangeNotifier {
     notifyListeners();
   }
 
+  void _writeChildren(StringBuffer buffer, String? parentId, Map<String?, List<DiagramNode>> childrenByParent, String indent) {
+    final children = childrenByParent[parentId];
+    if (children == null) return;
+
+    for (var child in children) {
+      if (child.type == NodeType.group) {
+        buffer.writeln('$indent    subgraph ${child.id} ["${child.label}"]');
+        _writeChildren(buffer, child.id, childrenByParent, '$indent    ');
+        buffer.writeln('$indent    end');
+      } else {
+        _writeNode(buffer, child, indent: '$indent    ');
+      }
+    }
+  }
+
   void _writeNode(StringBuffer buffer, DiagramNode node, {String indent = '    '}) {
     if (node.type == NodeType.resource && node.iconPath != null && _iconBase64Cache.containsKey(node.iconPath)) {
       final b64 = _iconBase64Cache[node.iconPath];
-      // Escape label for HTML context
       final safeLabel = node.label.replaceAll('"', '&quot;');
       final html = '<div style="text-align:center; padding: 10px;"><img src="data:image/png;base64,$b64" width="48" height="48"/><br/><div style="margin-top:8px; font-weight:600; font-family: sans-serif;">$safeLabel</div></div>';
       buffer.writeln('$indent${node.id}["$html"]');

@@ -38,5 +38,21 @@ void main() {
       expect(diagramState.edges.first.toId, 'B');
       expect(diagramState.mermaidCode, contains('A -->|Connect| B'));
     });
+
+    test('should parse commands with noise correctly', () async {
+      final aiState = AIModelState();
+      final diagramState = DiagramState();
+      
+      const commands = 'Sure, here is the diagram:\n'
+          '- GROUP:My VPC@vpc1@null\n'
+          '1. NODE:EC2 Instance@ec2_1@vpc1@null\n'
+          'Some other text.';
+      
+      await aiState.parseAndApplyCommands(commands, diagramState);
+      
+      expect(diagramState.nodes.containsKey('vpc1'), isTrue);
+      expect(diagramState.nodes.containsKey('ec2_1'), isTrue);
+      expect(diagramState.mermaidCode, contains('subgraph vpc1 ["My VPC"]'));
+    });
   });
 }
