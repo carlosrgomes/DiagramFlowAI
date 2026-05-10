@@ -70,6 +70,7 @@ class DiagramState extends ChangeNotifier {
   }) async {
     final sanitizedId = _sanitizeId(id);
     final sanitizedParentId = parentId != null ? _sanitizeId(parentId) : null;
+    final sanitizedLabel = _sanitizeLabel(label);
 
     if (iconPath != null && iconPath != 'null' && !_iconBase64Cache.containsKey(iconPath)) {
       try {
@@ -83,7 +84,7 @@ class DiagramState extends ChangeNotifier {
 
     _nodes[sanitizedId] = DiagramNode(
       id: sanitizedId,
-      label: label,
+      label: sanitizedLabel,
       type: type,
       parentId: sanitizedParentId,
       iconPath: iconPath == 'null' ? null : iconPath,
@@ -102,7 +103,7 @@ class DiagramState extends ChangeNotifier {
 
     _nodes[sanitizedId] = DiagramNode(
       id: sanitizedId,
-      label: newLabel,
+      label: _sanitizeLabel(newLabel),
       type: oldNode.type,
       parentId: oldNode.parentId,
       iconPath: oldNode.iconPath,
@@ -114,7 +115,7 @@ class DiagramState extends ChangeNotifier {
     _edges.add(DiagramEdge(
       fromId: _sanitizeId(fromId),
       toId: _sanitizeId(toId),
-      label: label,
+      label: label != null ? _sanitizeLabel(label) : null,
     ));
     _rebuildMermaidCode();
   }
@@ -132,6 +133,11 @@ class DiagramState extends ChangeNotifier {
 
   String _sanitizeId(String id) {
     return id.trim().replaceAll(RegExp(r'[^a-zA-Z0-9_]'), '_');
+  }
+
+  String _sanitizeLabel(String label) {
+    // Remove Markdown bold markers
+    return label.replaceAll('**', '').trim();
   }
 
   void _rebuildMermaidCode() {
