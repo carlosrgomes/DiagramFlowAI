@@ -150,6 +150,17 @@ class AIModelState extends ChangeNotifier {
     if (_status == AIModelStatus.downloading || _status == AIModelStatus.initializing) return;
 
     try {
+      // Fix for macOS Sandbox issues: ensure directories exist
+      final cacheDir = await getTemporaryDirectory();
+      if (!await cacheDir.exists()) {
+        await cacheDir.create(recursive: true);
+      }
+      
+      final supportDir = await getApplicationSupportDirectory();
+       if (!await supportDir.exists()) {
+        await supportDir.create(recursive: true);
+      }
+
       await FlutterGemma.initialize();
     } catch (e) {
       dev.log('[FlutterGemma] re-initialize: $e');
