@@ -163,7 +163,10 @@ class _DiagramCanvasState extends State<DiagramCanvas> {
       final ds = context.read<DiagramState>();
       switch (data['type'] as String? ?? '') {
         case 'dblclick':
-          _showRenameDialog(data['label'] as String? ?? '');
+          _showRenameDialog(
+            data['id'] as String? ?? '',
+            data['label'] as String? ?? '',
+          );
         case 'select':
           final id = data['id'] as String? ?? '';
           final lbl = data['label'] as String? ?? '';
@@ -183,7 +186,7 @@ class _DiagramCanvasState extends State<DiagramCanvas> {
     } catch (_) {}
   }
 
-  void _showRenameDialog(String currentLabel) {
+  void _showRenameDialog(String nodeId, String currentLabel) {
     final ctrl = TextEditingController(text: currentLabel);
     showDialog<void>(
       context: context,
@@ -208,11 +211,7 @@ class _DiagramCanvasState extends State<DiagramCanvas> {
             onPressed: () {
               final newLabel = ctrl.text.trim();
               if (newLabel.isNotEmpty && newLabel != currentLabel) {
-                final st = context.read<DiagramState>();
-                // Simple replacement: find `[oldLabel]` and replace label
-                final updated = st.mermaidCode.replaceAll(
-                    '[$currentLabel]', '[$newLabel]');
-                st.setCode(updated);
+                context.read<DiagramState>().renameNode(nodeId, newLabel);
               }
               Navigator.pop(ctx);
             },
@@ -266,7 +265,11 @@ class _DiagramCanvasState extends State<DiagramCanvas> {
               final id = idCtrl.text.trim().replaceAll(' ', '_');
               final label = labelCtrl.text.trim();
               if (id.isNotEmpty && label.isNotEmpty) {
-                context.read<DiagramState>().addNode(id, label);
+                context.read<DiagramState>().addNodeWithParent(
+                  id: id,
+                  label: label,
+                  type: NodeType.resource,
+                );
               }
               Navigator.pop(ctx);
             },
@@ -459,7 +462,7 @@ class _DiagramCanvasState extends State<DiagramCanvas> {
                   fontSize: 11, color: AppColors.onSurface)),
           const SizedBox(width: 10),
           _ActionBtn(Icons.edit_outlined, 'Rename', () {
-            _showRenameDialog(_selectedNodeLabel ?? '');
+            _showRenameDialog(_selectedNodeId!, _selectedNodeLabel ?? '');
             setState(() { _selectedNodeId = null; _selectedNodeLabel = null; });
           }),
           const SizedBox(width: 4),

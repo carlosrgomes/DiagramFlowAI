@@ -92,6 +92,20 @@ class DiagramState extends ChangeNotifier {
     addNodeWithParent(id: id, label: label, type: NodeType.resource);
   }
 
+  void renameNode(String id, String newLabel) {
+    final oldNode = _nodes[id];
+    if (oldNode == null) return;
+
+    _nodes[id] = DiagramNode(
+      id: id,
+      label: newLabel,
+      type: oldNode.type,
+      parentId: oldNode.parentId,
+      iconPath: oldNode.iconPath,
+    );
+    _rebuildMermaidCode();
+  }
+
   void addEdge(String fromId, String toId, {String? label}) {
     _edges.add(DiagramEdge(fromId: fromId, toId: toId, label: label));
     _rebuildMermaidCode();
@@ -134,7 +148,7 @@ class DiagramState extends ChangeNotifier {
       final parentNode = _nodes[parentId];
       final label = parentNode?.label ?? parentId;
       
-      buffer.writeln('    subgraph $parentId [$label]');
+      buffer.writeln('    subgraph $parentId ["$label"]');
       for (var node in entry.value) {
         _writeNode(buffer, node, indent: '        ');
       }
@@ -156,10 +170,12 @@ class DiagramState extends ChangeNotifier {
   void _writeNode(StringBuffer buffer, DiagramNode node, {String indent = '    '}) {
     if (node.type == NodeType.resource && node.iconPath != null && _iconBase64Cache.containsKey(node.iconPath)) {
       final b64 = _iconBase64Cache[node.iconPath];
-      final html = '<div style="text-align:center; padding: 10px;"><img src="data:image/png;base64,$b64" width="48" height="48"/><br/><div style="margin-top:8px; font-weight:600; font-family: sans-serif;">${node.label}</div></div>';
+      // Escape label for HTML context
+      final safeLabel = node.label.replaceAll('"', '&quot;');
+      final html = '<div style="text-align:center; padding: 10px;"><img src="data:image/png;base64,$b64" width="48" height="48"/><br/><div style="margin-top:8px; font-weight:600; font-family: sans-serif;">$safeLabel</div></div>';
       buffer.writeln('$indent${node.id}["$html"]');
     } else {
-      buffer.writeln('$indent${node.id}[${node.label}]');
+      buffer.writeln('$indent${node.id}["${node.label}"]');
     }
   }
 }

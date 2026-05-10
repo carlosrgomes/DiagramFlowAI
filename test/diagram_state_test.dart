@@ -3,48 +3,57 @@ import 'package:diagram_flow_ai/models/diagram_state.dart';
 
 void main() {
   group('DiagramState', () {
-    test('initial state has no nodes', () {
+    test('initial state has default mermaid code', () {
       final state = DiagramState();
-      expect(state.nodes, isEmpty);
+      expect(state.mermaidCode, contains('flowchart TD'));
     });
 
-    test('addNode adds a node to the list', () {
+    test('setCode updates mermaidCode', () {
       final state = DiagramState();
-      state.addNode(
-        id: 'node-1',
-        label: 'Compute Instance',
-        position: const Offset(100, 100),
-      );
-      expect(state.nodes.length, 1);
-      expect(state.nodes.first.id, 'node-1');
-      expect(state.nodes.first.position, const Offset(100, 100));
+      state.setCode('flowchart LR\n    A --> B');
+      expect(state.mermaidCode, 'flowchart LR\n    A --> B');
     });
 
-    test('updateNodePosition updates position correctly', () {
+    test('setCode notifies listeners', () {
       final state = DiagramState();
-      state.addNode(
-        id: 'node-1',
-        label: 'Compute Instance',
-        position: const Offset(100, 100),
-      );
-      
-      state.updateNodePosition('node-1', const Offset(200, 200));
-      expect(state.nodes.first.position, const Offset(200, 200));
-    });
-
-    test('updateNodePosition notifies listeners', () {
-      final state = DiagramState();
-      state.addNode(
-        id: 'node-1',
-        label: 'Compute Instance',
-        position: const Offset(100, 100),
-      );
-      
       bool notified = false;
       state.addListener(() => notified = true);
-      
-      state.updateNodePosition('node-1', const Offset(150, 150));
+      state.setCode('flowchart TD\n    X --> Y');
       expect(notified, isTrue);
+    });
+
+    test('setCode with same value does not notify', () {
+      final state = DiagramState();
+      final initial = state.mermaidCode;
+      int count = 0;
+      state.addListener(() => count++);
+      state.setCode(initial);
+      expect(count, 0);
+    });
+
+    test('addNode appends node to mermaid code', () {
+      final state = DiagramState();
+      state.addNode('srv', 'Server');
+      expect(state.mermaidCode, contains('srv["Server"]'));
+    });
+
+    test('addEdge appends edge to mermaid code', () {
+      final state = DiagramState();
+      state.addEdge('A', 'B');
+      expect(state.mermaidCode, contains('A --> B'));
+    });
+
+    test('addEdge with label uses labelled arrow', () {
+      final state = DiagramState();
+      state.addEdge('A', 'B', label: 'calls');
+      expect(state.mermaidCode, contains('-->|calls|'));
+    });
+
+    test('clearDiagram resets to minimal flowchart', () {
+      final state = DiagramState();
+      state.setCode('flowchart LR\n    A --> B --> C --> D');
+      state.clearDiagram();
+      expect(state.mermaidCode, contains('flowchart TD'));
     });
   });
 }

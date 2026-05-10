@@ -20,7 +20,7 @@ void main() {
       expect(diagramState.nodes['vpc1']?.type, NodeType.group);
       expect(diagramState.nodes.containsKey('ec2_1'), isTrue);
       expect(diagramState.nodes['ec2_1']?.parentId, 'vpc1');
-      expect(diagramState.mermaidCode, contains('subgraph vpc1 [My VPC]'));
+      expect(diagramState.mermaidCode, contains('subgraph vpc1 ["My VPC"]'));
     });
 
     test('should parse EDGE commands correctly', () async {

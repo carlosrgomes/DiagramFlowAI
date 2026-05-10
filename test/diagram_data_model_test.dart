@@ -31,9 +31,9 @@ void main() {
   });
 
   group('DiagramState Hierarchical Support', () {
-    test('should add a node to internal state and reflect in Mermaid code', () {
+    test('should add a node to internal state and reflect in Mermaid code', () async {
       final state = DiagramState();
-      state.addNodeWithParent(
+      await state.addNodeWithParent(
         id: 'ec2_1',
         label: 'Web Server',
         type: NodeType.resource,
@@ -41,17 +41,17 @@ void main() {
 
       expect(state.nodes.length, 1);
       expect(state.nodes['ec2_1']?.label, 'Web Server');
-      expect(state.mermaidCode, contains('ec2_1[Web Server]'));
+      expect(state.mermaidCode, contains('ec2_1["Web Server"]'));
     });
 
-    test('should handle subgraphs for group nodes', () {
+    test('should handle subgraphs for group nodes', () async {
       final state = DiagramState();
-      state.addNodeWithParent(
+      await state.addNodeWithParent(
         id: 'vpc1',
         label: 'My VPC',
         type: NodeType.group,
       );
-      state.addNodeWithParent(
+      await state.addNodeWithParent(
         id: 'ec2_1',
         label: 'Web Server',
         type: NodeType.resource,
@@ -59,9 +59,9 @@ void main() {
       );
 
       expect(state.nodes['ec2_1']?.parentId, 'vpc1');
-      // Mermaid subgraph syntax
-      expect(state.mermaidCode, contains('subgraph vpc1 [My VPC]'));
-      expect(state.mermaidCode, contains('ec2_1[Web Server]'));
+      // Mermaid subgraph syntax with quotes
+      expect(state.mermaidCode, contains('subgraph vpc1 ["My VPC"]'));
+      expect(state.mermaidCode, contains('ec2_1["Web Server"]'));
       expect(state.mermaidCode, contains('end'));
     });
   });
