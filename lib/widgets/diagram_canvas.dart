@@ -57,7 +57,7 @@ String _buildMermaidHtml() => '''
       theme: 'dark',
       securityLevel: 'loose',
       htmlLabels: true,
-      flowchart: { curve: 'basis', useMaxWidth: true }
+      flowchart: { curve: 'step', useMaxWidth: true }
     });
 
     // Render initial diagram
