@@ -68,6 +68,9 @@ class DiagramState extends ChangeNotifier {
     String? parentId,
     String? iconPath,
   }) async {
+    final sanitizedId = _sanitizeId(id);
+    final sanitizedParentId = parentId != null ? _sanitizeId(parentId) : null;
+
     if (iconPath != null && iconPath != 'null' && !_iconBase64Cache.containsKey(iconPath)) {
       try {
         final data = await rootBundle.load(iconPath);
@@ -78,11 +81,11 @@ class DiagramState extends ChangeNotifier {
       }
     }
 
-    _nodes[id] = DiagramNode(
-      id: id,
+    _nodes[sanitizedId] = DiagramNode(
+      id: sanitizedId,
       label: label,
       type: type,
-      parentId: parentId,
+      parentId: sanitizedParentId,
       iconPath: iconPath == 'null' ? null : iconPath,
     );
     _rebuildMermaidCode();
@@ -93,11 +96,12 @@ class DiagramState extends ChangeNotifier {
   }
 
   void renameNode(String id, String newLabel) {
-    final oldNode = _nodes[id];
+    final sanitizedId = _sanitizeId(id);
+    final oldNode = _nodes[sanitizedId];
     if (oldNode == null) return;
 
-    _nodes[id] = DiagramNode(
-      id: id,
+    _nodes[sanitizedId] = DiagramNode(
+      id: sanitizedId,
       label: newLabel,
       type: oldNode.type,
       parentId: oldNode.parentId,
@@ -107,13 +111,18 @@ class DiagramState extends ChangeNotifier {
   }
 
   void addEdge(String fromId, String toId, {String? label}) {
-    _edges.add(DiagramEdge(fromId: fromId, toId: toId, label: label));
+    _edges.add(DiagramEdge(
+      fromId: _sanitizeId(fromId),
+      toId: _sanitizeId(toId),
+      label: label,
+    ));
     _rebuildMermaidCode();
   }
 
   void deleteNode(String nodeId) {
-    _nodes.remove(nodeId);
-    _edges.removeWhere((edge) => edge.fromId == nodeId || edge.toId == nodeId);
+    final sanitizedId = _sanitizeId(nodeId);
+    _nodes.remove(sanitizedId);
+    _edges.removeWhere((edge) => edge.fromId == sanitizedId || edge.toId == sanitizedId);
     _rebuildMermaidCode();
   }
 
@@ -121,20 +130,21 @@ class DiagramState extends ChangeNotifier {
     _rebuildMermaidCode();
   }
 
+  String _sanitizeId(String id) {
+    return id.trim().replaceAll(RegExp(r'[^a-zA-Z0-9_]'), '_');
+  }
+
   void _rebuildMermaidCode() {
     final buffer = StringBuffer();
     buffer.writeln(_kInitialHeader);
 
-    // Group nodes by parentId
     final Map<String?, List<DiagramNode>> childrenByParent = {};
     for (var node in _nodes.values) {
       childrenByParent.putIfAbsent(node.parentId, () => []).add(node);
     }
 
-    // Recursively write nodes and groups starting from the top level (parentId: null)
     _writeChildren(buffer, null, childrenByParent, '');
 
-    // Finally, write edges
     for (var edge in _edges) {
       final arrow = edge.label != null && edge.label!.isNotEmpty 
           ? '-->|${edge.label}|' 
