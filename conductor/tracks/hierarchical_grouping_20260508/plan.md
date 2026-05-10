@@ -12,14 +12,12 @@
     - [x] Implement Feature
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Visual Overhaul' (Protocol in workflow.md) 68700cc
 
-## Phase 3: Orthogonal Connection Routing [checkpoint: 5e2d1a3]
-- [x] Task: Update `ConnectionPainter` to calculate and draw orthogonal paths (with right angles) between anchor points instead of straight lines. 5e2d1a3
+## Phase 3: Orthogonal Connection Routing [checkpoint: 14f54c5]
+- [x] Task: Update `ConnectionPainter` to calculate and draw orthogonal paths (with right angles) between anchor points instead of straight lines. 14f54c5
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Orthogonal Connections' (Protocol in workflow.md) 14f54c5
+
+## Phase 4: AI Generative Support [checkpoint: b1a2c3d]
+- [x] Task: Update `AIEngineService` system prompt to support `GROUP:` commands and parent-child associations in `NODE:` commands. Update `RightSidebar` parsing logic. d2e1f0a
     - [x] Write Tests
     - [x] Implement Feature
-- [x] Task: Conductor - User Manual Verification 'Phase 3: Orthogonal Connections' (Protocol in workflow.md) 5e2d1a3
-
-## Phase 4: AI Generative Support
-- [ ] Task: Update `AIEngineService` system prompt to support `GROUP:` commands and parent-child associations in `NODE:` commands. Update `RightSidebar` parsing logic.
-    - [ ] Write Tests
-    - [ ] Implement Feature
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: AI Generative Support' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 4: AI Generative Support' (Protocol in workflow.md) b1a2c3d

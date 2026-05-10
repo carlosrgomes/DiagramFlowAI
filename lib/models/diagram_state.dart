@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'diagram_node.dart';
 
 class DiagramEdge {
@@ -14,6 +16,7 @@ class DiagramState extends ChangeNotifier {
 
   final Map<String, DiagramNode> _nodes = {};
   final List<DiagramEdge> _edges = [];
+  final Map<String, String> _iconBase64Cache = {};
   
   String _code = '$_kInitialHeader\n    A[Start] --> B[End]';
   String _lastGoodCode = '$_kInitialHeader\n    A[Start] --> B[End]';
@@ -22,10 +25,10 @@ class DiagramState extends ChangeNotifier {
   String get mermaidCode => _code;
   String? get syntaxError => _syntaxError;
   Map<String, DiagramNode> get nodes => Map.unmodifiable(_nodes);
+  List<DiagramEdge> get edges => List.unmodifiable(_edges);
 
   DiagramState() {
-    // Initialize with default nodes to match initial code if needed, 
-    // but for now we'll just let the first clear/add handle it.
+    // Initialize with default
   }
 
   void setCode(String code) {
@@ -49,26 +52,43 @@ class DiagramState extends ChangeNotifier {
   void clearDiagram() {
     _nodes.clear();
     _edges.clear();
+    _iconBase64Cache.clear();
     addNodeWithParent(id: 'A', label: 'Start', type: NodeType.resource);
   }
 
-  void addNodeWithParent({
+  void clearDiagramNoRebuild() {
+    _nodes.clear();
+    _edges.clear();
+  }
+
+  Future<void> addNodeWithParent({
     required String id,
     required String label,
     required NodeType type,
     String? parentId,
-  }) {
+    String? iconPath,
+  }) async {
+    if (iconPath != null && iconPath != 'null' && !_iconBase64Cache.containsKey(iconPath)) {
+      try {
+        final data = await rootBundle.load(iconPath);
+        final bytes = data.buffer.asUint8List();
+        _iconBase64Cache[iconPath] = base64Encode(bytes);
+      } catch (e) {
+        debugPrint('Error loading icon $iconPath: $e');
+      }
+    }
+
     _nodes[id] = DiagramNode(
       id: id,
       label: label,
       type: type,
       parentId: parentId,
+      iconPath: iconPath == 'null' ? null : iconPath,
     );
     _rebuildMermaidCode();
   }
 
   void addNode(String id, String label, {String shape = 'rect'}) {
-    // Mapping old addNode to new structured model
     addNodeWithParent(id: id, label: label, type: NodeType.resource);
   }
 
@@ -83,6 +103,10 @@ class DiagramState extends ChangeNotifier {
     _rebuildMermaidCode();
   }
 
+  void rebuild() {
+    _rebuildMermaidCode();
+  }
+
   void _rebuildMermaidCode() {
     final buffer = StringBuffer();
     buffer.writeln(_kInitialHeader);
@@ -93,10 +117,12 @@ class DiagramState extends ChangeNotifier {
       groupedNodes.putIfAbsent(node.parentId, () => []).add(node);
     }
 
-    // First, write nodes without parents
+    // First, write nodes without parents (that are not groups themselves, or groups with no parent)
     if (groupedNodes.containsKey(null)) {
       for (var node in groupedNodes[null]!) {
-        _writeNode(buffer, node);
+        if (node.type == NodeType.resource) {
+          _writeNode(buffer, node);
+        }
       }
     }
 
@@ -128,8 +154,12 @@ class DiagramState extends ChangeNotifier {
   }
 
   void _writeNode(StringBuffer buffer, DiagramNode node, {String indent = '    '}) {
-    // For now, we use default rect shape for all. 
-    // Future tracks will handle custom visual representations.
-    buffer.writeln('$indent${node.id}[${node.label}]');
+    if (node.type == NodeType.resource && node.iconPath != null && _iconBase64Cache.containsKey(node.iconPath)) {
+      final b64 = _iconBase64Cache[node.iconPath];
+      final html = '<div style="text-align:center; padding: 10px;"><img src="data:image/png;base64,$b64" width="48" height="48"/><br/><div style="margin-top:8px; font-weight:600; font-family: sans-serif;">${node.label}</div></div>';
+      buffer.writeln('$indent${node.id}["$html"]');
+    } else {
+      buffer.writeln('$indent${node.id}[${node.label}]');
+    }
   }
 }
