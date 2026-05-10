@@ -1,10 +1,10 @@
 # Implementation Plan: Hierarchical Grouping & Professional Visuals
 
-## Phase 1: Data Model & Parent-Child Logic
+## Phase 1: Data Model & Parent-Child Logic [checkpoint: 82d904d]
 - [x] Task: Update `DiagramNode` with `NodeType` enum and `parentId` field. Modify `DiagramState` to handle these properties. 89e8f77
     - [x] Write Tests
     - [x] Implement Feature
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Data Model' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Data Model' (Protocol in workflow.md) 82d904d
 
 ## Phase 2: Visual Overhaul (Groups & Resources)
 - [ ] Task: Refactor `DiagramNodeWidget` to support `NodeType.group` (transparent bounded box with header) and `NodeType.resource` (large icon, label below).
