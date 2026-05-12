@@ -1,3 +1,5 @@
+import 'package:diagram_flow_ai/models/ai_model_state.dart';
+import 'package:diagram_flow_ai/models/project_io.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:diagram_flow_ai/main.dart';
 import 'package:diagram_flow_ai/theme/design_tokens.dart';
@@ -8,7 +10,11 @@ void main() {
     // Disable HTTP requests for fonts during tests
     GoogleFonts.config.allowRuntimeFetching = false;
 
-    await tester.pumpWidget(const DiagramFlowApp());
+    await tester.pumpWidget(DiagramFlowApp(
+      aiState: AIModelState(),
+      recentFiles: RecentFiles(),
+      themeController: ThemeController(),
+    ));
 
     // Verify Geist is applied to theme typography
     expect(AppTypography.h1.fontFamily, contains('Geist'));

@@ -59,10 +59,24 @@ void main() {
       );
 
       expect(state.nodes['ec2_1']?.parentId, 'vpc1');
-      // Mermaid subgraph syntax with quotes
       expect(state.mermaidCode, contains('subgraph vpc1 ["My VPC"]'));
       expect(state.mermaidCode, contains('ec2_1["Web Server"]'));
       expect(state.mermaidCode, contains('end'));
+    });
+
+    test('should handle connections between nodes in different subgraphs', () async {
+      final state = DiagramState();
+      await state.addNodeWithParent(id: 'vpc1', label: 'VPC 1', type: NodeType.group);
+      await state.addNodeWithParent(id: 'ec2_1', label: 'EC2 1', type: NodeType.resource, parentId: 'vpc1');
+      
+      await state.addNodeWithParent(id: 'vpc2', label: 'VPC 2', type: NodeType.group);
+      await state.addNodeWithParent(id: 'ec2_2', label: 'EC2 2', type: NodeType.resource, parentId: 'vpc2');
+      
+      state.addEdge('ec2_1', 'ec2_2', label: 'Peer');
+      
+      expect(state.mermaidCode, contains('ec2_1["EC2 1"]'));
+      expect(state.mermaidCode, contains('ec2_2["EC2 2"]'));
+      expect(state.mermaidCode, contains('ec2_1 -->|Peer| ec2_2'));
     });
   });
 }

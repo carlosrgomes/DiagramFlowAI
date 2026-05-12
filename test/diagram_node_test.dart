@@ -1,25 +1,9 @@
-import 'package:flutter/material.dart';
+// diagram_node_test.dart — placeholder after DiagramNodeWidget was removed in favour
+// of the Mermaid.js WebView rendering engine.
 import 'package:flutter_test/flutter_test.dart';
-import 'package:diagram_flow_ai/widgets/diagram_node.dart';
 
 void main() {
-  testWidgets('DiagramNodeWidget renders label', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      const MaterialApp(
-        home: Scaffold(
-          body: Stack(
-            children: [
-              DiagramNodeWidget(
-                label: 'Test Node',
-                position: Offset(10, 10),
-                size: Size(120, 50),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-
-    expect(find.text('Test Node'), findsOneWidget);
+  test('placeholder — diagram node widget no longer exists', () {
+    expect(true, isTrue);
   });
 }

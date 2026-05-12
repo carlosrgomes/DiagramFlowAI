@@ -5,7 +5,7 @@
 // 'flutter create' template.
 
 // The application's name. By default this is also the title of the Flutter window.
-PRODUCT_NAME = diagram_flow_ai
+PRODUCT_NAME = Diagram Flow AI
 
 // The application's bundle identifier
 PRODUCT_BUNDLE_IDENTIFIER = com.diagramflowai.diagramFlowAi
