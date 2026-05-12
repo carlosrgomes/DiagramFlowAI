@@ -1,0 +1,136 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag (e.g. v1.0.0). Leave empty to build artifacts only.'
+        required: false
+        default: ''
+
+env:
+  FLUTTER_CHANNEL: stable
+  APP_NAME: DiagramFlowAI
+
+jobs:
+  build:
+    name: Build ${{ matrix.target }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            target: macos
+            artifact_name: DiagramFlowAI-macos
+          - os: windows-latest
+            target: windows
+            artifact_name: DiagramFlowAI-windows
+          - os: ubuntu-latest
+            target: linux
+            artifact_name: DiagramFlowAI-linux
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Linux build dependencies
+        if: matrix.target == 'linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            clang cmake ninja-build pkg-config \
+            libgtk-3-dev liblzma-dev libstdc++-12-dev
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          cache: true
+
+      - name: Flutter doctor
+        run: flutter doctor -v
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Enable desktop target
+        run: flutter config --enable-${{ matrix.target }}-desktop
+
+      - name: Build macOS
+        if: matrix.target == 'macos'
+        run: flutter build macos --release
+
+      - name: Build Windows
+        if: matrix.target == 'windows'
+        run: flutter build windows --release
+
+      - name: Build Linux
+        if: matrix.target == 'linux'
+        run: flutter build linux --release
+
+      - name: Package macOS (zip .app)
+        if: matrix.target == 'macos'
+        run: |
+          cd build/macos/Build/Products/Release
+          APP=$(ls -d *.app | head -n1)
+          ditto -c -k --sequesterRsrc --keepParent "$APP" "${{ github.workspace }}/${{ matrix.artifact_name }}.zip"
+
+      - name: Package Windows (zip)
+        if: matrix.target == 'windows'
+        shell: pwsh
+        run: |
+          $src = "build/windows/x64/runner/Release"
+          $dst = "${{ github.workspace }}/${{ matrix.artifact_name }}.zip"
+          Compress-Archive -Path "$src/*" -DestinationPath $dst -Force
+
+      - name: Package Linux (tar.gz)
+        if: matrix.target == 'linux'
+        run: |
+          cd build/linux/x64/release/bundle
+          tar -czf "${{ github.workspace }}/${{ matrix.artifact_name }}.tar.gz" .
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: |
+            ${{ matrix.artifact_name }}.zip
+            ${{ matrix.artifact_name }}.tar.gz
+          if-no-files-found: ignore
+          retention-days: 14
+
+  release:
+    name: Publish GitHub Release
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && inputs.tag != '')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Resolve tag
+        id: tag
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "name=${{ inputs.tag }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "name=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag.outputs.name }}
+          name: ${{ steps.tag.outputs.name }}
+          generate_release_notes: true
+          files: |
+            artifacts/**/*.zip
+            artifacts/**/*.tar.gz
