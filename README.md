@@ -20,7 +20,7 @@ DiagramFlowAI provides a **local-first** experience. By running optimized AI mod
 - **Natural Language to Diagram:** Describe your architecture in plain English and get a production-ready diagram instantly.
 - **Dual Output Modes:**
   - **Mermaid Syntax:** Standard, version-control-friendly code for general documentation, flows, and system designs.
-  - **Cloud-Native Architecture:** Specialized support for major cloud providers. While it features optimized assets for **AWS**, it also includes comprehensive templates for **Google Cloud (GCP)** and general architectural patterns.
+  - **Cloud-Native Architecture:** Specialized support for major cloud providers, including high-fidelity assets and templates for **Google Cloud (GCP)**, **AWS**, and general architectural patterns.
 - **100% Local Execution:** Powered by **Gemma 4 Edge (2B/4B)** models running on **LiteRT** (formerly TensorFlow Lite). No internet required, no data leakage.
 - **"Thinking Mode" Transparency:** View the model's internal reasoning traces (Chain of Thought) as it builds your diagram.
 - **Self-Healing Loop:** Automatically detects and fixes Mermaid syntax errors by feeding parser feedback back into the local AI.
